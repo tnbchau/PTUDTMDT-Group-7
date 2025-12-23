@@ -1,0 +1,353 @@
+/* style-register.css */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Noto Sans', sans-serif;
+  background: #f9f9f9;
+  color: #333;
+}
+
+/* Layout chính: form 40%, image 60% */
+.main-grid {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  min-height: 100vh;
+}
+
+/* Form Section */
+.form-section {
+  background: #ffffff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+}
+
+.form-container {
+  width: 100%;
+  max-width: 400px;
+}
+
+.form-container h2 {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.5em;
+  color: #3E2723;
+  margin-bottom: 1em;
+  text-align: left;
+}
+
+input {
+  width: 100%;
+  padding: 0.75em;
+  margin-bottom: 1.2em;
+  border: none;
+  border-bottom: 2px solid #5D4037;
+  background: transparent;
+  font-size: 1em;
+}
+
+input:focus {
+  outline: none;
+  border-bottom-color: #3E2723;
+}
+
+#password-error {
+  color: #d32f2f;
+  font-size: 0.9em;
+  margin-bottom: 1em;
+  display: none;
+}
+
+#captcha-container {
+  display: none;
+  margin-bottom: 1em;
+}
+
+#captcha-container .g-recaptcha {
+  transform: scale(0.88);
+  transform-origin: 0 0;
+  width: 100%;
+  height: auto;
+}
+.btn {
+  width: 100%;
+  padding: 0.75em;
+  background: #5D4037;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s;
+  margin-bottom: 1.5em;
+}
+
+.btn:hover {
+  background: #3E2723;
+}
+label {
+  display: block;
+  margin-bottom: 0.3em;
+  font-weight: bold;
+  color: #5D4037;
+}
+/* Checkbox điều khoản */
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1.5em;
+  font-weight: normal;
+  color: #5D4037;
+}
+
+.terms-checkbox a {
+  color: #3E2723;
+  text-decoration: underline;
+}
+
+
+
+/* Social buttons */
+.alt {
+  text-align: center;
+  margin-bottom: 1em;
+  color: #555;
+  font-size: 0.9em;
+}
+
+.social-buttons {
+  display: flex;
+  gap: 0.5em;
+  margin-bottom: 1.5em;
+}
+
+.social-button {
+  flex: 1;
+  padding: 0.65em 0;
+  font-size: 0.9em;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.social-button.google { background: #db4437; }
+.social-button.tiktok { background: #000; color: #fff; }
+.social-button.facebook { background: #3b5998; }
+.social-button.twitter { background: #1da1f2; }
+
+.social-button:hover { opacity: 0.8; }
+
+/* Image Section */
+.image-section {
+  position: relative;
+  background-image: url('../images/backgrounddki.jpg');
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2em;
+  color: #fff;
+  text-align: center;
+  padding-bottom: 100px;
+  padding-right: 120px;
+}
+
+.image-section .logo {
+  width: 500px;
+  margin-bottom: 0px;
+}
+
+.image-section .description .title {
+  position: absolute;
+  top: 63%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  font-family: 'Cormorant Garamond', serif;
+  color: #49251A;
+  font-weight: 550;
+  font-size: 25px;
+  white-space: nowrap;
+}
+
+.image-section .description .subtitle {
+  position: absolute;
+  top: 68%;
+  left: 45%;
+  transform: translate(-50%, -50%);
+  max-width: 80%;
+  font-family: 'Cormorant Garamond', serif;
+  color: #49251A;
+  font-weight: 500;
+  font-size: 16px;
+  white-space: nowrap;
+}
+
+/* Checkbox + label trên 1 hàng */
+.terms-checkbox {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  margin-bottom: 1.5em;
+  font-weight: normal;
+  color: #5D4037;
+  white-space: nowrap;
+}
+
+.terms-checkbox input {
+  margin: 0;
+  padding: 0;
+  width: auto;
+}
+
+/* Center phần switch */
+.switch {
+  display: block;
+  width: 100%;
+  text-align: center;
+  margin-top: 1em;
+  font-size: 0.9em;
+  color: #5D4037;
+}
+
+.switch a {
+  color: #5D4037;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+
+.back-button {
+  padding: 10px 10px;
+  width: 100%;
+  background: #fff;
+  border: none;
+  color: #5D4037;
+  font-size: 1rem;
+  font-family: 'Noto Sans', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+  padding-top: 5px;
+}
+
+.back-button i {
+  margin-right: 0.5rem;
+}
+
+.back-button:hover {
+  color: #3E2723;
+}
+
+/* Responsive cho màn hình nhỏ hơn 768px */
+@media (max-width: 768px) {
+  .main-grid {
+    display: flex;
+    flex-direction: column;
+    min-height: auto; 
+  }
+
+  .form-section {
+    padding: 1.5em;
+    min-height: 100vh;
+    display: flex;
+    align-items: center; 
+  }
+
+  .form-container {
+    max-width: 100%; 
+    padding: 0 1em; 
+  }
+
+  .form-container h2 {
+    font-size: 1.3em; 
+    text-align: center;
+  }
+
+  label {
+    font-size: 0.9em; 
+  }
+
+  input {
+    font-size: 0.9em; 
+    padding: 0.6em; 
+    margin-bottom: 1em; 
+  }
+
+  #password-error {
+    font-size: 0.8em; 
+  }
+
+  .terms-checkbox {
+    font-size: 0.85em; 
+    white-space: normal; 
+  }
+
+  .btn {
+    font-size: 0.9em; 
+    padding: 0.6em; 
+  }
+
+  .alt {
+    font-size: 0.85em; 
+  }
+
+  .social-buttons {
+    flex-wrap: wrap;
+    gap: 0.4em; 
+  }
+
+  .social-button {
+    flex: 1  23%;  
+    font-size: 0.85em; 
+    padding: 0.5em; 
+  }
+
+  .switch {
+    font-size: 0.85em; 
+  }
+
+  .back-button {
+    font-size: 0.9em;
+    padding: 0.6em; 
+  }
+
+  #captcha-container .g-recaptcha {
+    transform: scale(0.77); 
+    transform-origin: 0 0;
+  }
+
+  .image-section {
+    display: none !important; 
+  }
+}
+
+@media (max-width: 360px) {
+  .form-section {
+    padding: 1em;
+  }
+
+  .form-container {
+    padding: 0 0.5em;
+  }
+
+  .social-button {
+    flex: 1 1 100%; 
+  }
+
+  #captcha-container .g-recaptcha {
+    transform: scale(0.7); 
+  }
+}

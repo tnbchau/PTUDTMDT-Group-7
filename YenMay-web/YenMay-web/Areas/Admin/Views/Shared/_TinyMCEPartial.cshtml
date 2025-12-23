@@ -1,0 +1,60 @@
+﻿@{
+    var allowImages = ViewData["AllowImages"] as bool? ?? true;
+    var editorHeight = ViewData["EditorHeight"] as int? ?? 300;
+    var selector = ViewData["Selector"] as string;
+}
+
+@if (!string.IsNullOrEmpty(selector))
+{
+    <script>
+        (function () {
+            if (typeof tinymce === 'undefined') return;
+
+            const allowImages = @allowImages.ToString().ToLower();
+            const selector = '@selector';
+
+            tinymce.init({
+                selector: selector,
+                height: @editorHeight,
+                menubar: allowImages,
+                plugins: allowImages
+                    ? 'advlist autolink lists link image charmap preview anchor searchreplace visualblocks code fullscreen insertdatetime media table help wordcount'
+                    : 'advlist autolink lists link charmap searchreplace visualblocks code fullscreen help wordcount',
+
+                toolbar: allowImages
+                    ? 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | link image media table | removeformat | code'
+                    : 'undo redo | blocks | bold italic underline | alignleft aligncenter alignright | bullist numlist | link | removeformat | code',
+
+                language: 'vi',
+                relative_urls: false,
+                remove_script_host: false,
+                convert_urls: true,
+
+                setup: function (editor) {
+                    editor.on('change', function () {
+                        editor.save();
+                    });
+                },
+
+                images_upload_handler: allowImages ? function (blobInfo, success, failure) {
+                    const formData = new FormData();
+                    formData.append('file', blobInfo.blob(), blobInfo.filename());
+
+                    fetch('@Url.Action("UploadEditorImage", "AdminProduct")', {
+                        method: 'POST',
+                        body: formData,
+                        headers: {
+                            'RequestVerificationToken': document.querySelector('input[name="__RequestVerificationToken"]').value
+                        }
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) success(data.imageUrl);
+                        else failure(data.message || 'Upload failed');
+                    })
+                    .catch(err => failure(err.message));
+                } : undefined
+            });
+        })();
+    </script>
+}

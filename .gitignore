@@ -1,0 +1,6 @@
+# Database backup
+*.bak
+
+# Build output (ASP.NET)
+bin/
+obj/

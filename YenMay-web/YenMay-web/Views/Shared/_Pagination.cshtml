@@ -1,0 +1,63 @@
+﻿@using YenMay_web.Models.ViewModels.Common
+@model PaginationViewModel
+
+@{
+    // Tạo hàm helper để lấy URL với page mới
+    string CreatePageUrl(int pageNumber)
+    {
+        // Lấy tất cả query parameters hiện tại
+        var queryParams = Context.Request.Query.ToDictionary(x => x.Key, x => x.Value.ToString());
+
+        // Cập nhật page number
+        queryParams["page"] = pageNumber.ToString();
+
+        // Xóa pageNumber cũ nếu có (giữ tương thích)
+        if (queryParams.ContainsKey("pageNumber"))
+            queryParams.Remove("pageNumber");
+
+        // Xây dựng query string
+        var queryString = string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"));
+
+        // Trả về URL đầy đủ
+        return $"{Context.Request.Path}?{queryString}";
+    }
+}
+
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-5">
+        <ul class="pagination justify-content-center">
+            <!-- Previous Page -->
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" href="@(Model.HasPreviousPage? CreatePageUrl(Model.PageIndex - 1) : "#")">
+                    Trước
+                </a>
+            </li>
+
+            <!-- Page Numbers -->
+            @foreach (var pageNum in Model.GetPageNumbers(5))
+            {
+                <li class="page-item @(pageNum == Model.PageIndex ? "active" : "")">
+                    <a class="page-link" href="@CreatePageUrl(pageNum)">
+                        @pageNum
+                    </a>
+                </li>
+            }
+
+            <!-- Next Page -->
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link" href="@(Model.HasNextPage? CreatePageUrl(Model.PageIndex + 1) : "#")">
+                    Sau
+                </a>
+            </li>
+        </ul>
+
+        <!-- Page Info -->
+        @if (Model.TotalCount > 0)
+        {
+            <div class="text-center text-muted small mt-2">
+                Hiển thị @Model.StartItem - @Model.EndItem trong tổng số @Model.TotalCount sản phẩm
+            </div>
+        }
+    </nav>
+}

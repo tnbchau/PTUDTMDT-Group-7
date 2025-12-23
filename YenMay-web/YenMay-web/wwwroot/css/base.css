@@ -1,0 +1,767 @@
+/* css/base.css */
+
+/* ==========================================================================
+   1. RESET & BASE STYLES
+   ========================================================================== */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: "Be Vietnam", sans-serif; /* Đảm bảo font này được import trong HTML hoặc CSS chính */
+    line-height: 1.6;
+    background-color: #f8f9fa; /* Nền xám rất nhạt cho toàn trang */
+    color: #495057;          /* Màu chữ chính */
+    -webkit-font-smoothing: antialiased; /* Cải thiện hiển thị font trên Webkit */
+    -moz-osx-font-smoothing: grayscale; /* Cải thiện hiển thị font trên Firefox */
+}
+
+/* ==========================================================================
+   2. UTILITIES & HELPERS
+   ========================================================================== */
+
+.container { /* Có thể dùng class .container của Bootstrap hoặc tùy chỉnh ở đây */
+    max-width: 1200px; /* Hoặc giá trị bạn muốn, ví dụ: 1140px, 1320px */
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 100%;
+}
+
+a {
+    text-decoration: none;
+    color: #611313; /* Màu link chính của theme */
+    transition: color .3s ease, opacity .3s ease;
+}
+
+a:hover {
+    color: #d24b4b; /* Màu link khi hover */
+    /* opacity: 0.8; */ /* Hiệu ứng mờ nhẹ khi hover nếu muốn */
+}
+
+img {
+    max-width: 100%;
+    height: auto;     /* Giữ tỷ lệ khung hình */
+    display: block;   /* Loại bỏ khoảng trắng thừa dưới ảnh inline */
+    vertical-align: middle; /* Căn chỉnh tốt hơn với text nếu inline */
+}
+
+ul, ol { /* Reset cơ bản cho danh sách */
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 1rem; /* Khoảng cách mặc định dưới danh sách */
+}
+
+.background-alt {
+    background-color: #ffe8e8; /* Nền thay thế cho các section đặc biệt */
+}
+
+.section-padding { /* Lớp tiện ích cho padding section */
+    padding-top: 60px;  /* Có thể là 3rem, 4rem tùy theo thiết kế */
+    padding-bottom: 60px;
+}
+
+.required { /* Dấu sao cho trường bắt buộc trong form */
+    color: #dc3545; /* Màu đỏ Bootstrap cho lỗi/cảnh báo */
+    font-weight: normal; /* Không cần quá đậm */
+    margin-left: 2px;
+}
+
+/* Ẩn element một cách trực quan nhưng vẫn giữ cho screen readers */
+.visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+
+/* ==========================================================================
+   3. TYPOGRAPHY (Các style chữ chung nhất)
+   ========================================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+    color: #611313; /* Màu tiêu đề chung */
+    font-weight: 700; /* Hoặc 600 tùy font */
+    line-height: 1.3;
+    margin-top: 0; /* Reset margin top */
+    margin-bottom: 0.75rem; /* Khoảng cách dưới tiêu đề */
+}
+
+h1 { font-size: 2.5rem; } /* Kích thước tham khảo, điều chỉnh theo thiết kế */
+h2 { font-size: 2rem; }
+h3 { font-size: 1.75rem; }
+h4 { font-size: 1.5rem; }
+h5 { font-size: 1.25rem; }
+h6 { font-size: 1rem; }
+
+p {
+    margin-bottom: 1rem; /* Khoảng cách dưới đoạn văn */
+}
+
+.page-title,
+.section-title { /* Các class tiêu đề đặc biệt nếu cần style khác h1-h6 mặc định */
+    text-align: center;
+    margin-bottom: 40px; /* Khoảng cách lớn hơn dưới tiêu đề trang/section */
+    text-transform: uppercase;
+    /* font-size và color đã được h1-h6 xử lý, có thể ghi đè ở đây nếu muốn */
+}
+
+.page-title {
+     margin-bottom: 2.5rem !important; /* Ưu tiên margin này */
+     font-size: 2rem; /* Đồng nhất kích thước page-title nếu cần */
+}
+
+.section-title { /* Cho các tiêu đề section nhỏ hơn page-title */
+    font-size: 2em; /* Ví dụ */
+    margin-bottom: 1.5rem;
+}
+
+
+/* ==========================================================================
+   4. BUTTONS (Style nút chung)
+   ========================================================================== */
+
+.btn { /* Style cơ bản cho tất cả các nút, có thể dùng chung với class .btn của Bootstrap */
+    display: inline-block;
+    padding: 10px 25px; /* Điều chỉnh padding cho phù hợp */
+    font-size: 1rem;   /* Kích thước font chữ trong nút */
+    font-weight: 700;  /* Độ đậm chữ */
+    line-height: 1.5;  /* Chiều cao dòng */
+    text-align: center;
+    text-decoration: none;
+    vertical-align: middle;
+    cursor: pointer;
+    -webkit-user-select: none; /* Ngăn chọn text trong nút trên Safari */
+    user-select: none; /* Ngăn chọn text trong nút */
+    background-color: transparent;
+    border: 1px solid transparent; /* Border mặc định */
+    border-radius: 5px; /* Bo góc */
+    transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out, transform .2s ease;
+}
+
+.btn:hover { /* Hiệu ứng chung khi hover */
+    transform: translateY(-2px); /* Nhấc nút lên một chút */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .1); /* Đổ bóng nhẹ */
+}
+.btn:focus, .btn.focus {
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(143, 88, 42, .25); /* Shadow theme khi focus, giống Bootstrap */
+}
+.btn:active, .btn.active {
+    transform: translateY(0); /* Trả lại vị trí cũ khi active */
+    box-shadow: none; /* Bỏ shadow khi active */
+}
+
+
+/* Nút chính của theme */
+.btn-primary { /* Có thể dùng để style cho class .btn-primary của Bootstrap */
+    background: linear-gradient(96.55deg, #8f2a2a 12.14%, #e99898 105.25%);
+    color: #fff;
+    border-color: #8f2a2a; /* Thêm border để rõ hơn nếu nền không phải gradient */
+}
+.btn-primary:hover {
+    background: linear-gradient(96.55deg, #7d4b20 12.14%, #d3a380 105.25%);
+    color: #fff;
+    border-color: #7d4b20;
+}
+
+/* Nút phụ của theme */
+.btn-secondary { /* Có thể dùng để style cho class .btn-secondary của Bootstrap */
+    background-color: #611313;
+    color: #fff;
+    border-color: #611313;
+}
+.btn-secondary:hover {
+    background-color: #4d0f0f;
+    color: #fff;
+    border-color: #4d0f0f;
+}
+
+/* Các biến thể nút với màu theme (nếu bạn muốn class riêng không phụ thuộc Bootstrap) */
+.btn-theme-primary {
+    background: linear-gradient(96.55deg, #8f2a2a 12.14%, #e99898 105.25%) !important;
+    border: 0 !important; /* Ghi đè border nếu không muốn */
+    color: #fff !important;
+    font-weight: 500; /* Có thể muốn font weight khác cho nút theme */
+    padding: 0.4rem 1rem; /* Padding nhỏ hơn */
+}
+.btn-theme-primary:hover {
+    background: linear-gradient(96.55deg, #7d2020 12.14%, #d38080 105.25%) !important;
+    color: #fff !important;
+}
+
+.btn-theme-secondary {
+    background-color: #611313 !important;
+    color: #fff !important;
+    border: 0 !important;
+    font-weight: 500;
+}
+.btn-theme-secondary:hover {
+    background-color: #4d0f0f !important;
+    color: #fff !important;
+}
+
+/* Nút outline */
+.btn-outline-secondary { /* Có thể dùng để style cho class .btn-outline-secondary của Bootstrap */
+    border-color: #6c757d; /* Màu xám Bootstrap */
+    color: #6c757d;
+    font-weight: 500;
+}
+.btn-outline-secondary:hover {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Nút kích thước lớn */
+.btn-lg { /* Có thể dùng để style cho class .btn-lg của Bootstrap */
+    padding: .75rem 1.5rem;
+    font-size: 1.05rem; /* Hoặc 1.1rem tùy ý */
+}
+
+
+/* ==========================================================================
+   5. HEADER & NAVIGATION (Style chung cho header trên mọi trang)
+   ========================================================================== */
+
+.site-header {
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .1);
+    padding: 10px 0; /* Padding trên dưới cho header */
+    position: sticky; /* Header dính khi cuộn */
+    top: 0;
+    z-index: 1025 !important; /* Cao hơn z-index mặc định của Bootstrap modal backdrop (1040) */
+}
+
+.header-container { /* Container bên trong header */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: nowrap; /* Ngăn xuống dòng nếu không gian hẹp (xử lý riêng cho mobile) */
+    position: relative; /* Cho dropdown search */
+}
+
+.logo img {
+    max-height: 60px; /* Chiều cao tối đa của logo */
+}
+
+/* --- Main Navigation (Desktop) --- */
+.main-nav .nav-menu {
+    display: flex;
+    list-style: none;
+    padding-left: 0;
+    margin-bottom: 0; /* Reset margin của ul */
+    align-items: center; /* Căn giữa các mục menu theo chiều dọc */
+}
+
+.main-nav .nav-menu li {
+    margin-left: 15px;  /* Khoảng cách giữa các mục menu */
+    margin-right: 15px;
+    display: flex;
+    align-items: center;
+    position: relative; /* Cho gạch chân ::after */
+}
+
+.main-nav .nav-menu a { /* Áp dụng cho cả link và link dropdown-toggle */
+    font-weight: 700;
+    text-transform: uppercase;
+    color: #611313; /* Màu chữ menu */
+    padding: 5px 0; /* Padding trên dưới cho link (tạo không gian cho gạch chân) */
+    position: relative;
+    white-space: nowrap; /* Ngăn text xuống dòng */
+    text-decoration: none;
+    display: inline-block;
+    line-height: normal; /* Reset line-height nếu cần */
+}
+
+/* Hiệu ứng gạch chân khi hover cho link menu không phải dropdown */
+.main-nav .nav-menu li:not(.dropdown) > a:hover::after {
+    content: "";
+    position: absolute;
+    bottom: -2px; /* Vị trí của gạch chân */
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: #d24b4b; /* Màu gạch chân */
+}
+
+/* --- Dropdown Menu (ghi đè style Bootstrap nếu cần) --- */
+.main-nav .nav-menu li.dropdown > a.dropdown-toggle::after { /* Bỏ mũi tên mặc định nếu dùng class .nav-link của Bootstrap */
+    display: none !important;
+}
+.main-nav .nav-menu li.dropdown > a.dropdown-toggle:hover::after { /* Không có gạch chân cho link dropdown */
+    display: none;
+}
+
+.main-nav .dropdown-menu { /* Menu con xổ xuống */
+    background-color: #ffffff;
+    border: 1px solid rgba(0,0,0,.1); /* Viền Bootstrap */
+    border-radius: 0.375rem; /* Bo góc Bootstrap */
+    box-shadow: 0 0.5rem 1rem rgba(0,0,0,.15); /* Shadow Bootstrap */
+    margin-top: 0.3rem; /* Khoảng cách với item cha */
+    padding-top: 0.5rem; /* Padding Bootstrap */
+    padding-bottom: 0.5rem;
+    min-width: 180px; /* Độ rộng tối thiểu */
+    /* z-index: 1001; */ /* Cao hơn header một chút nếu cần */
+}
+
+.main-nav .dropdown-item { /* Các item trong menu con */
+    padding: 0.5rem 1rem;
+    color: #611313;
+    font-weight: normal; /* Không cần đậm như menu chính */
+    text-transform: none; /* Không cần uppercase */
+    /* transition đã được a kế thừa */
+}
+.main-nav .dropdown-item:hover {
+    background-color: #f8f9fa; /* Màu nền Bootstrap khi hover */
+    color: #d24b4b; /* Màu chữ hover */
+}
+
+
+/* --- Header Icons (Search, Account, Cart) --- */
+.header-icons {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem; /* Khoảng cách đồng đều giữa các icon */
+}
+
+.header-icons > a,
+.header-icons > li { /* Áp dụng cho cả thẻ <a> và <li> (cho dropdown tài khoản) */
+    display: flex; /* Để căn chỉnh icon bên trong */
+    align-items: center;
+    text-decoration: none;
+    color: #611313; /* Màu icon */
+    line-height: 1; /* Quan trọng để icon không bị lệch */
+    margin: 0 !important; /* Ghi đè nếu có margin từ nguồn khác */
+    padding: 0;
+    list-style-type: none; /* Nếu là li */
+    transition: color 0.2s ease, opacity 0.2s ease; /* Hiệu ứng hover */
+}
+
+.header-icons > a:hover,
+.header-icons > li a:hover, /* Target link bên trong li */
+.header-icons > li .dropdown-toggle:hover { /* Target cả dropdown toggle */
+    color: #d24b4b; /* Màu hover */
+    opacity: 0.85;
+}
+
+.header-icons .fas { /* Style chung cho icon FontAwesome trong header */
+    font-size: 1.25rem; /* Kích thước icon */
+    line-height: 1;
+    display: block; /* Đảm bảo icon hiển thị đúng */
+}
+
+/* Search Icon & Form Container (Desktop) */
+#search-toggle-desktop { /* Nếu nút search là button */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Reset padding nếu là button */
+}
+/* .desktop-search-form đã có ở trên là #desktop-search-container */
+#desktop-search-container {
+    display: none; /* JS sẽ toggle class .active để hiển thị */
+    position: absolute; /* Định vị so với .header-container */
+    top: 110%; /* Vị trí dưới header */
+    right: 0; /* Căn phải */
+    width: 300px; /* Độ rộng form search */
+    max-width: 100%;
+    background-color: #fff;
+    padding: .75rem;
+    border-radius: .375rem; /* Bo góc Bootstrap */
+    box-shadow: 0 .5rem 1rem rgba(0, 0, 0, .15); /* Shadow Bootstrap */
+    z-index: 1050; /* Nằm trên các element khác, dưới modal (nếu có) */
+    align-items: center; /* Để input và nút đóng thẳng hàng */
+}
+#desktop-search-container.active {
+    display: flex !important; /* Ghi đè display:none */
+}
+#desktop-search-container .btn-close { /* Nút đóng form search Bootstrap */
+    margin-left: .5rem;
+}
+
+
+/* Account Dropdown Icon */
+#account-menu-item { /* Thẻ li chứa dropdown */
+    position: relative; /* Cho dropdown menu */
+}
+#account-menu-item .dropdown-toggle { /* Link toggle dropdown */
+    display: inline-flex; /* Icon và text (nếu có) thẳng hàng */
+    align-items: center;
+    gap: 0.4rem; /* Khoảng cách giữa icon và text */
+    color: #611313; /* Kế thừa từ .header-icons > li a */
+    font-weight: 500;
+    text-decoration: none;
+    line-height: 1;
+    padding: 0.2rem 0; /* Padding nhỏ cho dễ click */
+}
+#account-menu-item .dropdown-toggle .fas.fa-user-circle { /* Icon user */
+    font-size: 1.35rem; /* Kích thước icon user */
+    margin: 0;
+}
+
+#account-menu-item .dropdown-menu { /* Menu xổ xuống của tài khoản */
+    margin-top: 0.5rem !important; /* Khoảng cách với nút toggle */
+    border-radius: 0.375rem;
+    box-shadow: 0 .5rem 1rem rgba(0,0,0,.15);
+    border: 1px solid rgba(0,0,0,.08);
+    min-width: 200px;
+    z-index: 1030 !important; /* Đảm bảo nằm trên các thành phần khác */
+}
+#account-menu-item .dropdown-item { /* Các item trong menu tài khoản */
+    display: flex;
+    align-items: center;
+    gap: 0.6rem; /* Khoảng cách giữa icon và text trong item */
+    padding: 0.5rem 1rem;
+    font-size: 0.9rem;
+    /* Các style khác (màu chữ, hover) kế thừa từ .main-nav .dropdown-item */
+}
+#account-menu-item .dropdown-item i { /* Icon trong dropdown item */
+    width: 16px; /* Độ rộng cố định cho icon */
+    text-align: center;
+    color: #6c757d; /* Màu icon xám */
+}
+/* Style riêng cho nút logout */
+#account-menu-item.logged-in .dropdown-menu #logout-button,
+#account-menu-item.logged-in .dropdown-menu #logout-button-desktop { /* Nếu có ID riêng */
+    /* color: #b20000 !important; */ /* Màu đỏ chữ cho logout */
+}
+#account-menu-item.logged-in .dropdown-menu #logout-button i,
+#account-menu-item.logged-in .dropdown-menu #logout-button-desktop i {
+    color: #b20000; /* Màu đỏ cho icon logout */
+}
+#account-menu-item.logged-in .dropdown-menu #logout-button:hover {
+    background-color: #f8d7da; /* Nền đỏ nhạt khi hover logout */
+    color: #721c24 !important; /* Chữ đỏ đậm khi hover */
+}
+
+
+/* Cart Icon & Badge */
+.cart-icon-link {
+    position: relative; /* Để định vị badge */
+    display: inline-flex; /* Cho badge */
+    align-items: center;
+}
+/* Icon giỏ hàng .fa-shopping-cart đã có style từ .header-icons .fas */
+.cart-count-icon {
+    /* display: none; JS sẽ hiển thị khi có class .show */
+    position: absolute;
+    top: -5px;  /* Điều chỉnh vị trí badge */
+    right: -7px; /* Điều chỉnh vị trí badge */
+    background-color: #d24b4b; /* Màu nền badge (màu theme accent) */
+    color: white;
+    font-family: 'Arial', sans-serif; /* Font rõ ràng cho số */
+    border-radius: 50%; /* Hình tròn */
+    font-size: 0.65em; /* Kích thước chữ trong badge */
+    font-weight: bold;
+    line-height: 1; /* Căn giữa số theo chiều dọc */
+    text-align: center;
+    box-sizing: border-box;
+    min-width: 15px;   /* Kích thước tối thiểu của badge */
+    min-height: 15px;
+    padding: 2px 4px;  /* Padding bên trong badge */
+    border: 1px solid white; /* Viền trắng cho badge */
+    box-shadow: 0 1px 1px rgba(0,0,0,0.15); /* Đổ bóng nhẹ */
+    /* Dùng flex để căn số ở giữa nếu kích thước cố định */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+/* --- Mobile Navigation & Search --- */
+.menu-toggle { /* Nút hamburger */
+    display: none; /* Mặc định ẩn trên desktop, JS sẽ đổi thành block trên mobile */
+    background: transparent;
+    border: 0;
+    font-size: 1.8em; /* Kích thước icon hamburger */
+    cursor: pointer;
+    color: #611313; /* Màu icon */
+    padding: 0; /* Reset padding */
+    line-height: 1; /* Căn icon */
+}
+
+.main-nav-mobile { /* Container bao menu mobile, thường nằm ngay sau .header-container */
+    width: 100%;
+    /* position: absolute; */ /* Nếu muốn nó xổ xuống đè lên content */
+    /* top: 100%; */ /* Ngay dưới header */
+    /* left: 0; */
+    /* z-index: 1020; */ /* Dưới header chính một chút */
+}
+
+.main-nav-mobile .nav-menu { /* ul chứa các mục menu mobile */
+    display: none; /* JS sẽ toggle class .active để hiển thị */
+    flex-direction: column;
+    list-style: none;
+    padding-left: 0;
+    margin-top: 10px; /* Khoảng cách với header */
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, .1); /* Đổ bóng cho menu */
+    border-top: 1px solid #eee; /* Đường kẻ phân cách với header */
+}
+.main-nav-mobile .nav-menu.active { /* Khi menu mobile được mở */
+    display: flex;
+}
+
+.main-nav-mobile .nav-menu li {
+    margin: 0;
+    text-align: left; /* Căn trái các item menu */
+}
+.main-nav-mobile .nav-menu a {
+    padding: 12px 20px; /* Padding cho mỗi mục menu */
+    display: block; /* Để link chiếm hết chiều rộng */
+    border-bottom: 1px solid #eee; /* Đường kẻ giữa các mục */
+    color: #611313;
+    font-weight: 700;
+    text-transform: uppercase;
+}
+.main-nav-mobile .nav-menu a:hover {
+    background-color: #f8f8f8; /* Màu nền khi hover */
+    color: #d24b4b;
+}
+.main-nav-mobile .nav-menu li:last-child a { /* Bỏ border cho item cuối */
+    border-bottom: none;
+}
+
+/* Mobile Search Form Container */
+#mobile-search-container {
+    display: none; /* JS sẽ toggle class .active */
+    background-color: #f8f8f8; /* Nền khác biệt cho form search mobile */
+    border-bottom: 1px solid #eee;
+    padding: 10px 15px; /* Padding cho form */
+}
+#mobile-search-container.active {
+    display: block !important;
+}
+/* Input search bên trong #mobile-search-container có thể dùng style .form-control chung */
+
+
+/* ==========================================================================
+   13. FOOTER (Style chung cho footer trên mọi trang)
+   ========================================================================== */
+.site-footer {
+    background-color: #c13f3f; /* Màu nền footer đậm hơn */
+    color: #fbf9f8; /* Màu chữ sáng trên nền đậm */
+    padding-top: 40px;
+    /* padding-bottom: 0; */ /* Bỏ padding bottom ở đây nếu copyright có padding riêng */
+}
+
+.footer-container { /* Container các cột trong footer */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); /* Responsive columns */
+    gap: 30px; /* Khoảng cách giữa các cột */
+    padding-bottom: 30px; /* Padding dưới trước dòng copyright */
+}
+
+.footer-column .footer-logo img {
+    max-height: 50px; /* Kích thước logo footer */
+    margin-bottom: 1rem;
+}
+
+.footer-column h4 { /* Tiêu đề các cột footer */
+    color: #e99898;    /* Màu sáng hơn cho tiêu đề (màu theme accent) */
+    margin-bottom: 1rem;
+    text-transform: uppercase;
+    font-size: 1.1em;
+    font-weight: 700;
+}
+
+.footer-column p,
+.footer-column li { /* Text và list item trong footer */
+    margin-bottom: .5rem;
+    font-size: .9rem;
+    color: #f0e9e4; /* Màu chữ sáng hơn một chút để dễ đọc */
+}
+
+.footer-column ul.list-unstyled li { /* Đảm bảo style cho list nếu dùng class Bootstrap */
+    margin-bottom: .5rem;
+}
+
+.footer-column a { /* Link trong footer */
+    color: #fbf9f8; /* Màu link sáng giống text */
+    /* transition đã có ở a chung */
+}
+.footer-column a:hover {
+    color: #e99898; /* Màu link khi hover (màu theme accent) */
+}
+
+/* Khu vực icon mạng xã hội và logo Bộ Công Thương */
+.footer-social-bct {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 1rem; /* Khoảng cách với nội dung bên trên */
+}
+.footer-social-bct .social-icons {
+    display: flex;
+    gap: 15px; /* Khoảng cách giữa các icon MXH */
+}
+.footer-social-bct .social-icons a {
+    color: #fbf9f8; /* Màu icon MXH */
+    font-size: 1.3em; /* Kích thước icon */
+}
+.footer-social-bct .social-icons a:hover {
+    color: #e99898; /* Màu hover icon */
+}
+.footer-social-bct img[alt*="Bộ Công Thương"] {
+    max-height: 45px;
+    width: auto;
+}
+
+.copyright { /* Dòng copyright */
+    text-align: center;
+    padding: 15px 0;
+    border-top: 1px solid rgba(251, 249, 248, .2); /* Đường kẻ mờ */
+    font-size: .9em;
+    color: #c5b9b1; /* Màu chữ mờ hơn cho copyright */
+    background-color: #c13f3f; /* Đồng bộ màu nền với footer */
+}
+
+
+/* ==========================================================================
+   14. MEDIA QUERIES (Chung - Các breakpoint chính ảnh hưởng layout toàn cục)
+   ========================================================================== */
+
+/* Medium devices (tablets, <= 991.98px) */
+@media (max-width: 991.98px) {
+    .page-title, .section-title { font-size: 2em; } /* Giảm kích thước tiêu đề chung */
+    .section-title { font-size: 1.8em; }
+
+    /* Các điều chỉnh cho header, footer nếu layout thay đổi ở breakpoint này */
+    .main-nav { /* Ẩn nav desktop trên tablet trở xuống */
+        display: none;
+    }
+    .menu-toggle { /* Hiện nút hamburger */
+        display: block;
+    }
+     .header-container {
+        /* flex-wrap: wrap; */ /* Cho phép xuống dòng nếu cần */
+    }
+}
+
+/* Small devices (landscape phones, <= 767.98px) */
+@media (max-width: 767.98px) {
+    .page-title, .section-title { font-size: 1.8em; margin-bottom: 30px; }
+    .section-title { font-size: 1.6em; }
+
+    /* Header Icons có thể cần điều chỉnh thêm */
+    .header-icons {
+        /* Ví dụ: giảm gap hoặc ẩn bớt icon không quan trọng */
+        /* gap: 0.8rem; */
+    }
+
+    /* Footer Columns */
+    .footer-column {
+        text-align: center; /* Căn giữa nội dung cột footer */
+        margin-bottom: 30px; /* Khoảng cách giữa các cột khi xếp chồng */
+    }
+    .footer-column:last-child {
+        margin-bottom: 0;
+    }
+    .footer-column img[alt*="Logo Footer"],
+    .footer-column img[alt*="Bộ Công Thương"] {
+        margin-left: auto;
+        margin-right: auto; /* Căn giữa logo trong cột */
+    }
+    .footer-column h4 {
+        margin-top: 1rem; /* Khoảng cách trên cho tiêu đề cột khi xếp chồng */
+    }
+    .footer-social-bct {
+        justify-content: center; /* Căn giữa icon MXH và BCT */
+    }
+    .footer-social-bct img[alt*="Bộ Công Thương"] {
+        margin-left: 0; /* Reset nếu có margin đặc biệt từ desktop */
+    }
+}
+
+/* Extra small devices (portrait phones, <= 575.98px) */
+@media (max-width: 575.98px) {
+    .page-title, .section-title { font-size: 1.6em; }
+    .section-title { font-size: 1.4em; }
+
+    .header-icons .fas { font-size: 1.1rem; } /* Icon nhỏ hơn trên mobile */
+    .cart-count-icon { /* Badge nhỏ hơn một chút */
+        top: -4px; right: -6px;
+        min-width: 13px; min-height: 13px;
+        font-size: 0.6em; padding: 1px 3px;
+    }
+}
+
+/* ==========================================================================
+   STYLES FOR COMMON COMPONENTS (Nếu có thể tái sử dụng ở nhiều nơi)
+   Ví dụ: Star Rating, Product Excerpt (mô tả ngắn sản phẩm)
+   Nếu các thành phần này có style nhất quán trên các card sản phẩm,
+   chi tiết sản phẩm, v.v. thì nên đặt ở đây.
+   ========================================================================== */
+
+/* --- Star Rating (Dùng cho sản phẩm) --- */
+.star-rating {
+    font-size: .8em; /* Kích thước sao */
+    color: #fdd835; /* Màu vàng cho sao (FontAwesome solid) */
+    margin-bottom: .5rem;
+    text-align: center; /* Hoặc left tùy thiết kế card */
+}
+.star-rating .rating { /* Thường là text (vd: "4.5") - có thể ẩn nếu chỉ dùng icon */
+    display: none;
+}
+.product-rating-summary .fa-star, /* Sao đầy */
+.product-rating-summary .fa-star-half-alt, /* Sao nửa */
+.product-card-rating-summary .fa-star, /* Áp dụng cho card sản phẩm */
+.product-card-rating-summary .fa-star-half-alt {
+    color: #fdd835; /* Màu vàng */
+    /* margin-right: 1px; */ /* Khoảng cách nhỏ giữa các sao nếu cần */
+}
+.product-rating-summary .far.fa-star, /* Sao rỗng (nếu dùng) */
+.product-card-rating-summary .far.fa-star {
+    color: #e0e0e0; /* Màu xám nhạt cho sao rỗng */
+}
+.product-rating-summary .rating-count,
+.product-card-rating-summary .rating-count {
+    font-size: 0.85em;
+    color: #6c757d; /* Màu xám cho số lượt đánh giá */
+    margin-left: 0.3rem; /* Khoảng cách với sao */
+}
+
+
+/* --- Product Excerpt (Mô tả ngắn sản phẩm trên card) --- */
+.product-excerpt {
+    font-size: .8rem; /* Kích thước font mô tả ngắn */
+    color: #555; /* Màu chữ */
+    margin-bottom: .75rem;
+    line-height: 1.4;
+    text-align: left; /* Thường căn trái */
+    /* Giới hạn số dòng nếu cần (CSS-only trick) */
+    /* overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; 
+    -webkit-box-orient: vertical;
+    min-height: calc(1.4em * 2); Đảm bảo không gian cho 2 dòng */
+}
+.product-excerpt p {
+    margin-bottom: .3em; /* Khoảng cách giữa các đoạn nhỏ trong excerpt */
+}
+.product-excerpt p strong { /* Chữ đậm trong excerpt */
+    color: #4f4f4f;
+}
+
+/* Star Rating Input (Dùng trong form đánh giá sản phẩm) */
+.star-rating-input .fa-star {
+    color: #ccc; /* Màu sao mặc định (rỗng) */
+    margin-right: 5px;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+}
+.star-rating-input .fa-star:hover,
+.star-rating-input .fa-star.selected,
+.star-rating-input .fa-star.hovered {
+    color: #fdd835; /* Màu sao khi được chọn hoặc hover (FontAwesome solid) */
+}

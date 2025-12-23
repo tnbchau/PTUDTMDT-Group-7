@@ -1,0 +1,140 @@
+﻿@model YenMay_web.Models.ViewModels.Article.ArticleSidebarViewModel
+
+<aside class="article-sidebar">
+
+    <div class="sidebar-box mb-5">
+        <h5 class="sidebar-title fw-bold mb-3">Tìm kiếm bài viết</h5>
+        <div class="p-3 border rounded shadow-sm bg-white">
+            <form asp-controller="Article"
+                  asp-action="Index"
+                  method="get"
+                  class="sidebar-search-form">
+                <div class="input-group">
+                    <input type="text"
+                           name="searchTerm"
+                           class="form-control border-end-0"
+                           placeholder="Nhập từ khóa..."
+                           value="@Context.Request.Query["searchTerm"]" />
+                    <button class="btn btn-brown px-3" type="submit">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <hr class="sidebar-divider mb-5">
+
+    <div class="sidebar-box mb-5">
+        <h5 class="sidebar-title fw-bold mb-3">Bài viết gần đây</h5>
+        <div class="p-3 border rounded shadow-sm bg-white">
+            <ul class="sidebar-list list-unstyled mb-0">
+                @foreach (var article in Model.RecentArticles)
+                {
+                    <li class="py-3 border-bottom last-child-border-0">
+                        <a asp-controller="Article"
+                           asp-action="Details"
+                           asp-route-categorySlug="@article.CategorySlug"
+                           asp-route-articleSlug="@article.Slug"
+                           class="sidebar-link text-decoration-none">
+                            <i class="fas fa-angle-right me-2 small text-muted"></i>@article.Title
+                        </a>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+    <hr class="sidebar-divider mb-5">
+
+    <div class="sidebar-box mb-5">
+        <h5 class="sidebar-title fw-bold mb-3">Danh mục bài viết</h5>
+        <div class="p-3 border rounded shadow-sm bg-white">
+            <ul class="sidebar-list list-unstyled mb-0">
+                @foreach (var cat in Model.Categories)
+                {
+                    <li class="d-flex justify-content-between align-items-center py-2">
+                        <a asp-controller="Article"
+                           asp-action="Index"
+                           asp-route-categorySlug="@cat.Slug"
+                           class="sidebar-link text-decoration-none">
+                            @cat.Name
+                        </a>
+                        <span class="badge rounded-pill bg-light text-brown border">@cat.ArticleCount</span>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+
+</aside>
+
+<style>
+    :root {
+        --main-brown: #8B4513;
+    }
+
+    /* Tiêu đề sidebar */
+    .sidebar-title {
+        color: var(--main-brown);
+        border-left: 4px solid var(--main-brown);
+        padding-left: 12px;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    /* Đường kẻ phân cách giữa các khối lớn */
+    .sidebar-divider {
+        border: 0;
+        border-top: 1px double #ddd;
+        opacity: 0.5;
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    /* Link bài viết gần đây - Tăng padding py-3 để cách xa nhau hơn */
+    .sidebar-list li {
+        transition: background 0.2s;
+    }
+
+    .sidebar-link {
+        color: #444;
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        display: block;
+    }
+
+        .sidebar-link:hover {
+            color: var(--main-brown) !important;
+            transform: translateX(5px);
+        }
+
+    /* Nút search */
+    .btn-brown {
+        background-color: var(--main-brown);
+        color: white;
+        border: 1px solid var(--main-brown);
+    }
+
+        .btn-brown:hover {
+            background-color: #6d3610;
+            color: white;
+        }
+
+    .text-brown {
+        color: var(--main-brown);
+    }
+
+    .last-child-border-0:last-child {
+        border-bottom: none !important;
+        padding-bottom: 0 !important;
+    }
+
+    .sidebar-search-form .form-control:focus {
+        border-color: var(--main-brown);
+        box-shadow: 0 0 0 0.2rem rgba(139, 69, 19, 0.15);
+    }
+</style>

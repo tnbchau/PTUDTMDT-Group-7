@@ -1,0 +1,268 @@
+/* ==========================================================================
+   STYLES FOR PRODUCT_DETAIL.HTML
+   ========================================================================== */
+
+body.product-detail-page { /* Class riêng cho body trang này nếu cần style nền khác */
+    /* background-color: #fff; */ /* Ví dụ nền trắng */
+}
+
+.product-detail-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    margin-top: 20px;
+}
+
+/* Breadcrumbs */
+.woocommerce-breadcrumb { /* Class breadcrumb (giống WooCommerce) */
+    font-size: 0.9rem;
+    color: #777;
+    margin-bottom: 1.5rem;
+    padding: 10px 15px; /* Thêm padding */
+    background-color: #f8f9fa; /* Nền cho breadcrumb */
+    border-radius: 0.25rem;
+}
+.woocommerce-breadcrumb a {
+    color: #613613;
+    text-decoration: none;
+}
+.woocommerce-breadcrumb a:hover {
+    color: #d26e4b;
+}
+.woocommerce-breadcrumb span.divider {
+    margin: 0 8px;
+    color: #aaa;
+}
+
+/* Product Gallery */
+.product-gallery .carousel-item img {
+    max-height: 500px;
+    width: 100%;
+    object-fit: contain; /* Giữ tỷ lệ, không cắt */
+    border: 1px solid #eee;
+    border-radius: 5px;
+    cursor: pointer; /* Cho biết có thể click để xem lớn */
+}
+.carousel-indicators [data-bs-target] { /* Nút chỉ thị slide */
+    background-color: #8F582A;
+}
+.product-thumbnails {
+    overflow-x: auto;
+    white-space: nowrap; /* Giữ thumbnail trên một hàng */
+    padding-top: 10px; /* Khoảng cách với ảnh chính */
+}
+.product-thumbnails img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    cursor: pointer;
+    border: 2px solid transparent;
+    border-radius: 4px;
+    opacity: 0.7;
+    margin-right: 5px;
+    display: inline-block; /* Để thumbnail nằm trên hàng */
+}
+.product-thumbnails img.active,
+.product-thumbnails img:hover {
+    border-color: #8F582A; /* Màu theme */
+    opacity: 1;
+}
+
+/* Product Detail Info */
+.product-detail-info .product-title {
+    color: #613613;
+    margin-bottom: 0.75rem;
+    font-weight: 700;
+    font-size: 1.8rem; /* Kích thước tiêu đề sản phẩm */
+}
+.product-detail-info .price {
+    color: #d26e4b;
+    font-size: 2rem; /* Giá to, nổi bật */
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+.product-detail-info .short-description {
+    color: #555;
+    margin-bottom: 1.5rem;
+    line-height: 1.7;
+}
+.product-detail-info .short-description p {
+    margin-bottom: 0.5rem;
+}
+
+/* Stock Status & Policies */
+.stock-status { margin-bottom: 1rem; }
+.quick-policies {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem; /* Khoảng cách giữa các item chính sách */
+    font-size: 0.85rem;
+    color: #555;
+    border-top: 1px solid #eee;
+    padding-top: 1rem;
+    margin-top: 1rem;
+}
+.quick-policies span i { color: #8F582A; }
+
+
+/* Quantity Selector */
+.quantity-selector label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #333;
+}
+.quantity-selector .form-control { /* Input số lượng */
+    max-width: 70px;
+    text-align: center;
+    display: inline-block; /* Cho phép nằm cùng hàng với label */
+    border-color: #ced4da; /* Màu border Bootstrap */
+}
+/* Nút thêm vào giỏ đã có style từ .btn-theme-primary */
+#add-to-wishlist-button { /* Nút yêu thích */
+    /* Style chung đã có, có thể thêm style riêng nếu cần */
+}
+#add-to-wishlist-button i.fas.fa-heart { /* Icon trái tim đầy (đã thích) */
+    color: red;
+}
+
+
+/* Product Meta (SKU, Category) */
+.product-meta {
+    font-size: 0.9em;
+    color: #6c757d;
+    margin-top: 1.5rem; /* Khoảng cách với các nút */
+}
+.product-meta strong { color: #343a40; }
+.product-meta a { color: #613613; }
+.product-meta a:hover { color: #d26e4b; }
+
+
+/* Product Tabs (Mô tả, Thông tin, Đánh giá) */
+.product-tabs {
+    margin-top: 3rem;
+}
+.product-tabs .nav-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 0; /* Bỏ margin dưới của nav-tabs */
+}
+.product-tabs .nav-item {
+    margin-bottom: -1px; /* Để border active đè lên */
+}
+.product-tabs .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    color: #6c757d;
+    font-weight: 500;
+    padding: 0.8rem 1rem;
+    margin-right: 1rem;
+    transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+.product-tabs .nav-link:hover:not(.active) {
+    color: #495057;
+    border-bottom-color: #e9ecef; /* Màu theme nhạt khi hover */
+}
+.product-tabs .nav-tabs .nav-link.active,
+.product-tabs .nav-tabs .nav-item.show .nav-link { /* Ghi đè Bootstrap */
+    color: #8F582A; /* Màu theme chính */
+    background-color: transparent;
+    border-color: transparent transparent #8F582A transparent !important; /* Chỉ border dưới */
+    font-weight: 600;
+}
+.product-tabs .tab-content {
+    padding: 2rem 0.5rem; /* Padding cho nội dung tab */
+    border: none;
+    background-color: transparent;
+}
+.product-description-content h1, /* Style cho heading trong mô tả */
+.product-description-content h2,
+.product-description-content h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.8rem;
+    color: #613613;
+    font-weight: bold;
+}
+.product-description-content p,
+.product-description-content ul li {
+    margin-bottom: 0.75rem;
+    line-height: 1.8;
+    color: #4f4f4f;
+}
+.product-description-content ul {
+    padding-left: 20px;
+}
+
+
+/* Review Form & List (Trong tab Đánh giá) */
+/* Star rating input đã có trong base.css */
+#existing-reviews-list .review-item { /* Một đánh giá */
+    /* Style nếu cần */
+}
+#existing-reviews-list .review-author {
+    /* ... */
+}
+#existing-reviews-list .review-rating .fa-star {
+    /* ... */
+}
+#existing-reviews-list .review-comment {
+    /* ... */
+}
+#new-review-form label { /* Nhãn trong form đánh giá */
+    /* ... */
+}
+#new-review-form .form-control { /* Input, textarea trong form đánh giá */
+    /* ... */
+}
+#new-review-form .btn-theme-primary { /* Nút gửi đánh giá */
+    /* ... */
+}
+
+
+/* Related Products Section */
+.related-products-section {
+    padding: 40px 0;
+    background-color: #f8f9fa; /* Nền giống body */
+    margin-top: 40px;
+}
+.related-products-section .section-title { /* Tiêu đề "Sản phẩm liên quan" */
+    margin-bottom: 2rem;
+    color: #613613;
+}
+/* Style cho .product-card trong related-products-grid kế thừa từ style-sanpham.css hoặc base.css */
+#related-products-grid .product-card {
+    margin-bottom: 0; /* Nếu grid tự tạo gap */
+}
+
+
+/* Modal xem ảnh lớn */
+#productImageModal .modal-dialog { max-width: 800px; }
+#productImageModal .modal-body { padding: 0; }
+#productImageModal img {
+    max-height: 80vh;
+    width: auto; /* Để giữ tỷ lệ */
+    max-width: 100%;
+    display: block;
+    margin: 0 auto; /* Căn giữa ảnh trong modal */
+}
+#productImageModal .btn-close { /* Nút đóng modal */
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    z-index: 10; /* Nằm trên ảnh */
+    background-color: rgba(255,255,255,0.7);
+    border-radius: 50%;
+    padding: 0.5em;
+}
+
+/* MEDIA QUERIES (Cho product_detail.html) */
+@media (max-width: 767.98px) {
+    .product-detail-info .product-title { font-size: 1.5rem; }
+    .product-detail-info .price { font-size: 1.7rem; }
+    .product-gallery .carousel-item img { max-height: 350px; }
+    .product-tabs .nav-link { margin-right: 0.5rem; padding: 0.7rem 0.8rem; font-size: 0.9rem;}
+}

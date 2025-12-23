@@ -1,0 +1,222 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using YenMay_web.Models.Domain
+@inject SignInManager<User> SignInManager
+@inject UserManager<User> UserManager
+@inject YenMay_web.Data.YMDbContext _context
+
+<header class="site-header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white">
+        <div class="container">
+
+            <!-- LOGO -->
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">
+                <img src="/img-sp/logotrongsuot.png" alt="Yến Mây" style="height:50px;">
+            </a>
+
+            <button class="navbar-toggler" type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+
+                <!-- MENU LEFT -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link fw-semibold text-dark"
+                           asp-controller="Home"
+                           asp-action="Index">Trang Chủ</a>
+                    </li>
+
+                    <!-- BÀI VIẾT -->
+                    <li class="nav-item dropdown">
+                        @{
+                            var blogCategories = _context.CategoryArticles.OrderBy(c => c.Name).ToList();
+                        }
+                        <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown">
+                            Bài Viết
+                        </a>
+                        <ul class="dropdown-menu">
+                            @foreach (var cat in blogCategories)
+                            {
+                                <li>
+                                    <a class="dropdown-item" href="/tin-tuc/@cat.Slug">@cat.Name</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                    <!-- SẢN PHẨM -->
+                    <li class="nav-item dropdown">
+                        @{
+                            var categories = _context.Categories.OrderBy(c => c.Name).ToList();
+                        }
+                        <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown">
+                            Sản Phẩm
+                        </a>
+                        <ul class="dropdown-menu">
+                            @foreach (var category in categories)
+                            {
+                                <li>
+                                    <a class="dropdown-item" href="/san-pham/@category.Slug">@category.Name</a>
+                                </li>
+                            }
+                        </ul>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link text-dark"
+                           asp-controller="About"
+                           asp-action="Index">Về Chúng Tôi</a>
+                    </li>
+                </ul>
+
+                <!-- MENU RIGHT -->
+                <ul class="navbar-nav align-items-lg-center">
+
+                    <!-- TRA CỨU ĐƠN -->
+                    <li class="nav-item d-flex align-items-center me-lg-2">
+                        <a class="btn btn-track-order btn-sm d-flex align-items-center justify-content-center gap-1"
+                           asp-controller="Order"
+                           asp-action="Track">
+                            <i class="fas fa-search"></i>
+                            <span class="d-none d-lg-inline">Tra cứu đơn</span>
+                        </a>
+                    </li>
+
+                    <!-- GIỎ HÀNG -->
+                    <li class="nav-item d-flex align-items-center me-lg-3">
+                        <a class="nav-link cart-link position-relative d-flex align-items-center justify-content-center"
+                           asp-controller="Cart"
+                           asp-action="Index">
+                            <i class="fas fa-shopping-cart"></i>
+                            @{
+                                var cartCount = ViewData["CartCount"] as int? ?? 0;
+                            }
+                            <span class="cart-count badge rounded-pill bg-danger"
+                                  style="display:@(cartCount > 0 ? "inline-flex" : "none");">
+                                @(cartCount > 99 ? "99+" : cartCount)
+                            </span>
+                        </a>
+                    </li>
+
+                    <!-- USER -->
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        var user = await UserManager.GetUserAsync(User);
+                        var isAdmin = user != null && await UserManager.IsInRoleAsync(user, "Admin");
+
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle text-dark" data-bs-toggle="dropdown">
+                                <i class="fas fa-user"></i> @User.Identity?.Name
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-lg-end">
+                                @if (isAdmin)
+                                {
+                                    <li>
+                                        <a class="dropdown-item text-danger fw-bold"
+                                           asp-area="Admin"
+                                           asp-controller="Dashboard"
+                                           asp-action="Index">Quản trị</a>
+                                    </li>
+                                    <li><hr class="dropdown-divider"></li>
+                                }
+                                <li>
+                                    <a class="dropdown-item"
+                                       asp-area="Identity"
+                                       asp-page="/Account/Manage/Index">Hồ sơ</a>
+                                </li>
+                                <li>
+                                    <form asp-area="Identity" asp-page="/Account/Logout">
+                                        <button class="dropdown-item">Đăng xuất</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark"
+                               asp-area="Identity"
+                               asp-page="/Account/Login">Đăng nhập</a>
+                        </li>
+                    }
+                </ul>
+
+            </div>
+        </div>
+    </nav>
+</header>
+
+<style>
+    .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 1030;
+        background: #fff;
+        transition: box-shadow .3s;
+    }
+
+        .site-header.scrolled {
+            box-shadow: 0 2px 10px rgba(0,0,0,.08);
+        }
+
+    /* ===== TRA CỨU ===== */
+    .btn-track-order {
+        height: 38px;
+        border: 1px solid #8B4513;
+        color: #8B4513;
+        background: transparent;
+        border-radius: 20px;
+        padding: 0 12px;
+        font-size: 0.875rem;
+    }
+
+        .btn-track-order:hover {
+            background: #8B4513;
+            color: #fff;
+        }
+
+    /* ===== GIỎ HÀNG ===== */
+    .cart-link {
+        height: 38px;
+        width: 38px;
+        padding: 0;
+        /* Đảm bảo icon nằm chính giữa để làm tâm điểm cho số đếm */
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .cart-link i {
+            font-size: 1.1rem;
+        }
+
+    .cart-count {
+        position: absolute;
+        /* Nhích lên cao hơn (giá trị âm sẽ đẩy lên trên hẳn icon) */
+        top: -2px;
+        /* Đẩy ra xa hơn về bên phải */
+        right: -5px;
+        font-size: 0.65rem;
+        min-width: 18px;
+        height: 18px;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2px;
+        border: 2px solid #fff; /* Thêm viền trắng để số đếm nổi bật hơn trên nền icon */
+        font-weight: bold;
+    }
+</style>
+
+<script>
+    document.addEventListener('scroll', () => {
+        const header = document.querySelector('.site-header');
+        window.scrollY > 10
+            ? header.classList.add('scrolled')
+            : header.classList.remove('scrolled');
+    });
+</script>

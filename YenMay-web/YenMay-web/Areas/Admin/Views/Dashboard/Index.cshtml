@@ -1,0 +1,176 @@
+﻿@model YenMay_web.Areas.Admin.ViewModels.Dashboard.AdminDashboardViewModel
+
+@{
+    ViewData["Title"] = "Tổng quan Admin";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="container-fluid px-4 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="h3 fw-bold text-dark m-0">Bảng điều khiển</h2>
+        <span class="text-muted"><i class="far fa-calendar-alt me-1"></i> Hôm nay: @DateTime.Now.ToString("dd/MM/yyyy")</span>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-primary bg-opacity-10 p-3 rounded-3">
+                        <i class="fas fa-box text-primary fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <p class="text-muted small mb-1 fw-bold">TỔNG ĐƠN HÀNG</p>
+                        <h4 class="mb-0 fw-bold">@Model.General.TotalOrders.ToString("N0")</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-success bg-opacity-10 p-3 rounded-3">
+                        <i class="fas fa-dollar-sign text-success fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <p class="text-muted small mb-1 fw-bold">DOANH THU</p>
+                        <h4 class="mb-0 fw-bold">@Model.General.TotalRevenue.ToString("C0", new System.Globalization.CultureInfo("vi-VN"))</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-info bg-opacity-10 p-3 rounded-3">
+                        <i class="fas fa-users text-info fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <p class="text-muted small mb-1 fw-bold">KHÁCH HÀNG</p>
+                        <h4 class="mb-0 fw-bold">@Model.General.TotalCustomers.ToString("N0")</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card border-0 shadow-sm p-3">
+                <div class="d-flex align-items-center">
+                    <div class="flex-shrink-0 bg-warning bg-opacity-10 p-3 rounded-3">
+                        <i class="fas fa-tshirt text-warning fa-lg"></i>
+                    </div>
+                    <div class="flex-grow-1 ms-3">
+                        <p class="text-muted small mb-1 fw-bold">SẢN PHẨM</p>
+                        <h4 class="mb-0 fw-bold">@Model.General.TotalProducts.ToString("N0")</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <div class="col-xl-8">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-white border-0 py-3">
+                    <h5 class="fw-bold mb-0">Doanh thu 7 ngày gần nhất</h5>
+                </div>
+                <div class="card-body">
+                    <div style="height: 300px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xl-4">
+            <div class="card border-0 shadow-sm mb-4" style="background: linear-gradient(135deg, #5D4037, #8D6E63); color: white;">
+                <div class="card-body p-4 text-center">
+                    <h6 id="card-label" class="text-uppercase opacity-75 fw-bold small">Đơn hàng hôm nay</h6>
+                    <h1 id="card-value" class="display-4 fw-bold my-3">@Model.Orders.TodayOrders</h1>
+                    <div class="bg-white bg-opacity-25 rounded-pill py-2 px-3 d-inline-block">
+                        <i class="fas fa-shopping-cart me-2"></i> Trạng thái hoạt động
+                    </div>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm">
+                <div class="card-body">
+                    <h6 class="fw-bold mb-3">Tình trạng đơn hàng</h6>
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span>Chờ xác nhận</span> <span class="badge bg-warning text-dark">@Model.Orders.PendingOrders</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span>Đang xử lý</span> <span class="badge bg-primary">@Model.Orders.ProcessingOrders</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 small">
+                        <span>Đang giao</span> <span class="badge bg-info">@Model.Orders.ShippedOrders</span>
+                    </div>
+                    <div class="d-flex justify-content-between small">
+                        <span>Hoàn thành</span> <span class="badge bg-success">@Model.Orders.DeliveredOrders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const labels = @Html.Raw(Json.Serialize(Model.ChartData.Labels));
+            const revenueData = @Html.Raw(Json.Serialize(Model.ChartData.RevenueData));
+            const orderData = @Html.Raw(Json.Serialize(Model.ChartData.OrderData));
+            const todayOrders = @Model.Orders.TodayOrders;
+
+            const ctx = document.getElementById('revenueChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Doanh thu (VNĐ)',
+                        data: revenueData,
+                        borderColor: '#5D4037',
+                        backgroundColor: 'rgba(93, 64, 55, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 5,
+                        pointHoverRadius: 8,
+                        pointBackgroundColor: '#5D4037'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    onClick: (evt, elements) => {
+                        const labelElem = document.getElementById('card-label');
+                        const valueElem = document.getElementById('card-value');
+
+                        if (elements.length > 0) {
+                            const index = elements[0].index;
+                            labelElem.innerText = "Đơn hàng ngày " + labels[index];
+                            valueElem.innerText = orderData[index];
+                            valueElem.parentElement.parentElement.style.background = "linear-gradient(135deg, #2c3e50, #4ca1af)";
+                        } else {
+                            labelElem.innerText = "Đơn hàng hôm nay";
+                            valueElem.innerText = todayOrders;
+                            valueElem.parentElement.parentElement.style.background = "linear-gradient(135deg, #5D4037, #8D6E63)";
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                callback: function(value) {
+                                    return value.toLocaleString('vi-VN') + ' ₫';
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}

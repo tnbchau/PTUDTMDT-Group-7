@@ -1,0 +1,347 @@
+﻿@using YenMay_web.Models.ViewModels.Products
+@model YenMay_web.Models.ViewModels.Products.ProductDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Name + " - Yến Sào Yến Mây";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    // Xử lý list
+    var imageList = Model.Images != null ? Model.Images.ToList() : new List<ProductImageViewModel>();
+    var reviewList = Model.Reviews != null ? Model.Reviews.ToList() : new List<ProductReviewViewModel>();
+    var relatedList = Model.RelatedProducts != null ? Model.RelatedProducts.ToList() : new List<ProductCardViewModel>();
+
+    // Rating
+    double avgRating = reviewList.Any() ? reviewList.Average(r => r.Rating) : 5;
+    int fullStars = (int)avgRating;
+    bool hasHalfStar = avgRating - fullStars >= 0.5;
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/style-product-detail.css">
+    <link rel="stylesheet" href="~/css/style-sanpham.css">
+    <style>
+        .product-detail-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            margin-top: 20px;
+        }
+
+        .product-gallery .carousel-item img {
+            max-height: 500px;
+            width: 100%;
+            object-fit: contain;
+            border: 1px solid #eee;
+            border-radius: 5px;
+        }
+
+        .product-thumbnails {
+            overflow-x: auto;
+            white-space: nowrap;
+            margin-top: 10px;
+            padding-bottom: 5px;
+        }
+
+            .product-thumbnails img {
+                width: 70px;
+                height: 70px;
+                object-fit: cover;
+                cursor: pointer;
+                border: 2px solid transparent;
+                border-radius: 4px;
+                opacity: 0.7;
+                margin-right: 5px;
+                display: inline-block;
+            }
+
+                .product-thumbnails img.active, .product-thumbnails img:hover {
+                    border-color: #8F582A;
+                    opacity: 1;
+                }
+
+        .product-detail-info .price {
+            color: #d26e4b;
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        .product-description-content img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+}
+
+<main class="site-main section-padding">
+    <div class="container">
+        <nav class="woocommerce-breadcrumb breadcrumbs mb-4" style="background-color: #f8f9fa; padding: 10px 15px; border-radius: 0.25rem;">
+            @if (Model.Breadcrumbs != null)
+            {
+                foreach (var crumb in Model.Breadcrumbs)
+                {
+                    if (crumb.IsActive)
+                    {
+                        <span style="color: #6c757d;">@crumb.Name</span>
+                    }
+                    else
+                    {
+
+                        <a href="@crumb.Url" style="text-decoration: none; color: #613613;">@crumb.Name</a>
+                        <span class="divider">/</span>
+         }
+                }
+            }
+        </nav>
+
+        <div class="product-detail-container bg-white p-3 p-md-4 rounded shadow-sm">
+            <div class="row g-4 g-lg-5">
+                <div class="col-lg-6 product-gallery">
+                    <div id="productImageCarousel" class="carousel slide mb-3" data-bs-ride="false">
+                        <div class="carousel-inner rounded border" style="cursor: pointer;" data-bs-toggle="modal" data-bs-target="#productImageModal">
+                            @if (imageList.Count > 0)
+                            {
+                                for (int i = 0; i < imageList.Count; i++)
+                                {
+                                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                                        <img src="@imageList[i].ImageUrl" class="d-block w-100" alt="@imageList[i].AltText">
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="carousel-item active">
+                                    <img src="/images/no-image.png" class="d-block w-100" alt="@Model.Name">
+                                </div>
+                            }
+                        </div>
+
+                        @if (imageList.Count > 1)
+                        {
+                            <button class="carousel-control-prev" type="button" data-bs-target="#productImageCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.3); border-radius: 50%;"></span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#productImageCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: rgba(0,0,0,0.3); border-radius: 50%;"></span>
+                            </button>
+                        }
+                    </div>
+                    <div class="product-thumbnails">
+                        @if (imageList.Count > 0)
+                        {
+                            for (int i = 0; i < imageList.Count; i++)
+                            {
+                                <img src="@imageList[i].ImageUrl" class="@(i == 0 ? "active" : "")" onclick="switchImage(@i)" alt="Thumbnail @i">
+                            }
+                        }
+                    </div>
+                </div>
+
+                <div class="col-lg-6 product-detail-info">
+                    <h1 class="product-title" style="color: #613613; font-weight: 700;">@Model.Name</h1>
+                    <hr class="my-3">
+
+                    <div class="product-rating-summary mb-2">
+                        @for (int i = 1; i <= 5; i++)
+                        {
+                            if (i <= fullStars)
+                            {
+                                <i class="fas fa-star text-warning"></i>
+                            }
+                            else if (i == fullStars + 1 && hasHalfStar)
+                            {
+
+                                <i class="fas fa-star-half-alt text-warning"></i>
+                            }
+                            else
+                            {
+
+                                <i class="far fa-star text-muted"></i>
+                            }
+                        }
+                        <span class="rating-count small text-muted ms-1">(@(reviewList.Count > 0 ? $"{reviewList.Count} đánh giá" : "Chưa có đánh giá"))</span>
+                    </div>
+
+                    <p class="price mb-3">@Model.Price.ToString("N0")₫</p>
+
+                    <div class="short-description mb-3" style="color: #555;">
+                        @Html.Raw(Model.ShortDescriptionHtml)
+                    </div>
+
+                    <div class="stock-status mb-3">
+                        @if (Model.StockQuantity > 0)
+                        {
+                            <i class="fas fa-check-circle text-success me-1"></i>
+                        
+                            <span class="fw-medium text-success">Còn hàng</span>
+                        }
+                        else
+                        {
+                            <i class="fas fa-times-circle text-danger me-1"></i>
+                        
+                            <span class="fw-medium text-danger">Hết hàng</span>
+                        }
+                    </div>
+
+                    <div class="quick-policies d-flex flex-wrap gap-3 small text-muted border-top pt-3 mt-3 mb-4">
+                        <span><i class="fas fa-shipping-fast me-1 text-primary"></i> Giao hàng nhanh</span>
+                        <span><i class="fas fa-shield-alt me-1 text-primary"></i> Đảm bảo chất lượng</span>
+                        <span><i class="fas fa-undo me-1 text-primary"></i> Đổi trả dễ dàng</span>
+                    </div>
+
+                    <form id="addToCartForm" class="row g-2 align-items-center mb-3">
+                        <div class="col-auto">
+                            <label for="product-quantity" class="col-form-label fw-bold">Số lượng:</label>
+                        </div>
+                        <div class="col-auto" style="width: 80px;">
+                            <input type="number" id="product-quantity" class="form-control form-control-sm text-center" value="1" min="1" max="@(Model.StockQuantity > 0 ? Model.StockQuantity : 1)">
+                        </div>
+                        <div class="col">
+                            <button type="button"
+                                    id="btn-add-to-cart-detail"
+                                    class="btn btn-primary w-100 add-to-cart-btn"
+                                    style="background-color: #8F582A; border-color: #8F582A;"
+                                    data-id="@Model.Id"
+                                    data-name="@Model.Name"
+                                    @(Model.StockQuantity <= 0 ? "disabled" : "")>
+                                <i class="fas fa-cart-plus me-1"></i> @(Model.StockQuantity > 0 ? "Thêm vào giỏ" : "Hết hàng")
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button type="button" class="btn btn-outline-secondary btn-sm" title="Thêm vào yêu thích">
+                                <i class="far fa-heart"></i>
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="product-meta small text-muted mt-3">
+                        <span class="sku_wrapper d-block">Mã SKU: <strong>@Model.SKU</strong></span>
+                        <span class="posted_in d-block">Danh mục: <a href="/san-pham/@Model.CategorySlug" class="text-decoration-none">@Model.CategoryName</a></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row product-tabs mt-5">
+                <div class="col-12">
+                    <ul class="nav nav-tabs" id="productTab" role="tablist">
+                        <li class="nav-item"><button class="nav-link active" data-bs-toggle="tab" data-bs-target="#description-tab-pane" style="color: #613613;">Mô tả chi tiết</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#additional-info-tab-pane" style="color: #613613;">Thông tin bổ sung</button></li>
+                        <li class="nav-item"><button class="nav-link" data-bs-toggle="tab" data-bs-target="#reviews-tab-pane" style="color: #613613;">Đánh giá (@reviewList.Count)</button></li>
+                    </ul>
+                    <div class="tab-content" id="productTabContent">
+                        <div class="tab-pane fade show active" id="description-tab-pane">
+                            <div class="product-description-content pt-3">@Html.Raw(Model.FullDescriptionHtml)</div>
+                        </div>
+                        <div class="tab-pane fade" id="additional-info-tab-pane">
+                            <div class="pt-3">@Html.Raw(string.IsNullOrEmpty(Model.AdditionalInfoHtml) ? "<p>Hiện chưa có thông tin bổ sung.</p>" : Model.AdditionalInfoHtml)</div>
+                        </div>
+                        <div class="tab-pane fade" id="reviews-tab-pane">
+                            <div class="pt-3">
+                                <h4 class="mb-3">Đánh giá sản phẩm</h4>
+                                <div class="reviews-list mt-3 mb-4">
+                                    @if (reviewList.Count > 0)
+                                    {
+                                        foreach (var review in reviewList)
+                                        {
+                                            <div class="review-item border-bottom pb-3 mb-3">
+                                                <div class="d-flex justify-content-between">
+                                                    <strong style="color: #613613;">@review.UserName</strong>
+                                                    <span class="text-muted small">@review.CreatedAt.ToString("dd/MM/yyyy")</span>
+                                                </div>
+                                                <div class="mb-2 text-warning" style="font-size: 0.9rem;">
+                                                    @for (int r = 1; r <= 5; r++)
+                                                    {
+                                                        if (r <= review.Rating)
+                                                        {
+                                                            <i class="fas fa-star"></i>
+                                                        }
+                                                        else
+                                                        {
+
+                                                            <i class="far fa-star"></i>
+                                                        }
+                                                    }
+                                                </div>
+                                                <p class="mb-0 text-secondary">@review.Comment</p>
+                                            </div>
+                                        }
+                                    }
+                                    else
+                                    {
+
+                                        <p>Hiện chưa có đánh giá nào.</p>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        @if (relatedList.Count > 0)
+        {
+            <section class="related-products-section mt-5">
+                <div class="container">
+                    <h2 class="section-title text-center" style="color: #613613;">Sản Phẩm Liên Quan</h2>
+                    <div class="products-grid mt-4">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                            @foreach (var item in relatedList)
+                            {
+                                @await Html.PartialAsync("_ProductCard", item)
+                            }
+                        </div>
+                    </div>
+                </div>
+            </section>
+        }
+    </div>
+</main>
+
+<div class="modal fade" id="productImageModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content bg-transparent border-0">
+            <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3 z-3" data-bs-dismiss="modal"></button>
+            <div class="modal-body p-0 text-center">
+                <img src="" id="modal-product-image" class="img-fluid" alt="Xem ảnh lớn">
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // 1. Logic chuyển ảnh (Giữ nguyên)
+        function switchImage(index) {
+            var myCarousel = document.querySelector('#productImageCarousel');
+            var carousel = bootstrap.Carousel.getOrCreateInstance(myCarousel);
+            carousel.to(index);
+            updateActiveThumbnail(index);
+        }
+
+        function updateActiveThumbnail(index) {
+            document.querySelectorAll('.product-thumbnails img').forEach((img, idx) => {
+                if (idx === index) {
+                    img.classList.add('active');
+                    img.style.opacity = '1';
+                    img.style.borderColor = '#8F582A';
+                } else {
+                    img.classList.remove('active');
+                    img.style.opacity = '0.7';
+                    img.style.borderColor = 'transparent';
+                }
+            });
+        }
+
+        var myCarouselEl = document.getElementById('productImageCarousel');
+        myCarouselEl.addEventListener('slide.bs.carousel', function (event) {
+            updateActiveThumbnail(event.to);
+        });
+
+        myCarouselEl.addEventListener('click', function() {
+            let activeImg = this.querySelector('.carousel-item.active img');
+            if(activeImg) document.getElementById('modal-product-image').src = activeImg.src;
+        });
+
+    </script>
+}

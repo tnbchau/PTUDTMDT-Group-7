@@ -1,0 +1,223 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.AdminProduct
+@model AdminProductFormViewModel
+
+@{
+    ViewData["Title"] = "Chỉnh sửa sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <style>
+        .tox-tinymce {
+            border-radius: 4px;
+            border: 1px solid #5D4037 !important;
+        }
+
+        .image-item {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 5px;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid #e0e0e0;
+        }
+
+        /* --- SỬA LẠI NÚT XÓA Ở ĐÂY --- */
+        .btn-delete-img {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background: #dc3545; /* Màu đỏ Bootstrap */
+            color: white;
+            border-radius: 50%;
+            width: 22px;
+            height: 22px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            border: 2px solid white; /* Thêm viền trắng để nổi bật trên nền ảnh */
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            /* Căn giữa dấu x tuyệt đối */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0;
+            line-height: 1;
+        }
+
+            .btn-delete-img:hover {
+                background: #a71d2a;
+                transform: scale(1.1);
+                transition: all 0.2s;
+            }
+
+        .btn-brown {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+        }
+
+            .btn-brown:hover {
+                background-color: #3E2723;
+                color: white;
+            }
+
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .card-header.bg-light {
+            background-color: #f5f5f5 !important;
+            color: #5D4037 !important;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #5D4037;">Sản phẩm</a></li>
+            <li class="breadcrumb-item active">Chỉnh sửa</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow">
+        <div class="card-header py-3" style="background-color: #5D4037;">
+            <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-edit me-2"></i>Cập nhật: @Model.Name</h6>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit" method="post" enctype="multipart/form-data" id="productForm">
+                <input type="hidden" asp-for="Id" />
+                <div id="deletedImagesContainer"></div>
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Thông tin sản phẩm</h6></div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label asp-for="Name" class="form-label required"></label>
+                                    <input asp-for="Name" class="form-control" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="SKU" class="form-label required"></label>
+                                        <input asp-for="SKU" class="form-control" />
+                                        <span asp-validation-for="SKU" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Price" class="form-label required"></label>
+                                        <div class="input-group">
+                                            <input asp-for="Price" class="form-control" type="number" />
+                                            <span class="input-group-text">đ</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CategoryId" class="form-label required"></label>
+                                        <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-select"></select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="StockQuantity" class="form-label required"></label>
+                                        <input asp-for="StockQuantity" class="form-control" type="number" />
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="ShortDescriptionHTML" class="form-label"></label>
+                                    <textarea asp-for="ShortDescriptionHTML" id="shortDescription" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Mô tả chi tiết</h6></div>
+                            <div class="card-body">
+                                <textarea asp-for="FullDescriptionHTML" id="fullDescription"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        @* --- Quản lý ảnh hiện tại --- *@
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Ảnh hiện tại</h6></div>
+                            <div class="card-body">
+                                <div class="d-flex flex-wrap gap-3 pt-2">
+                                    @if (Model.ExistingImages != null)
+                                    {
+                                        foreach (var img in Model.ExistingImages)
+                                        {
+                                            <div class="image-item" id="img-@img.Id">
+                                                <img src="/@img.ImageUrl" class="preview-image" onerror="this.src='/images/no-image.png'" />
+                                                <button type="button" class="btn-delete-img" onclick="markAsDeleted(@img.Id)" title="Xóa ảnh">&times;</button>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+
+                        @* --- Tải ảnh mới --- *@
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Thêm ảnh mới</h6></div>
+                            <div class="card-body">
+                                <input asp-for="ImageFiles" class="form-control" type="file" multiple accept="image/*" id="newImages" />
+                                <div id="newImagePreview" class="d-flex flex-wrap gap-2 mt-2"></div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-brown"><i class="fas fa-save me-2"></i>Cập nhật</button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary">Hủy</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @{
+        ViewDataDictionary ConfigTiny(string s, int h, bool img) => new ViewDataDictionary(ViewData) { ["Selector"] = s, ["EditorHeight"] = h, ["AllowImages"] = img };
+    }
+    <partial name="_TinyMCEPartial" view-data='ConfigTiny("#shortDescription", 180, false)' />
+    <partial name="_TinyMCEPartial" view-data='ConfigTiny("#fullDescription", 400, true)' />
+
+    <script>
+        function markAsDeleted(id) {
+            if(confirm("Xóa ảnh này?")) {
+                $(`#img-${id}`).fadeOut();
+                $('#deletedImagesContainer').append(`<input type="hidden" name="DeletedImageIds" value="${id}" />`);
+            }
+        }
+
+        $('#newImages').on('change', function() {
+            const preview = $('#newImagePreview').empty();
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const imgContainer = $('<div class="image-item"></div>');
+                    const img = $('<img>').attr({src: e.target.result, class: 'preview-image'});
+                    imgContainer.append(img);
+                    preview.append(imgContainer);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+    }

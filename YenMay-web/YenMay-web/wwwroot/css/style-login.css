@@ -1,0 +1,392 @@
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+
+body {
+    font-family: 'Noto Sans', sans-serif;
+}
+
+h2 {
+    font-family: 'Cormorant Garamond', serif;
+    margin-bottom: 20px;
+    color: #3E2723;
+}
+
+
+/* Layout chính */
+.main-grid {
+    display: grid;
+    grid-template-columns: 60% 40%;
+    height: 100vh;
+    transition: grid-template-columns 0.5s ease;
+    
+}
+.form-container {
+    width: 200%; 
+    display: flex;
+    transition: transform 0.5s ease;
+    transform: translateX(0);
+}
+
+.form {
+    width: 50%; 
+    padding: 50px;
+}
+
+/* Phần ảnh bên trái */
+.image-section {
+    position: relative;
+    background-image: url('../images/background.jpg');
+    background-position: center;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    padding-bottom: 100px;
+    padding-left: 38px;
+}
+
+.logo {
+    width: 500px;
+    height: auto;
+    margin-bottom: 0px;
+}
+
+.description {
+    color: white;
+    text-align: center;
+    font-size: 30px;
+    max-width: 60%;
+    white-space: nowrap;
+}
+
+.description .title {
+  position: absolute;       
+  top: 57%;                 
+  left: 53%;               
+  transform: translate(-50%, -50%); 
+  z-index: 10;              
+  color: white;
+  text-align: center;
+  font-size: 25px;
+  max-width: 60%;
+  line-height: 1.4;
+  font-family: 'Cormorant Garamond', serif;
+  color:#49251A;
+  font-weight:550;
+  
+}
+.description .subtitle{
+    position: absolute;
+    top: calc(57% + 3em);   
+    left: 75%;
+    transform: translateX(-50%);
+    z-index: 10;           
+    font-family: 'Cormorant Garamond', serif;
+    color: #49251A;
+    font-size: 16px;        
+    line-height: 1.2;
+    margin: 0;
+}
+/* Phần form bên phải */
+.form-section {
+    background: white;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* canh dọc */
+    height: 100%;         
+}
+
+
+
+.form-content {
+    max-width: 400px;
+    margin: 0 auto;
+    
+}
+
+/* Label & Input */
+label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #5D4037;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"] {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: none;
+    border-bottom: 2px solid #5D4037;
+    background: transparent;
+    font-size: 16px;
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="password"]:focus {
+    outline: none;
+    border-bottom-color: #3E2723;
+}
+
+input::placeholder {
+    color: #aaa;
+}
+
+/* Checkbox nhỏ */
+label input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+/* Button chung */
+button {
+    width: 100%;
+    padding: 15px;
+    background: #5D4037;
+    color: white;
+    border: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 2px;
+    border-radius: 4px;
+}
+
+button:hover {
+    background: #3E2723;
+    
+}
+
+/* Nút riêng phần đổi mật khẩu */
+#reset-section button {
+    margin-top: 10px;
+}
+
+/* Nút xã hội */
+.social-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin: 20px 0;
+    flex-wrap: wrap;
+}
+
+.social-button {
+    width: 23%;
+    padding: 10px;
+    background: #ffffff;
+    color: #5D4037;
+    border: 1px solid #5D4037;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border-radius: 2px;
+}
+
+.social-button:hover {
+    background: #f5f5f5;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Màu riêng các mạng xã hội */
+.social-button.google { background-color: #db4437; color: white; border: none; }
+.social-button.tiktok  { background-color: #000;      color: white; border: none; }
+.social-button.facebook { background-color: #3b5998; color: white; border: none; }
+.social-button.twitter  { background-color: #1da1f2; color: white; border: none; }
+
+.social-button.google:hover   { background-color: #c1351d; }
+.social-button.tiktok:hover    { background-color: #444; }
+.social-button.facebook:hover { background-color: #2d4373; }
+.social-button.twitter:hover  { background-color: #0c85d0; }
+.back-button {
+  background: #fff;
+  border: none;
+  color: #5D4037;
+  font-size: 1rem;
+  font-family: 'Noto Sans', sans-serif;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: color 0.3s ease;
+  justify-content: center;
+}
+
+.back-button i {
+  margin-right: 0.5rem;
+}
+
+.back-button:hover {
+  background: none;
+}
+/* Liên kết và đoạn văn */
+p {
+    text-align: center;
+    margin-top: 20px;
+    color: #5D4037;
+}
+a {
+    color: #5D4037;
+    text-decoration: none;
+    font-weight: bold;
+}
+a:hover {
+    text-decoration: underline;
+}
+
+/* Chi tiết form quên mật khẩu */
+.forgot-password p {
+    margin-bottom: 20px;
+    color: #5D4037;
+}
+.forgot-password input {
+    margin-bottom: 20px;
+}
+
+/* Ẩn phần đổi mật khẩu mặc định */
+#reset-section {
+    display: none;
+}
+/* --- 1. Thiết lập mặc định cho title & subtitle --- */
+.description .title {
+  /* giữ nguyên vị trí center với left/top đã khai báo */
+  opacity: 1;
+  transform: translate(-50%, -50%) translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.description .subtitle {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+  transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+/* --- 2. Khi bấm vào “Quên mật khẩu” (#forgot-password-target active) --- */
+#forgot-password-target:target ~ .main-grid .image-section .description .title {
+  opacity: 0;
+  /* slide lên 20px */
+  transform: translate(-50%, -50%) translateY(-20px);
+}
+#forgot-password-target:target ~ .main-grid .image-section .description .subtitle {
+  opacity: 0;
+  transform: translateX(-50%) translateY(-20px);
+}
+/* --- 3. Chuyển form và ẩn image-section khi Quên mật khẩu --- */
+#forgot-password-target:target ~ .main-grid {
+  grid-template-columns: 0% 100%;
+}
+#forgot-password-target:target ~ .main-grid .image-section {
+  opacity: 0;
+  transform: scale(0.9);
+  pointer-events: none;
+}
+#forgot-password-target:target ~ .main-grid .form-container {
+  transform: translateX(-50%);
+}
+
+#signin-target:target ~ .main-grid {
+  grid-template-columns: 60% 40%;
+}
+#signin-target:target ~ .main-grid .image-section {
+  opacity: 1;
+  transform: scale(1);
+  pointer-events: auto;
+}
+#signin-target:target ~ .main-grid .form-container {
+  transform: translateX(0);
+}
+
+/* Style riêng form-content quên mật khẩu */
+.forgot-password .form-content {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+/* Ẩn phần đổi mật khẩu mặc định */
+#reset-section {
+    display: none;
+}
+
+/* Class để hiển thị reset-section khi được kích hoạt */
+#reset-section.show-reset-section {
+    display: block !important;
+}
+
+@media (max-width: 768px) {
+    .image-section {
+        display: none !important; 
+    }
+
+    .main-grid {
+        display: block; 
+        height: auto;
+        justify-content: center;
+    }
+
+    /* Form container */
+    .form-container {
+        width: 100%; 
+        display: block; 
+        transform: none !important; 
+    }
+
+    .form {
+        width: 100%;
+        padding: 1.5em; 
+    }
+
+    .form-content {
+        max-width: 100%; 
+    }
+
+    input[type="email"],
+    input[type="password"] {
+        font-size: 14px; 
+        padding: 8px; 
+    }
+
+    button {
+        font-size: 14px; 
+        padding: 12px; 
+    }
+
+    .main-grid .form-container .form.forgot-password {
+        display: none !important;
+    }
+
+    #forgot-password-target:target ~ .main-grid .form-container .form.signin {
+        display: none !important; 
+    }
+    #forgot-password-target:target ~ .main-grid .form-container .form.forgot-password {
+        display: block !important; 
+    }
+
+    #signin-target:target ~ .main-grid .form-container .form.signin {
+        display: block !important;
+    }
+    #signin-target:target ~ .main-grid .form-container .form.forgot-password {
+        display: none !important; 
+    }
+
+    #reset-section.show-reset-section {
+        display: block !important;
+        margin-top: 1em;
+    }
+    #reset-section input {
+        font-size: 14px;
+        padding: 8px;
+    }
+    #reset-section button {
+        font-size: 14px;
+        padding: 12px;
+    }
+}

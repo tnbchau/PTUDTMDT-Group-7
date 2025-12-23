@@ -1,0 +1,194 @@
+/* ==========================================================================
+   STYLES FOR SANPHAM.HTML (Trang danh sách sản phẩm)
+   ========================================================================== */
+
+/* --- SHOP PAGE TITLE (Mục 3 từ style.css gốc) --- */
+.shop-page-title {
+    padding: 20px 0;
+    background-color: #f8f8f8;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #eee;
+}
+.shop-page-title h1 {
+    margin: 0;
+    font-size: 1.8em;
+    color: #613613;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+}
+
+/* --- PRODUCT LISTING / PRODUCT GRIDS (Mục 8 từ style.css gốc) --- */
+/* (.products-grid, .product-card, .card-img-top, .card-body, .product-title, .price, .add-to-cart-button) */
+/* Bạn đã có nhiều định nghĩa cho .product-card. Hãy chọn một bộ nhất quán.
+   Dưới đây là phiên bản chi tiết hơn (Lựa chọn 2 từ style.css gốc)
+   và đã được tối ưu cho các trang danh sách.
+*/
+.products-grid { /* Grid chung */
+    /* Bootstrap .row và .row-cols-* sẽ xử lý layout */
+}
+
+.products-grid .product-card { /* Style chính cho card sản phẩm */
+    background-color: #ffffff;
+    border: 1px solid #ede8e1; /* Viền màu be nhạt */
+    border-radius: 12px;       /* Bo góc nhiều hơn */
+    overflow: hidden;
+    /* text-align: center; */ /* Sẽ bị card-body ghi đè nếu muốn text căn trái */
+    padding: 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Quan trọng để các card bằng chiều cao */
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1),
+                box-shadow 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+.products-grid .product-card:hover {
+     transform: translateY(-5px);
+     box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1);
+}
+
+.products-grid .product-card .card-img-top {
+    width: 100%;
+    height: 270px; /* Chiều cao ảnh sản phẩm */
+    object-fit: cover; /* Hoặc contain tùy theo ảnh */
+    transition: transform 0.5s ease;
+    border-bottom: 1px solid #f5f5f5; /* Đường kẻ mảnh dưới ảnh */
+}
+.products-grid .product-card:hover .card-img-top {
+    transform: scale(1.05); /* Zoom nhẹ khi hover */
+}
+
+.products-grid .product-card .card-body {
+    padding: 1rem;
+    text-align: left; /* Căn trái nội dung trong card body */
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1; /* Để body chiếm hết không gian còn lại */
+}
+
+.products-grid .product-card .product-title {
+    font-weight: 600;
+    color: #5c3e3c;
+    font-size: 1rem;
+    margin-bottom: 0.6rem;
+    line-height: 1.4;
+    height: calc(1.4em * 2); /* 2 dòng */
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+.products-grid .product-card .product-title a {
+    color: inherit;
+    text-decoration: none;
+}
+.products-grid .product-card .product-title a:hover {
+    color: #d26e4b;
+}
+
+/* Star rating đã có trong base.css */
+/* Product excerpt đã có trong base.css */
+
+.products-grid .product-card .price {
+    font-weight: 700;
+    color: #bf5a36;
+    font-size: 1.1rem;
+    margin-top: auto; /* Đẩy giá xuống dưới */
+    margin-bottom: 1rem;
+    text-align: center; /* Căn giữa giá */
+}
+
+.products-grid .product-card .add-to-cart-button {
+    font-size: 0.9rem !important;
+    padding: 0.65rem 1.25rem !important;
+    margin-top: auto !important; /* Đẩy nút xuống nếu giá không có margin-top:auto */
+    border-radius: 50px; /* Bo tròn nút */
+    font-weight: 500;
+    letter-spacing: 0.3px;
+    /* Các class .btn-theme-primary sẽ áp dụng màu */
+}
+.products-grid .product-card .add-to-cart-button i {
+    margin-right: 0.4rem;
+}
+
+
+/* --- WOOCOMMERCE PAGINATION (Mục 8 từ style.css gốc) --- */
+.woocommerce-pagination .page-item.active .page-link {
+    background-color: #613613;
+    border-color: #613613;
+    color: #fff;
+}
+.woocommerce-pagination .page-link {
+    color: #613613;
+}
+.woocommerce-pagination .page-link:hover {
+    background-color: #f0e9e4;
+    color: #4d2a0f;
+}
+.woocommerce-pagination .page-item.disabled .page-link {
+    color: #6c757d;
+}
+
+/* --- PRODUCT CONTROLS (Filter/Sort) --- */
+.product-controls {
+    background-color: #fff;
+    padding: 1rem;
+    border-radius: 0.375rem;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    margin-bottom: 2rem; /* Thêm khoảng cách dưới */
+}
+.filter-options .fw-bold,
+.sort-options .fw-bold {
+    color: #613613;
+}
+.filter-price-btn { /* Nút lọc giá */
+    border-color: #ced4da;
+    color: #6c757d;
+}
+.filter-price-btn:hover {
+    background-color: #e9ecef;
+    color: #495057;
+}
+.filter-price-btn.active { /* Nút lọc giá đang active */
+    background-color: #613613;
+    color: white;
+    border-color: #613613;
+}
+
+/* --- NO SEARCH RESULTS --- */
+#no-search-results { /* Đã có trong style.css, có thể giữ hoặc chuyển vào đây */
+    border-left: 5px solid #ffc107; /* Màu vàng cảnh báo của Bootstrap */
+    background-color: #fff3cd; /* Nền vàng nhạt */
+    color: #664d03; /* Màu chữ */
+}
+
+
+/* --- MEDIA QUERIES (Cho sanpham.html) --- */
+@media (max-width: 767.98px) {
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .product-controls > div { /* Các div con của product-controls */
+        text-align: left !important; /* Căn trái trên mobile */
+        margin-bottom: 1rem; /* Khoảng cách giữa các nhóm control */
+    }
+    .filter-price-btn {
+        margin-bottom: 0.5rem; /* Dãn cách nút giá trên mobile */
+        margin-right: 0.5rem; /* Thêm margin phải */
+    }
+    .sort-options .form-select {
+        width: 100%; /* Select chiếm hết chiều rộng */
+    }
+}
+
+@media (max-width: 575.98px) {
+    .products-grid {
+        grid-template-columns: 1fr; /* 1 cột trên mobile nhỏ */
+    }
+    .products-grid .product-card .card-img-top { height: 220px; }
+    .products-grid .product-card .product-title { font-size: 0.95rem; }
+    .products-grid .product-card .price { font-size: 1rem; }
+    .products-grid .product-card .add-to-cart-button { font-size: 0.85rem !important; padding: 0.6rem 1rem !important; }
+}

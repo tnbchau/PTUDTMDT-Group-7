@@ -1,0 +1,32 @@
+﻿@model List<YenMay_web.Areas.Admin.ViewModels.ProductAdminImageViewModel>
+
+<div class="card mb-4">
+    <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Hình ảnh hiện có</h6>
+    </div>
+    <div class="card-body">
+        @if (Model != null && Model.Any())
+        {
+            <div class="row g-2">
+                @foreach (var image in Model)
+                {
+                    <div class="col-6 position-relative">
+                        <img src="@image.ImageUrl" alt="Product image"
+                             class="img-thumbnail w-100"
+                             style="height: 100px; object-fit: cover;">
+                        <button type="button"
+                                class="btn btn-sm btn-danger position-absolute top-0 end-0 m-1"
+                                onclick="deleteImage(@image.Id, this)"
+                                title="Xóa ảnh">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <p class="text-muted text-center">Chưa có hình ảnh</p>
+        }
+    </div>
+</div>

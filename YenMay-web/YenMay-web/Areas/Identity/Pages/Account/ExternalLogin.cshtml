@@ -1,0 +1,33 @@
+﻿@page
+@model YenMay_web.Areas.Identity.Pages.Account.ExternalLoginModel
+@{
+    ViewData["Title"] = "Đăng ký";
+}
+
+<h1>@ViewData["Title"]</h1>
+<h2 id="external-login-title">Liên kết tài khoản @Model.ProviderDisplayName.</h2>
+<hr />
+
+<p id="external-login-description" class="text-info">
+    Bạn đã xác thực thành công với <strong>@Model.ProviderDisplayName</strong>.
+    Vui lòng nhập địa chỉ email bên dưới và nhấn nút Đăng ký để hoàn tất quá trình đăng nhập.
+</p>
+
+<div class="row">
+    <div class="col-md-4">
+        <form asp-page-handler="Confirmation" asp-route-returnUrl="@Model.ReturnUrl" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                <input asp-for="Input.Email" class="form-control" />
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Đăng ký</button>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+

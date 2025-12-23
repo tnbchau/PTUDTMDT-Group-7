@@ -1,0 +1,318 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.Shipping
+@model ShippingRuleIndexViewModel
+
+@{
+    ViewData["Title"] = "Cấu hình Phí vận chuyển";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var mainBrown = "#5D4037";
+}
+
+@section Styles {
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+    <style>
+        .btn-brown {
+            background-color: @mainBrown;
+            border-color: @mainBrown;
+            color: white;
+        }
+
+            .btn-brown:hover {
+                background-color: #4E342E;
+                border-color: #4E342E;
+                color: white;
+            }
+
+        .btn-outline-brown {
+            color: @mainBrown;
+            border-color: @mainBrown;
+        }
+
+            .btn-outline-brown:hover {
+                background-color: @mainBrown;
+                color: white;
+            }
+
+        .text-brown-theme {
+            color: @mainBrown !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: @mainBrown !important;
+            border-color: @mainBrown !important;
+        }
+
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .modal-header-brown {
+            background-color: @mainBrown;
+            color: white;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-truck-moving me-2" style="color: @mainBrown;"></i>Phí vận chuyển
+        </h1>
+        @* Nút trigger Create Modal *@
+        <button type="button" class="btn btn-brown" onclick="openShippingModal(null)">
+            <i class="fas fa-plus me-2"></i>Thêm quy tắc mới
+        </button>
+    </div>
+
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-header py-3" style="background-color: @mainBrown;">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-filter me-2"></i>Bộ lọc quy tắc</h6>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.IsActive.HasValue)
+                {
+                    <a asp-action="Index" class="btn btn-sm btn-outline-light">Xóa lọc</a>
+                }
+            </div>
+        </div>
+        <div class="card-body bg-light">
+            <form method="get">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <label class="filter-label">TÌM THEO TÊN</label>
+                        <input type="text" name="searchTerm" value="@Model.SearchTerm" class="form-control shadow-sm" placeholder="Nhập tên quy tắc..." />
+                    </div>
+                    <div class="col-md-3">
+                        <label class="filter-label">TRẠNG THÁI</label>
+                        <select name="isActive" class="form-select shadow-sm">
+                            <!option value="">Tất cả</!option>
+                            <!option value="true" @(Model.IsActive == true ? "selected" : "")>Đang hoạt động</!option>
+                            <!option value="false" @(Model.IsActive == false ? "selected" : "")>Đang ẩn</!option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="filter-label">&nbsp;</label>
+                        <button type="submit" class="btn btn-brown w-100 shadow-sm"><i class="fas fa-search me-2"></i> Lọc</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th class="ps-4">Tên quy tắc</th>
+                            <th>Đơn tối thiểu</th>
+                            <th>Đơn tối đa</th>
+                            <th>Phí vận chuyển</th>
+                            <th class="text-center">Trạng thái</th>
+                            <th class="text-center pe-4">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Rules.Any())
+                        {
+                            @foreach (var item in Model.Rules)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <div class="fw-bold text-dark">@item.Name</div>
+                                        <small class="text-muted">@item.Description</small>
+                                    </td>
+                                    <td>@item.MinOrderValueText</td>
+                                    <td>@item.MaxOrderValueText</td>
+                                    <td class="text-danger fw-bold">@item.ShippingFeeText</td>
+                                    <td class="text-center">
+                                        <form asp-action="ToggleStatus" asp-route-id="@item.Id" method="post" class="d-inline">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="border-0 bg-transparent shadow-none">
+                                                <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")" style="cursor:pointer">
+                                                    @item.StatusText
+                                                </span>
+                                            </button>
+                                        </form>
+                                    </td>
+                                    <td class="text-center pe-4">
+                                        <div class="btn-group btn-group-sm border rounded">
+                                            @* Nút trigger Edit Modal kèm data attributes *@
+                                            <button type="button" class="btn btn-link text-brown-theme px-2" title="Sửa"
+                                                    onclick="openShippingModal(this)"
+                                                    data-id="@item.Id"
+                                                    data-name="@item.Name"
+                                                    data-min="@item.MinOrderValue"
+                                                    data-max="@item.MaxOrderValue"
+                                                    data-fee="@item.ShippingFee"
+                                                    data-desc="@item.Description"
+                                                    data-active="@item.IsActive.ToString().ToLower()">
+                                                <i class="fas fa-edit"></i>
+                                            </button>
+                                            <button type="button" class="btn btn-link text-danger px-2" onclick="confirmDelete(@item.Id, '@item.Name')" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="6" class="text-center py-5 text-muted">Không tìm thấy quy tắc nào.</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.Pagination.TotalPages > 1)
+            {
+                <nav class="py-4">
+                    <ul class="pagination justify-content-center mb-0">
+                        @foreach (var p in Model.Pagination.GetPageNumbers())
+                        {
+                            <li class="page-item @(p == Model.Page ? "active" : "")">
+                                <a class="page-link shadow-none" href="@Url.Action("Index", new { page = p, searchTerm = Model.SearchTerm, isActive = Model.IsActive })">@p</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modalShippingRule" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content border-0 shadow">
+            <div class="modal-header modal-header-brown">
+                <h5 class="modal-title" id="modalTitle">Quy tắc vận chuyển</h5>
+                <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="formShippingRule" method="post">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="ruleId" name="Id" value="0" />
+
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label class="filter-label">Tên quy tắc <span class="text-danger">*</span></label>
+                        <input type="text" id="ruleName" name="Name" class="form-control" required />
+                    </div>
+
+                    <div class="row">
+                        <div class="col-6 mb-3">
+                            <label class="filter-label">Đơn tối thiểu (VNĐ)</label>
+                            <input type="number" id="ruleMin" name="MinOrderValue" class="form-control" value="0" required min="0" />
+                        </div>
+                        <div class="col-6 mb-3">
+                            <label class="filter-label">Đơn tối đa (VNĐ)</label>
+                            <input type="number" id="ruleMax" name="MaxOrderValue" class="form-control" value="0" required min="0" />
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="filter-label">Phí vận chuyển (VNĐ)</label>
+                        <input type="number" id="ruleFee" name="ShippingFee" class="form-control text-danger fw-bold" value="0" required min="0" />
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="filter-label">Mô tả ngắn</label>
+                        <textarea id="ruleDesc" name="Description" class="form-control" rows="2"></textarea>
+                    </div>
+
+                    <div class="form-check form-switch mt-2">
+                        <input class="form-check-input" type="checkbox" id="ruleActive" name="IsActive" value="true" checked>
+                        <label class="form-check-label" for="ruleActive">Kích hoạt quy tắc</label>
+                    </div>
+                </div>
+                <div class="modal-footer bg-light border-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
+                    <button type="submit" class="btn btn-brown px-4">Lưu thông tin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<form id="form-delete" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="delete-id" name="id" />
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const shippingModal = new bootstrap.Modal(document.getElementById('modalShippingRule'));
+        const shippingForm = document.getElementById('formShippingRule');
+
+        function openShippingModal(btn) {
+            shippingForm.reset();
+
+            if (btn === null) {
+                // TRƯỜNG HỢP CREATE
+                document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus me-2"></i>Thêm quy tắc mới';
+                document.getElementById('ruleId').value = 0;
+                document.getElementById('ruleActive').checked = true;
+                shippingForm.action = '@Url.Action("Create", "AdminShippingRule")';
+            } else {
+                // TRƯỜNG HỢP EDIT
+                document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Chỉnh sửa quy tắc';
+
+                // Lấy data từ attributes
+                const id = btn.getAttribute('data-id');
+                const name = btn.getAttribute('data-name');
+                const min = btn.getAttribute('data-min');
+                const max = btn.getAttribute('data-max');
+                const fee = btn.getAttribute('data-fee');
+                const desc = btn.getAttribute('data-desc');
+                const active = btn.getAttribute('data-active') === 'true';
+
+                document.getElementById('ruleId').value = id;
+                document.getElementById('ruleName').value = name;
+                document.getElementById('ruleMin').value = min;
+                document.getElementById('ruleMax').value = max;
+                document.getElementById('ruleFee').value = fee;
+                document.getElementById('ruleDesc').value = desc;
+                document.getElementById('ruleActive').checked = active;
+
+                shippingForm.action = '@Url.Action("Edit", "AdminShippingRule")';
+            }
+
+            shippingModal.show();
+        }
+
+        function confirmDelete(id, name) {
+            Swal.fire({
+                title: 'Xóa quy tắc?',
+                text: `Bạn có chắc muốn xóa "${name}"? Thao tác này không thể hoàn tác.`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-id').value = id;
+                    document.getElementById('form-delete').submit();
+                }
+            });
+        }
+
+        // Tự động đóng alert thành công của hệ thống nếu có
+        @if (TempData["Success"] != null)
+        {
+                <text>
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Thành công',
+                    text: '@TempData["Success"]',
+                    timer: 2000,
+                    showConfirmButton: false
+                });
+                </text>
+        }
+    </script>
+}

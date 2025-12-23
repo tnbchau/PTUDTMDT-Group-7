@@ -1,0 +1,147 @@
+﻿@model YenMay_web.Models.ViewModels.Article.ArticleDetailViewModel
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div class="container py-5 article-detail-page">
+
+    <div class="row gx-lg-5">
+
+        <!-- MAIN CONTENT -->
+        <div class="col-lg-8">
+
+            <!-- Breadcrumb -->
+            <nav class="mb-4 small text-muted">
+                <a asp-controller="Home" asp-action="Index">Trang chủ</a>
+                <span class="mx-1">/</span>
+                <a asp-controller="Article" asp-action="Index">Bài viết</a>
+
+                @if (!string.IsNullOrEmpty(Model.CategorySlug))
+                {
+                    <span class="mx-1">/</span>
+                    <a asp-controller="Article"
+                       asp-action="Index"
+                       asp-route-categorySlug="@Model.CategorySlug">
+                        @Model.CategoryName
+                    </a>
+                }
+            </nav>
+
+            <!-- Article header -->
+            <header class="mb-4">
+                <h1 class="fw-bold mb-2" style="color:#3E2723">
+                    @Model.Title
+                </h1>
+
+                <div class="text-muted small border-bottom pb-3">
+                    <span class="me-3">
+                        <i class="far fa-calendar-alt me-1"></i>
+                        @Model.DisplayUpdatedDate
+                    </span>
+
+                    @if (!string.IsNullOrEmpty(Model.CategoryName))
+                    {
+                        <span>
+                            <i class="far fa-folder-open me-1"></i>
+                            @Model.CategoryName
+                        </span>
+                    }
+                </div>
+            </header>
+
+            <!-- Featured image -->
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <div class="mb-4">
+                    <img src="@Model.ImageUrl"
+                         class="img-fluid rounded shadow-sm"
+                         alt="@Model.Title" />
+                </div>
+            }
+
+            <!-- Content -->
+            <article class="article-content mb-5">
+                @Html.Raw(Model.Content)
+            </article>
+
+            <!-- SHARE -->
+            <div class="border-top pt-4 mt-5">
+                <button class="btn btn-outline-secondary"
+                        onclick="copyArticleUrl()">
+                    <i class="fas fa-share-alt me-1"></i>
+                    Chia sẻ bài viết
+                </button>
+            </div>
+
+            <!-- RELATED ARTICLES -->
+            @if (Model.RelatedArticles.Any())
+            {
+                <div class="mt-5">
+                    <h4 class="fw-bold mb-4" style="color:#613613">
+                        Bài viết liên quan
+                    </h4>
+
+                    <div class="row g-4">
+                        @foreach (var article in Model.RelatedArticles)
+                        {
+                            <div class="col-md-6 col-lg-4">
+                                <partial name="_ArticleCard" model="article" />
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+
+        <!-- SIDEBAR -->
+        <aside class="col-lg-4 mt-5 mt-lg-0">
+            <div class="sticky-top" style="top:100px">
+                <partial name="_ArticleSidebar" model="Model.Sidebar" />
+            </div>
+        </aside>
+
+    </div>
+</div>
+
+<!-- SHARE SCRIPT -->
+<script>
+    function copyArticleUrl() {
+        const url = window.location.href;
+
+        navigator.clipboard.writeText(url).then(() => {
+            alert("Đã sao chép link bài viết:\n" + url);
+        });
+    }
+</script>
+
+<style>
+    .article-content {
+        line-height: 1.8;
+        font-size: 1.05rem;
+        color: #333;
+    }
+
+        .article-content h2,
+        .article-content h3,
+        .article-content h4 {
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            color: #613613;
+            font-weight: 600;
+        }
+
+        .article-content img {
+            max-width: 100%;
+            border-radius: 6px;
+            margin: 1.5rem 0;
+        }
+
+        .article-content blockquote {
+            border-left: 4px solid #e9bc98;
+            padding-left: 1.5rem;
+            margin: 1.5rem 0;
+            font-style: italic;
+            color: #555;
+        }
+</style>

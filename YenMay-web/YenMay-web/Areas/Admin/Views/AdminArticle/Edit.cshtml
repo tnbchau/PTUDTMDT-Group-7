@@ -1,0 +1,245 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.AdminArticle
+@model AdminArticleFormViewModel
+
+@{
+    ViewData["Title"] = "Cập nhật bài viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var mainBrown = "#5D4037";
+}
+
+@section Styles {
+    <style>
+        /* Theme Configuration - Giữ nguyên như Create */
+        .text-brown-theme {
+            color: @mainBrown !important;
+        }
+
+        .bg-brown-theme {
+            background-color: @mainBrown !important;
+            color: white;
+        }
+
+        .btn-brown {
+            background-color: @mainBrown;
+            color: white;
+            border-color: @mainBrown;
+        }
+
+            .btn-brown:hover {
+                background-color: #3E2723;
+                color: white;
+                border-color: #3E2723;
+            }
+
+        /* Form Styling */
+        .form-control:focus, .form-select:focus {
+            border-color: @mainBrown;
+            box-shadow: 0 0 0 0.25rem rgba(93, 64, 55, 0.25);
+        }
+
+        .form-label.required::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        /* Image Upload Box Styling */
+        .image-upload-box {
+            width: 100%;
+            height: 250px;
+            border: 2px dashed #ced4da;
+            border-radius: 6px;
+            background-color: #f8f9fa;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+            .image-upload-box:hover {
+                border-color: @mainBrown;
+                background-color: #fdfbfb;
+            }
+
+            .image-upload-box img {
+                max-width: 100%;
+                max-height: 100%;
+                object-fit: contain;
+                /* Logic display sẽ được xử lý inline trong HTML */
+            }
+
+        .upload-placeholder {
+            text-align: center;
+            color: #6c757d;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4 py-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-area="Admin" asp-controller="Dashboard" asp-action="Index" class="text-decoration-none text-muted">Dashboard</a></li>
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none text-muted">Bài viết</a></li>
+            <li class="breadcrumb-item active text-brown-theme fw-bold" aria-current="page">Cập nhật</li>
+        </ol>
+    </nav>
+
+    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+        @Html.AntiForgeryToken()
+
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CurrentImageUrl" />
+
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 bg-white border-bottom-0">
+                        <h6 class="m-0 font-weight-bold text-brown-theme"><i class="fas fa-edit me-2"></i>Nội dung bài viết</h6>
+                    </div>
+                    <div class="card-body">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" style="display:none;"></div>
+
+                        <div class="mb-3">
+                            <label asp-for="Title" class="form-label required fw-bold">Tiêu đề</label>
+                            <input asp-for="Title" class="form-control form-control-lg" />
+                            <span asp-validation-for="Title" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ShortDescription" class="form-label fw-bold">Mô tả ngắn</label>
+                            <textarea asp-for="ShortDescription" class="form-control" rows="3" maxlength="300"
+                                      placeholder="Nhập mô tả ngắn (tối đa 300 ký tự)..."></textarea>
+                            <div class="text-end small text-muted mt-1">
+                                <span id="shortDescCounter">0</span>/300 ký tự
+                            </div>
+                            <span asp-validation-for="ShortDescription" class="text-danger small"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Content" class="form-label required fw-bold">Nội dung chi tiết</label>
+                            <textarea asp-for="Content" id="articleContent"></textarea>
+                            <span asp-validation-for="Content" class="text-danger small"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4">
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3 bg-brown-theme">
+                        <h6 class="m-0 fw-bold"><i class="fas fa-tools me-2"></i>Hành động</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-check form-switch mb-3">
+                            <input class="form-check-input" type="checkbox" asp-for="IsPublished">
+                            <label class="form-check-label fw-bold" asp-for="IsPublished">Hiển thị bài viết</label>
+                        </div>
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-brown"><i class="fas fa-save me-2"></i>Cập nhật</button>
+                            <a asp-action="Index" class="btn btn-outline-secondary">Quay lại</a>
+                        </div>
+                        <div class="mt-3 text-muted small fst-italic text-center">
+                            Lần sửa cuối: @DateTime.Now.ToString("dd/MM/yyyy HH:mm")
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-brown-theme"><i class="fas fa-folder me-2"></i>Phân loại</h6>
+                    </div>
+                    <div class="card-body">
+                        <label asp-for="CategoryArticleId" class="form-label fw-bold">Danh mục</label>
+                        <select asp-for="CategoryArticleId" asp-items="ViewBag.Categories" class="form-select">
+                            <option value="">-- Chọn danh mục --</option>
+                        </select>
+                        <span asp-validation-for="CategoryArticleId" class="text-danger small"></span>
+                    </div>
+                </div>
+
+                <div class="card shadow mb-4">
+                    <div class="card-header py-3">
+                        <h6 class="m-0 font-weight-bold text-brown-theme"><i class="fas fa-image me-2"></i>Ảnh đại diện</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="image-upload-box" onclick="document.getElementById('imageInput').click()">
+                            @{
+                                bool hasImage = !string.IsNullOrEmpty(Model.CurrentImageUrl);
+                            }
+                            <img id="previewImg" src="@(hasImage? Url.Content("~" + Model.CurrentImageUrl) : "")"
+                                 alt="Preview" style="@(hasImage ? "display:block" : "display:none")" />
+
+                            <div class="upload-placeholder" id="placeholder" style="@(hasImage ? "display:none" : "display:block")">
+                                <i class="fas fa-cloud-upload-alt fa-3x mb-2"></i>
+                                <p class="mb-0 small">Nhấn để thay đổi ảnh</p>
+                            </div>
+                        </div>
+                        <input type="file" asp-for="ImageFile" id="imageInput" class="d-none" accept="image/*" onchange="handleImagePreview(this)" />
+                        <span asp-validation-for="ImageFile" class="text-danger small mt-2 d-block"></span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    @{
+        var tinyMceConfig = new ViewDataDictionary(ViewData)
+        {
+            { "Selector", "#articleContent" },
+            { "EditorHeight", 500 },
+            { "AllowImages", true }
+        };
+    }
+    <partial name="_TinyMCEPartial" view-data="tinyMceConfig" />
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- 1. Counter cho Mô tả ngắn ---
+            const shortDescTextarea = document.querySelector('#ShortDescription');
+            const counter = document.querySelector('#shortDescCounter');
+
+            if (shortDescTextarea && counter) {
+                updateCounter(); // Chạy ngay khi load trang để đếm text hiện có
+                shortDescTextarea.addEventListener('input', updateCounter);
+
+                function updateCounter() {
+                    const text = shortDescTextarea.value;
+                    const length = text.length;
+                    counter.textContent = length;
+
+                    if (length > 300) {
+                        counter.classList.add('text-danger');
+                        counter.classList.remove('text-muted');
+                    } else {
+                        counter.classList.remove('text-danger');
+                        counter.classList.add('text-muted');
+                    }
+                }
+            }
+        });
+
+        // --- 2. Xử lý preview ảnh (Khi chọn ảnh mới) ---
+        function handleImagePreview(input) {
+            const preview = document.getElementById('previewImg');
+            const placeholder = document.getElementById('placeholder');
+
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    preview.src = e.target.result;
+                    preview.style.display = 'block';
+                    placeholder.style.display = 'none'; // Ẩn placeholder đi
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+}

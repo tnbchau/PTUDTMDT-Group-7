@@ -1,0 +1,327 @@
+/* ==========================================================================
+   STYLES FOR INDEX.HTML (Trang chủ)
+   ========================================================================== */
+
+/* --- HERO BANNER (Mục 6 từ style.css gốc) --- */
+.hero-banner {
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    height: 100vh; /* Hoặc một giá trị vh phù hợp */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: #fff;
+    position: relative;
+}
+.hero-banner::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .3); /* Lớp phủ tối */
+    z-index: 1;
+}
+.banner-content {
+    position: relative;
+    z-index: 2;
+}
+.hero-banner h1 {
+    font-size: 3em; /* Điều chỉnh nếu cần */
+    margin-bottom: 15px;
+    color: #fff;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, .6);
+}
+.hero-banner p {
+    font-size: 1.2em; /* Điều chỉnh nếu cần */
+    margin-bottom: 25px;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, .6);
+}
+/* Nút trong hero banner có thể dùng class .btn-primary từ base.css */
+
+
+/* --- COMMITMENT SECTION (Mục 7 từ style.css gốc) --- */
+/* (Chỉ giữ lại nếu section này đặc thù cho trang chủ) */
+.commitment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+}
+.commitment-item i {
+    font-size: 2.5em;
+    color: #613613; /* Màu theme */
+    margin-bottom: 15px;
+}
+.commitment-item h3 {
+    font-size: 1.2em;
+    color: #613613;
+    margin-bottom: 10px;
+}
+
+
+/* --- ABOUT SECTION ON INDEX (Mục 7 từ style.css gốc) --- */
+/* (Style cho phần "Về Chúng Tôi" rút gọn trên trang chủ) */
+.about-container { /* Đảm bảo không xung đột với trang aboutus.html */
+    display: flex;
+    align-items: center;
+    gap: 80px; /* Khoảng cách lớn giữa ảnh và text */
+}
+.about-image {
+    flex: auto;
+    max-width: 45%; /* Giới hạn chiều rộng ảnh */
+}
+.about-image img {
+    border-radius: 10px;
+}
+.about-text {
+    flex: 1;
+}
+.about-text h2 { /* Tiêu đề "Về Chúng Tôi" trên index */
+    font-size: 2em;
+    color: #613613;
+    margin-bottom: 20px;
+    text-align: left; /* Khác với .section-title chung */
+}
+
+
+/* --- TESTIMONIAL SECTION ON INDEX (Mục 7 từ style.css gốc) --- */
+.testimonial-grid { /* Nếu không dùng carousel */
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+.testimonial-card { /* Style chung cho card testimonial */
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    min-height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.testimonial-card img {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    margin: 0 auto 15px;
+    object-fit: cover;
+}
+.testimonial-card blockquote {
+    font-style: italic;
+    margin-bottom: 15px;
+    color: #555;
+    min-height: 60px;
+    flex-grow: 1;
+}
+.testimonial-card .author {
+    font-weight: 700;
+    color: #613613;
+    margin-top: 10px;
+    display: block;
+}
+/* Carousel cho Testimonials */
+.testimonial-carousel .carousel-item {
+    padding: 0 10% 20px; /* Khoảng đệm cho nút control */
+    min-height: 350px; /* Đảm bảo các item có chiều cao nhất định */
+}
+.testimonial-carousel .carousel-item-content-wrapper { /* Bọc nội dung card */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+}
+.testimonial-carousel .carousel-control-next,
+.testimonial-carousel .carousel-control-prev {
+    z-index: 20; /* Đảm bảo nút nằm trên */
+    top: 50%;
+    transform: translateY(-50%);
+    /* width: 5%; */ /* Có thể bỏ nếu Bootstrap xử lý tốt */
+}
+.testimonial-carousel .carousel-control-next-icon,
+.testimonial-carousel .carousel-control-prev-icon {
+    background-color: rgba(0, 0, 0, .3);
+    border-radius: 50%;
+    padding: 1rem;
+    background-size: 60% 60%;
+    /* width, height đã có từ Bootstrap */
+}
+
+
+/* --- BLOG PREVIEW SECTION (Mục 7 từ style.css gốc) --- */
+/* (Style cho phần xem trước blog trên trang chủ) */
+.blog-preview-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+/* Style cho .blog-post-card ở đây sẽ ghi đè hoặc bổ sung cho style-blog.css nếu cần */
+/* Ví dụ, nếu bạn muốn card blog trên index trông khác một chút */
+#index-page-blog-preview .blog-post-card {
+    /* Styles đặc thù cho card blog trên trang chủ */
+    /* Nếu giống hệt style-blog.css thì không cần định nghĩa lại ở đây */
+    /* Bạn có thể kế thừa từ .blog-post-card chung và chỉ ghi đè những gì cần thiết */
+}
+
+
+/* --- CUSTOM IMAGE BANNER SECTION (Mục 7 từ style.css gốc) --- */
+.new-image-section {
+    background-color: #fff;
+}
+.custom-image-banner {
+    border-radius: 30px;
+    overflow: hidden;
+    padding: 0;
+    border: 1px solid #eee;
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .1);
+    line-height: 0; /* Tránh khoảng trắng thừa */
+}
+.custom-image-banner img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+
+/* --- CATEGORY PRODUCT TABS (Gần cuối style.css gốc) --- */
+.category-tabs {
+    border-bottom: 1px solid #dee2e6;
+    margin-bottom: 2.5rem !important;
+}
+.category-tabs .nav-item {
+    margin-bottom: -1px; /* Để border của link active đè lên */
+}
+.category-tabs .nav-link {
+    border: none;
+    border-bottom: 3px solid transparent;
+    color: #6c757d;
+    font-weight: 600;
+    padding: 0.75rem 1.2rem;
+    margin: 0 0.5rem;
+    transition: border-color 0.2s ease-in-out, color 0.2s ease-in-out;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    background-color: transparent;
+    white-space: nowrap;
+}
+.category-tabs .nav-link:hover:not(.active) {
+    color: #343a40;
+    border-bottom-color: #e9ecef;
+}
+/* Màu active cho tab có thể khác nhau tùy theme, ở đây dùng màu xanh lá */
+.category-tabs .nav-tabs .nav-link.active,
+.category-tabs .nav-tabs .nav-item.show .nav-link {
+     color: #198754;
+     background-color: transparent;
+     border-color: transparent transparent #198754 transparent !important;
+     font-weight: 700;
+}
+/* Lưới sản phẩm bên dưới tab (nếu style card khác với trang sanpham.html) */
+#categoryTabContent .products-grid .product-card {
+    /* Nếu giống style ở style-sanpham.css thì không cần khai báo lại */
+    /* Nếu khác, hãy định nghĩa ở đây */
+}
+
+
+/* --- MODAL VIDEO GIỚI THIỆU (Gần cuối style.css gốc) --- */
+#introVideoModal .modal-dialog {
+    max-width: 90vw;
+    width: auto;
+    margin: 1.75rem auto;
+}
+#introVideoModal .modal-content {
+    background-color: #000;
+    border: none;
+    border-radius: 0;
+    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.5);
+}
+#introVideoModal .modal-body {
+    padding: 0;
+}
+#introVideoModal .btn-close-white { /* Đã có style inline, có thể bỏ qua */
+    font-size: 1.2rem;
+    padding: 0.75rem;
+    opacity: 0.9;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+#introVideoModal .btn-close-white:hover {
+    opacity: 1;
+}
+.modal-backdrop.show { /* Nếu muốn backdrop tối hơn */
+    opacity: 0.9;
+}
+
+
+/* --- COMMITMENTS STRIP (Cuối style.css gốc) --- */
+.commitments-strip {
+    /* background-color: #fff; */
+    /* padding đã có từ .section-padding */
+}
+.commitment-item-strip i {
+    color: #8F582A; /* Màu theme cho icon */
+}
+.commitment-item-strip h6 {
+    color: #613613; /* Màu theme cho tiêu đề */
+    font-size: 0.9rem;
+}
+.commitment-item-strip p {
+    font-size: 0.8rem;
+}
+
+
+/* --- MEDIA QUERIES (Cho index.html) --- */
+@media (max-width: 991.98px) {
+    .about-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 40px;
+    }
+    .about-image {
+        max-width: 70%;
+        margin-bottom: 0; /* Vì đã có gap */
+    }
+    .about-text h2 {
+        text-align: center; /* Căn giữa lại trên tablet */
+    }
+}
+
+@media (max-width: 767.98px) {
+    .hero-banner h1 { font-size: 2.2em; }
+    .hero-banner p { font-size: 1em; }
+
+    .commitment-grid,
+    .testimonial-grid { /* Nếu không dùng carousel */
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .blog-preview-grid {
+        grid-template-columns: 1fr; /* 1 cột cho blog preview */
+    }
+    .about-image { max-width: 80%; }
+}
+
+@media (max-width: 575.98px) {
+    .hero-banner {
+        height: auto;
+        min-height: 50vh;
+        padding: 40px 0;
+    }
+    .hero-banner h1 { font-size: 1.8em; }
+    .hero-banner p { font-size: 0.9em; }
+
+    .commitment-grid,
+    .testimonial-grid,
+    .blog-preview-grid {
+        grid-template-columns: 1fr; /* Tất cả 1 cột trên mobile nhỏ */
+    }
+    .about-image { max-width: 100%; }
+}

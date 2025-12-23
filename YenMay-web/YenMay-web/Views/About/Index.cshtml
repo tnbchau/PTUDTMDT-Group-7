@@ -1,0 +1,255 @@
+﻿@{
+    ViewData["Title"] = "Về Chúng Tôi - Yến Sào Yến Mây";
+}
+
+@section Styles {
+    @* Kết nối file CSS riêng cho trang About *@
+    <link rel="stylesheet" href="~/css/style-aboutus.css">
+    <style>
+        /* Đảm bảo layout team hiển thị tốt trên mọi màn hình */
+        .team-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 2rem;
+            padding: 20px 0;
+        }
+
+        .team-card {
+            flex: 0 1 calc(33.333% - 2rem);
+            min-width: 280px;
+        }
+
+        @@media (max-width: 991px) {
+            .team-card {
+                flex: 0 1 calc(50% - 2rem);
+            }
+        }
+
+        @@media (max-width: 576px) {
+            .team-card {
+                flex: 0 1 100%;
+            }
+        }
+    </style>
+}
+
+<div class="about-us-page">
+    <h2 class="we">Về Chúng Tôi</h2>
+
+    <div class="main-content">
+        <div class="slogan">
+            <h2>QUÀ TẶNG TỪ TÂM, DƯỠNG SINH AN LÀNH</h2>
+            <p>
+                Chúng tôi tự hào mang đến những sản phẩm yến sào chất lượng cao, tinh khiết và giàu dinh dưỡng,
+                đáp ứng tiêu chuẩn khắt khe nhất để chăm sóc sức khỏe của bạn.
+            </p>
+        </div>
+
+        @* --- SLIDER (Tương tác qua aboutus.js) --- *@
+        <div class="slider-container">
+            <div class="slider-inner">
+                <div class="slide">
+                    <div class="item" style="background-image: url('@Url.Content("~/images/1200.jpg")');">
+                        <div class="content">
+                            <div class="name">Chim yến tổ trắng</div>
+                            <div class="des">
+                                Chim yến tổ trắng (Aerodramus fuciphagus) là loài chim nhỏ, thường làm tổ bằng nước bọt bám trên vách đá
+                                hoặc trong nhà yến. Tổ của chúng – gọi là tổ yến – được sử dụng để chế biến nước yến...
+                            </div>
+                            <button class="seemore">Xem thêm</button>
+                        </div>
+                    </div>
+                    <div class="item" style="background-image: url('@Url.Content("~/images/yensao.jpg")');">
+                        <div class="content">
+                            <div class="name">Tổ yến tinh chế</div>
+                            <div class="des">Tổ yến tinh chế - tinh hoa vàng trắng, đẳng cấp thượng lưu.</div>
+                            <button class="seemore">Xem thêm</button>
+                        </div>
+                    </div>
+                    <div class="item" style="background-image: url('@Url.Content("~/images/packing.webp")');">
+                        <div class="content">
+                            <div class="name">Đóng gói</div>
+                            <div class="des">Đóng gói sang trọng - Tinh túy trong từng chi tiết.</div>
+                            <button class="seemore">Xem thêm</button>
+                        </div>
+                    </div>
+                    <div class="item" style="background-image: url('@Url.Content("~/images/toyensangtrong.jpg")');">
+                        <div class="content">
+                            <div class="name">Nước yến thượng hạng</div>
+                            <div class="des">Viên ngọc trắng hòa tan - Tinh túy đất trời ban tặng.</div>
+                            <button class="seemore">Xem thêm</button>
+                        </div>
+                    </div>
+                    <div class="item" style="background-image: url('@Url.Content("~/images/anhnuocyenxin.png")');">
+                        <div class="content">
+                            <div class="name">Nước Yến</div>
+                            <div class="des">Từ cung đình ra thế giới - Tinh chất vàng cho giới thượng lưu.</div>
+                            <button class="seemore">Xem thêm</button>
+                        </div>
+                    </div>
+                    <div class="item" style="background-image: url('@Url.Content("~/images/cuahang.png")');">
+                        <div class="content">
+                            <div class="name">Cửa Hàng</div>
+                            <div class="des">Không gian trải nghiệm sản phẩm yến sào đẳng cấp.</div>
+                            <button class="seemore">Xem thêm</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="button">
+                    <button class="prev"><i class="fa-solid fa-arrow-left"></i></button>
+                    <button class="next"><i class="fa-solid fa-arrow-right"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @* --- GIỚI THIỆU CHI TIẾT --- *@
+    <section id="about" class="container py-5">
+        <div class="about-content history">
+            <div class="about-image">
+                <img src="~/images/cuahang.png" alt="Lịch Sử Hình Thành">
+            </div>
+            <div class="about-text">
+                <h3>Lịch Sử Hình Thành</h3>
+                <p>
+                    Từ một ý tưởng nhỏ trong căn phòng nhỏ bé vào năm 2010, chúng tôi đã không ngừng nỗ lực để trở thành
+                    thương hiệu yến sào được yêu thích nhất tại Việt Nam. Mỗi bước đi đều là sự kết hợp giữa niềm đam mê,
+                    sự tận tâm và cam kết mang đến sản phẩm tốt nhất cho khách hàng.
+                </p>
+            </div>
+        </div>
+
+        <div class="about-content reverse mission">
+            <div class="about-image">
+                <img src="~/images/cuahang2.png" alt="Sứ Mệnh">
+            </div>
+            <div class="about-text">
+                <h3>Sứ Mệnh</h3>
+                <p>
+                    Không ngừng sáng tạo, tối ưu hóa nguồn dinh dưỡng quý báu đến từ Yến sào thiên nhiên,
+                    để mang đến cho cộng đồng cơ hội sử dụng một trong những sản vật quý báu mà thiên nhiên ban tặng,
+                    mang đến sức khỏe, hạnh phúc và cuộc sống tốt đẹp hơn.
+                </p>
+            </div>
+        </div>
+
+        <div class="about-content vision">
+            <div class="about-image">
+                <img src="~/images/testmau2.jpg" alt="Tầm Nhìn">
+            </div>
+            <div class="about-text">
+                <h3>Tầm Nhìn</h3>
+                <p>
+                    Trở thành một trong những công ty hàng đầu cung cấp các sản phẩm dinh dưỡng đến từ Yến sào.
+                    Là thương hiệu Việt Nam chấp cánh đưa nông sản Việt sánh ngang với các thương hiệu nổi tiếng toàn cầu.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    @* --- ĐỘI NGŨ CỦA CHÚNG TÔI (6 Thành viên) --- *@
+    <section id="team" class="py-5 bg-light">
+        <h2 class="we">Đội Ngũ Của Chúng Tôi</h2>
+        <div class="container">
+            <div class="team-container">
+                <div class="team-card card border-0 shadow-sm">
+                    <div class="card__img">
+                        <img src="~/img-sv/9.jpg" alt="Phạm Thị Thanh Lam">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h5 fw-bold">Phạm Thị Thanh Lam</h3>
+                        <p class="quote text-muted small">"Mỗi tổ yến là một tác phẩm nghệ thuật, được chế tác với sự tận tâm."</p>
+                        <div class="card__social">
+                            <a href="https://www.facebook.com/lam.pham.447119/" target="_blank" class="social-icon mx-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="mailto:31231024745@st.ueh.edu.vn" class="social-icon mx-2"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card card border-0 shadow-sm">
+                    <div class="card__img">
+                        <img src="~/img-sv/8.jpg" alt="Nguyễn Thị Hải Anh">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h5 fw-bold">Nguyễn Thị Hải Anh</h3>
+                        <p class="quote text-muted small">"Sự đổi mới và tinh tế là nền tảng để tạo nên những sản phẩm đẳng cấp."</p>
+                        <div class="card__social">
+                            <a href="https://www.facebook.com/hai.anh.274193" target="_blank" class="social-icon mx-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="mailto:31231022396@st.ueh.edu.vn" class="social-icon mx-2"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card card border-0 shadow-sm">
+                    <div class="card__img">
+                        <img src="~/img-sv/5.jpg" alt="Hoàng Gia Bảo">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h5 fw-bold">Hoàng Gia Bảo</h3>
+                        <p class="quote text-muted small">"Chất lượng là chìa khóa để xây dựng niềm tin với khách hàng."</p>
+                        <div class="card__social">
+                            <a href="https://www.facebook.com/hgyaba.oo/" target="_blank" class="social-icon mx-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="mailto:31231025913@ueh.edu.vn" class="social-icon mx-2"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card card border-0 shadow-sm">
+                    <div class="card__img">
+                        <img src="~/img-sv/7.jpg" alt="Thái Ngọc Bảo Châu">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h5 fw-bold">Thái Ngọc Bảo Châu</h3>
+                        <p class="quote text-muted small">"Mỗi tổ yến là một tác phẩm nghệ thuật, được chế tác với sự tận tâm."</p>
+                        <div class="card__social">
+                            <a href="https://www.facebook.com/tnbchau.2911" target="_blank" class="social-icon mx-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="mailto:31231023230@st.ueh.edu.vn" class="social-icon mx-2"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card card border-0 shadow-sm">
+                    <div class="card__img">
+                        <img src="~/img-sv/6.jpg" alt="Lê Như Thanh Tú">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h5 fw-bold">Lê Như Thanh Tú</h3>
+                        <p class="quote text-muted small">"Sự đổi mới và tinh tế là nền tảng để tạo nên những sản phẩm đẳng cấp."</p>
+                        <div class="card__social">
+                            <a href="https://www.facebook.com/nhatanh138522" target="_blank" class="social-icon mx-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="mailto:31231025940@ueh.edu.vn" class="social-icon mx-2"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="team-card card border-0 shadow-sm">
+                    <div class="card__img">
+                        <img src="~/img-sv/4.jpg" alt="Lương Gia Vĩ">
+                    </div>
+                    <div class="card-body text-center">
+                        <h3 class="h5 fw-bold">Lương Gia Vĩ</h3>
+                        <p class="quote text-muted small">"Chất lượng là chìa khóa để xây dựng niềm tin với khách hàng."</p>
+                        <div class="card__social">
+                            <a href="https://www.facebook.com/giavi.luong.167" target="_blank" class="social-icon mx-2"><i class="fab fa-facebook-f"></i></a>
+                            <a href="mailto:31231024175@ueh.edu.vn" class="social-icon mx-2"><i class="fa-solid fa-envelope"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* --- MODAL XEM ẢNH --- *@
+    <div id="imageModal" class="modal">
+        <span class="close">&times;</span>
+        <img class="modal-content" id="modalImage" src="">
+        <button class="modal-prev">&#10094;</button>
+        <button class="modal-next">&#10095;</button>
+    </div>
+</div>
+
+@section Scripts {
+    @* Kết nối file JS cho các hiệu ứng Slider và Modal *@
+    <script src="~/js/aboutus.js"></script>
+}

@@ -1,0 +1,97 @@
+﻿@page "/login/"
+@model LoginModel
+@{
+    ViewData["Title"] = "ĐĂNG NHẬP";
+    Layout = "_Layout";
+}
+
+<link rel="stylesheet" href="~/css/base.css" />
+<link rel="stylesheet" href="~/css/style-login.css" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" />
+
+<div id="signin-target"></div>
+<div class="main-grid">
+
+    <div class="image-section">
+        <img src="~/images/logo.png" alt="Logo" class="logo" />
+        <div class="description">
+            <p class="title">CHÀO MỪNG ĐẾN VỚI CHÚNG TÔI</p>
+            <p class="subtitle">Đăng nhập để trải nghiệm tốt nhất.</p>
+        </div>
+    </div>
+
+    <div class="form-section">
+        <div class="form-container">
+
+            <div class="form signin">
+                <div class="form-content">
+
+                    <form id="account" method="post">
+                        <h2>ĐĂNG NHẬP</h2>
+
+                        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                        <label asp-for="Input.UserName">UserName</label>
+                        <input asp-for="Input.UserName" placeholder="Nhập UserName của bạn" class="input-field" aria-required="true" />
+                        <span asp-validation-for="Input.UserName" class="text-danger"></span>
+
+                        <label asp-for="Input.Password">Mật khẩu</label>
+                        <input asp-for="Input.Password" type="password" placeholder="Nhập mật khẩu của bạn" class="input-field" aria-required="true" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+
+                        <label class="remember-me">
+                            <input asp-for="Input.RememberMe" />
+                            Ghi nhớ tôi
+                        </label>
+
+                        <button id="login-submit" type="submit" class="submit-btn">Đăng nhập</button>
+                    </form>
+
+                    <p class="divider-text">Hoặc đăng nhập với</p>
+
+                    @if (Model.ExternalLogins?.Count > 0)
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div class="social-buttons">
+                                @foreach (var provider in Model.ExternalLogins)
+                                {
+                                    <button type="submit"
+                                            class="social-button"
+                                            name="provider"
+                                            value="@provider.Name"
+                                            title="Đăng nhập bằng @provider.DisplayName">
+                                        <i class="fab fa-@provider.Name.ToLower()"></i>
+                                    </button>
+                                }
+                            </div>
+                        </form>
+                    }
+                    <div class="footer-links">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword" style="text-decoration:none;">
+                                Quên mật khẩu?
+                            </a>
+                        </p>
+
+                        <p>
+                            Chưa có tài khoản?
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" style="text-decoration:none;">
+                                Đăng ký
+                            </a>
+                        </p>
+                    </div>
+
+                    <button type="button" class="back-button" onclick="window.location.href='/'">
+                        <i class="fas fa-arrow-left"></i> Trở về
+                    </button>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

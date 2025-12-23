@@ -1,0 +1,278 @@
+/* ==========================================================================
+   STYLES FOR CART.HTML (Trang giỏ hàng)
+   ========================================================================== */
+
+/* --- CART PAGE CONTAINER & TABLE (Mục 9 từ style.css gốc) --- */
+.cart-container {
+    margin-top: 30px; /* Khoảng cách trên cho khu vực giỏ hàng */
+}
+
+.cart-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 30px;
+    background-color: #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, .05);
+    border-radius: 0.375rem; /* Bo góc nhẹ cho bảng */
+    overflow: hidden; /* Để bo góc có tác dụng */
+}
+
+.cart-table thead {
+    /* background-color: #f8f8f8; */ /* Có thể bỏ nếu th đã có style */
+}
+
+.cart-table th,
+.cart-table td {
+    padding: 15px 12px; /* Tăng padding ngang một chút */
+    vertical-align: middle;
+    text-align: left; /* Căn trái mặc định cho các cell */
+}
+
+.cart-table th {
+    background-color: #e9ecef; /* Nền header bảng nhạt hơn (Bootstrap a.table-light) */
+    color: #613613; /* Màu chữ theme */
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: .85em;
+    border-bottom: 1px solid #dee2e6; /* Đường kẻ dưới header */
+}
+.cart-table th.text-end, .cart-table td.text-end { text-align: right !important; }
+.cart-table th.text-center, .cart-table td.text-center { text-align: center !important; }
+
+
+.cart-table tbody tr {
+    border-bottom: 1px solid #e9ecef; /* Đường kẻ giữa các dòng nhạt hơn */
+}
+.cart-table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.cart-table td {
+    font-size: .95rem;
+    color: #495057; /* Màu chữ cho nội dung cell */
+}
+
+.cart-table .product-thumbnail img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: .375rem; /* Bo góc ảnh */
+    border: 1px solid #dee2e6;
+}
+
+.cart-table .product-name a {
+    font-weight: 500;
+    color: #343a40; /* Màu tên sản phẩm */
+    text-decoration: none;
+    transition: color .2s ease;
+}
+.cart-table .product-name a:hover {
+    color: #d26e4b; /* Màu hover */
+}
+
+/* Quantity Controls (Mục 9 & 10 từ style.css gốc, vì dùng chung ở cart & checkout) */
+.quantity-controls {
+    display: flex;
+    align-items: center;
+    justify-content: center; /* Căn giữa các nút và input */
+}
+.quantity-controls .form-control, /* Input số lượng */
+.cart-table .quantity-input {
+    width: 55px !important; /* Giảm độ rộng */
+    text-align: center;
+    border: 1px solid #ced4da; /* Màu border Bootstrap */
+    border-radius: 4px;
+    margin: 0 5px;
+    padding: 5px;
+    box-shadow: none;
+    height: calc(1.5em + .75rem + 2px); /* Đồng nhất chiều cao với Bootstrap input */
+    font-size: .95rem;
+    -moz-appearance: textfield; /* Bỏ mũi tên trên Firefox */
+}
+.quantity-controls .form-control::-webkit-outer-spin-button,
+.quantity-controls .form-control::-webkit-inner-spin-button,
+.cart-table .quantity-input::-webkit-outer-spin-button,
+.cart-table .quantity-input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.quantity-controls .btn, /* Nút +/- */
+.cart-table .quantity-button {
+    background-color: #e9ecef; /* Màu nền nút giống header bảng */
+    border: 1px solid #ced4da;
+    color: #495057;
+    cursor: pointer;
+    padding: .375rem .7rem; /* Padding Bootstrap cho nút sm */
+    border-radius: 4px;
+    font-size: .8em; /* Kích thước font cho icon +/- */
+    line-height: 1; /* Để icon căn giữa */
+}
+.quantity-controls .btn:hover,
+.cart-table .quantity-button:hover {
+    background-color: #dee2e6; /* Màu nền đậm hơn khi hover */
+    color: #343a40;
+}
+.quantity-controls .btn:focus { /* Focus cho nút ở checkout */
+    box-shadow: 0 0 0 .2rem rgba(143, 88, 42, .25); /* Màu theme */
+}
+
+/* Remove Item Button (Mục 9 & 10 từ style.css gốc) */
+.remove-item-button { /* Áp dụng cho cả cart và checkout mini-cart nếu có */
+    background: transparent;
+    border: 1px solid transparent;
+    color: #dc3545; /* Màu đỏ Bootstrap danger */
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: .4rem .6rem;
+    border-radius: .375rem;
+    transition: color .2s ease, background-color .2s ease, border-color .2s ease;
+}
+.remove-item-button:hover {
+    color: #fff;
+    background-color: #c82333; /* Màu đỏ đậm hơn */
+    border-color: #bd2130;
+}
+
+
+/* --- CART SUMMARY (Mục 9 từ style.css gốc) --- */
+.cart-summary {
+    /* Bootstrap .row và .col-md-X đã xử lý layout */
+}
+.cart-summary .card { /* Style cho card tóm tắt */
+    border: 1px solid #e9bc98; /* Viền màu theme */
+    border-radius: .5rem;
+    box-shadow: 0 .125rem .375rem rgba(0,0,0,.06);
+}
+.cart-summary .card-title {
+    color: #613613;
+    font-weight: 600;
+    font-size: 1.25rem;
+}
+.cart-summary #cart-subtotal-amount {
+    color: #d26e4b; /* Màu theme cho tổng tiền */
+    font-size: 1.6rem;
+    font-weight: 500;
+}
+.cart-actions .btn { /* Các nút trong cart actions */
+    /* Đã có style từ .btn-theme-primary, .btn-outline-secondary chung */
+    /* margin-left: 10px; /* Bỏ nếu dùng d-grid gap-2 */
+}
+.cart-summary .btn-lg { /* Nút lớn */
+    padding: .75rem 1.25rem;
+    font-size: 1.1rem;
+}
+
+
+/* --- EMPTY CART MESSAGE (Mục 9 từ style.css gốc) --- */
+#empty-cart-message {
+    border-left: 5px solid #8F582A; /* Viền trái màu theme */
+    background-color: #fffaf0; /* Nền vàng rất nhạt */
+    color: #5c4d42;
+    padding: 2rem;
+    border-radius: .5rem;
+    text-align: center;
+}
+#empty-cart-message .alert-heading {
+    color: #8F582A;
+    font-weight: 600;
+    margin-bottom: 1rem;
+}
+#empty-cart-message p {
+    margin-bottom: 1.5rem;
+}
+#empty-cart-message .btn-theme-primary i {
+    transition: transform 0.2s ease-in-out;
+    margin-left: 0.5rem; /* Nếu icon nằm sau text */
+}
+#empty-cart-message .btn-theme-primary:hover i {
+    transform: translateX(3px);
+}
+
+
+/* --- MEDIA QUERIES (Cho cart.html - Mục 14 từ style.css gốc) --- */
+@media (max-width: 767.98px) {
+    /* Cart Page Responsive */
+    .cart-table thead {
+        display: none; /* Ẩn header bảng trên mobile */
+    }
+    .cart-table tbody tr {
+        display: block;
+        margin-bottom: 1.5rem;
+        border: 1px solid #dee2e6; /* Thêm border cho từng block item */
+        border-radius: .5rem;
+        padding: 1rem;
+        background-color: #fff;
+        box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+    }
+    .cart-table tbody td {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        text-align: right !important; /* Ghi đè text-align left của cell */
+        padding: .75rem .5rem;
+        border-bottom: 1px dashed #eee; /* Phân cách các dòng thông tin trong 1 item */
+    }
+    .cart-table tbody td:last-child {
+        border-bottom: none; /* Bỏ border cho dòng cuối cùng của 1 item */
+    }
+    .cart-table tbody td::before { /* Hiển thị label cho từng cell */
+        content: attr(data-label); /* Lấy từ data-label của HTML (cần thêm vào JS) */
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: .8em;
+        color: #613613;
+        margin-right: auto; /* Đẩy label sang trái */
+        text-align: left;
+        padding-right: 10px; /* Khoảng cách giữa label và value */
+    }
+    .cart-table .product-thumbnail { /* Cell ảnh */
+        display: block; /* Cho phép căn giữa ảnh */
+        text-align: center;
+        padding-bottom: 1rem; /* Khoảng cách dưới ảnh */
+    }
+    .cart-table .product-thumbnail::before { /* Không cần label cho ảnh */
+        display: none;
+    }
+    .cart-table .product-thumbnail img {
+        width: 90px;
+        height: 90px;
+    }
+    .cart-table .product-name { /* Cell tên sản phẩm */
+        font-size: 1rem; /* Có thể giữ nguyên hoặc điều chỉnh */
+    }
+    .cart-table .product-name a {
+        display: block;
+        text-align: right; /* Value căn phải */
+    }
+    .cart-table .quantity-controls {
+        justify-content: flex-end; /* Đẩy nút số lượng sang phải */
+        margin-top: .5rem; /* Thêm chút khoảng cách nếu cần */
+        width: auto; /* Cho phép co giãn theo nội dung */
+    }
+    .cart-table .quantity-controls .form-control {
+         flex: 0 0 auto !important; /* Ngăn input co giãn quá mức */
+    }
+
+    /* Cart Summary Responsive */
+    .cart-summary {
+        /* Bootstrap col-* sẽ tự xử lý xuống dòng */
+    }
+    .cart-summary .col-md-7.col-lg-6.col-xl-5 { /* Class của Bootstrap cho summary box */
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+    }
+    .cart-summary .card-title { /* Căn giữa tiêu đề tóm tắt trên mobile nếu muốn */
+        /* text-align: center; */
+    }
+    .cart-actions { /* Các nút trong cart summary */
+        display: flex;
+        flex-direction: column; /* Xếp chồng các nút */
+        gap: 10px; /* Khoảng cách giữa các nút */
+        width: 100%;
+    }
+    .cart-actions .btn {
+        margin-left: 0; /* Reset margin nếu có */
+    }
+}

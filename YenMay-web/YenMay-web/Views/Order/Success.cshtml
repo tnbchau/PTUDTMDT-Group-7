@@ -1,0 +1,57 @@
+﻿@using YenMay_web.Utilities
+@model YenMay_web.Models.ViewModels.Orders.OrderSuccessViewModel
+
+@{
+    ViewData["Title"] = "Đặt hàng thành công";
+}
+
+<div class="container py-5 text-center">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="mb-4">
+                <i class="bi bi-check-circle-fill text-success" style="font-size: 5rem;"></i>
+            </div>
+            <h1 class="fw-bold mb-3">Cảm ơn bạn đã đặt hàng!</h1>
+            <p class="lead text-muted mb-4">
+                Đơn hàng <span class="text-primary fw-bold">#@Model.OrderCode</span> đã được tiếp nhận và đang chờ xử lý.
+            </p>
+
+            <div class="card border-0 shadow-sm mb-4 text-start">
+                <div class="card-body p-4">
+                    <h5 class="fw-bold mb-3 border-bottom pb-2">Thông tin đơn hàng</h5>
+                    <div class="row mb-2">
+                        <div class="col-sm-4 text-muted">Tổng thanh toán:</div>
+                        <div class="col-sm-8 fw-bold text-danger">@OrderHelper.FormatCurrency(Model.TotalAmount)</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4 text-muted">Hình thức thanh toán:</div>
+                        <div class="col-sm-8">@OrderHelper.GetPaymentMethodText(Model.PaymentMethod)</div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-sm-4 text-muted">Email liên hệ:</div>
+                        <div class="col-sm-8">@Model.CustomerEmail</div>
+                    </div>
+                </div>
+            </div>
+
+            @if (Model.IsBankTransfer)
+            {
+                <div class="alert alert-info border-0 shadow-sm p-4 text-start mb-4">
+                    <h5 class="fw-bold"><i class="bi bi-info-circle me-2"></i>Thông tin chuyển khoản</h5>
+                    <p class="mb-3 small">Vui lòng chuyển khoản đúng số tiền và nội dung bên dưới để đơn hàng được xác nhận nhanh nhất:</p>
+                    <div class="bg-white p-3 rounded border">
+                        <div class="mb-2"><strong>Ngân hàng:</strong> Vietcombank</div>
+                        <div class="mb-2"><strong>Chủ tài khoản:</strong> NGUYEN VAN A</div>
+                        <div class="mb-2"><strong>Số tài khoản:</strong> 0123456789</div>
+                        <div class="mb-0 text-danger"><strong>Nội dung:</strong> CHUYEN KHOAN DON HANG @Model.OrderCode</div>
+                    </div>
+                </div>
+            }
+
+            <div class="d-flex justify-content-center gap-3 mt-4">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-outline-primary px-4 py-2">Quay lại trang chủ</a>
+                <a asp-controller="Product" asp-action="Index" class="btn btn-primary px-4 py-2">Tiếp tục mua sắm</a>
+            </div>
+        </div>
+    </div>
+</div>

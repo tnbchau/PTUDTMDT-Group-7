@@ -1,0 +1,108 @@
+﻿@model YenMay_web.Models.ViewModels.Article.ArticleIndexViewModel
+
+@{
+    ViewData["Title"] = string.IsNullOrEmpty(Model.CategoryName)
+        ? "Tin tức & Bài viết"
+        : Model.CategoryName;
+}
+
+<div class="container py-5">
+
+    <div class="mb-5 border-bottom pb-3">
+        <h1 class="page-title fw-bold" style="color: #8B4513;">
+            @ViewData["Title"]
+        </h1>
+
+        @if (!string.IsNullOrEmpty(Model.SearchTerm))
+        {
+            <p class="text-muted">
+                <i class="fas fa-search me-2"></i>Kết quả tìm kiếm cho: <strong>@Model.SearchTerm</strong>
+            </p>
+        }
+    </div>
+
+    <div class="row">
+
+        <!-- ===== DANH SÁCH BÀI VIẾT ===== -->
+        <div class="col-lg-8">
+
+            @if (!Model.Articles.Any())
+            {
+                <div class="alert alert-light border shadow-sm text-center py-5">
+                    <i class="fas fa-folder-open fa-3x mb-3 text-muted"></i>
+                    <p class="mb-0">Không tìm thấy bài viết phù hợp trong mục này.</p>
+                </div>
+            }
+            else
+            {
+                <div class="row g-4">
+                    @foreach (var article in Model.Articles)
+                    {
+                        <div class="col-md-6 col-lg-4">
+                            <partial name="_ArticleCard" model="article" />
+                        </div>
+                    }
+                </div>
+            }
+
+            @if (Model.Pagination.TotalPages > 1)
+            {
+                <div class="mt-5 d-flex justify-content-center">
+                    <partial name="_Pagination" model="Model.Pagination" />
+                </div>
+            }
+
+        </div>
+
+        <!-- ===== SIDEBAR ===== -->
+        <div class="col-lg-4">
+            <div class="article-sidebar-wrapper">
+
+                @if (Model.Sidebar != null && Model.Sidebar.Any())
+                {
+                    <div class="sticky-top" style="top: 110px;">
+                        <partial name="_ArticleSidebar" model="Model.Sidebar.First()" />
+                    </div>
+                }
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<style>
+    /* ===== SIDEBAR TÁCH KHỐI ===== */
+    .article-sidebar-wrapper {
+        margin-left: 40px; /* Đẩy sidebar lệch phải */
+        padding-left: 30px;
+        border-left: 1px solid #eee; /* Vách ngăn thị giác */
+    }
+
+    @@media (max-width: 991.98px) {
+        .article-sidebar-wrapper
+
+    {
+        margin-left: 0;
+        padding-left: 0;
+        border-left: none;
+        margin-top: 50px;
+    }
+
+    }
+
+    /* ===== TITLE ===== */
+    .page-title {
+        position: relative;
+        display: inline-block;
+    }
+
+        .page-title::after {
+            content: "";
+            display: block;
+            width: 50px;
+            height: 3px;
+            background: #8B4513;
+            margin-top: 10px;
+        }
+</style>

@@ -1,0 +1,308 @@
+﻿@using YenMay_web.Models.ViewModels.Products
+@using YenMay_web.Models.Domain
+@model ProductListViewModel
+
+@{
+    ViewData["Title"] = "Sản Phẩm - Yến Sào Yến Mây";
+
+    // Helper functions
+    string GetCategoryUrl(string slug)
+    {
+        if (string.IsNullOrEmpty(slug))
+            return "/san-pham";
+        return $"/san-pham/{slug}";
+    }
+
+    // Helper để lấy title hiển thị
+    string GetCategoryTitle()
+    {
+        if (!string.IsNullOrEmpty(Model.Filter.SearchTerm))
+            return $"Kết quả tìm kiếm: \"{Model.Filter.SearchTerm}\"";
+
+        if (!string.IsNullOrEmpty(Model.Filter.CategorySlug))
+        {
+            var category = Model.Categories.FirstOrDefault(c => c.Slug == Model.Filter.CategorySlug);
+            return category?.Name ?? "Danh mục sản phẩm";
+        }
+
+        return "Tất Cả Sản Phẩm";
+    }
+
+    // Helper để check active filter
+    bool IsPriceFilterActive(decimal? min, decimal? max)
+    {
+        if (min == null && max == null)
+            return !Model.Filter.MinPrice.HasValue && !Model.Filter.MaxPrice.HasValue;
+
+        return Model.Filter.MinPrice == min && Model.Filter.MaxPrice == max;
+    }
+
+    // Check đang ở danh mục cụ thể
+    bool HasSpecificCategory()
+    {
+        return !string.IsNullOrEmpty(Model.Filter.CategorySlug);
+    }
+
+    // Lấy tên danh mục hiện tại
+    string GetCurrentCategoryName()
+    {
+        if (!string.IsNullOrEmpty(Model.Filter.CategorySlug))
+        {
+            var category = Model.Categories.FirstOrDefault(c => c.Slug == Model.Filter.CategorySlug);
+            return category?.Name ?? "Danh mục";
+        }
+        return "";
+    }
+
+    // Hàm tạo URL theo logic mới
+    string GetPriceFilterUrl(decimal? minPrice = null, decimal? maxPrice = null)
+    {
+        // Xây dựng URL base
+        string baseUrl;
+        if (HasSpecificCategory())
+        {
+            // Đang ở danh mục cụ thể -> giữ category
+            baseUrl = GetCategoryUrl(Model.Filter.CategorySlug);
+        }
+        else
+        {
+            // Đang ở trang chung -> không có category
+            baseUrl = "/san-pham";
+        }
+
+        var queryParams = new List<string>();
+
+        // Luôn reset về trang 1 khi lọc giá
+        queryParams.Add("page=1");
+
+        // Giữ sort nếu không phải default
+        if (!string.IsNullOrEmpty(Model.Filter.SortBy) && Model.Filter.SortBy != "default")
+            queryParams.Add($"sortBy={Model.Filter.SortBy}");
+
+        // Giữ search nếu có
+        if (!string.IsNullOrEmpty(Model.Filter.SearchTerm))
+            queryParams.Add($"searchTerm={Model.Filter.SearchTerm}");
+
+        // Price filter - THÊM nếu có giá trị
+        if (minPrice.HasValue)
+            queryParams.Add($"minPrice={minPrice.Value}");
+
+        if (maxPrice.HasValue)
+            queryParams.Add($"maxPrice={maxPrice.Value}");
+
+        // Xây dựng URL cuối cùng
+        if (queryParams.Any())
+            return $"{baseUrl}?{string.Join("&", queryParams)}";
+
+        return baseUrl;
+    }
+    string GetPagingUrl(int page)
+    {
+        string baseUrl = HasSpecificCategory()
+            ? GetCategoryUrl(Model.Filter.CategorySlug)
+            : "/san-pham";
+
+        var queryParams = new List<string>
+    {
+        $"page={page}"
+    };
+
+        if (!string.IsNullOrEmpty(Model.Filter.SortBy))
+            queryParams.Add($"sortBy={Model.Filter.SortBy}");
+
+        if (!string.IsNullOrEmpty(Model.Filter.SearchTerm))
+            queryParams.Add($"searchTerm={Model.Filter.SearchTerm}");
+
+        if (Model.Filter.MinPrice.HasValue)
+            queryParams.Add($"minPrice={Model.Filter.MinPrice.Value}");
+
+        if (Model.Filter.MaxPrice.HasValue)
+            queryParams.Add($"maxPrice={Model.Filter.MaxPrice.Value}");
+
+        return $"{baseUrl}?{string.Join("&", queryParams)}";
+    }
+
+
+    // Hàm cho nút "Tất cả" - LOGIC MỚI
+    string GetAllProductsUrl()
+    {
+        if (HasSpecificCategory())
+        {
+            // Đang ở danh mục -> về danh mục đó (không có price filter)
+            return GetCategoryUrl(Model.Filter.CategorySlug);
+        }
+        else
+        {
+            // Đang ở trang chung -> về trang chung (không có gì cả)
+            return "/san-pham";
+        }
+    }
+}
+
+<main id="main" class="site-main pb-5">
+    <div class="container section-padding">
+        <div class="shop-container">
+
+            <!-- Breadcrumb thông minh -->
+            <nav aria-label="breadcrumb" class="mb-4">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/">Trang chủ</a></li>
+
+                    @if (HasSpecificCategory())
+                    {
+                        <!-- Đang ở danh mục cụ thể -->
+                        <li class="breadcrumb-item">
+                            <a href="/san-pham">Sản phẩm</a>
+                        </li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            @GetCurrentCategoryName()
+                        </li>
+                    }
+                    else if (!string.IsNullOrEmpty(Model.Filter.SearchTerm))
+                    {
+                        <!-- Đang tìm kiếm -->
+                        <li class="breadcrumb-item"><a href="/san-pham">Sản phẩm</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">
+                            Tìm kiếm: "@Model.Filter.SearchTerm"
+                        </li>
+                    }
+                    else
+                    {
+                        <!-- Đang ở trang sản phẩm chung -->
+                        <li class="breadcrumb-item active" aria-current="page">Sản phẩm</li>
+                    }
+                </ol>
+            </nav>
+
+            <h2 id="category-title" class="section-title text-center mb-4">
+                @GetCategoryTitle()
+            </h2>
+
+            <!-- Chỉ giữ Price Filter -->
+            <div class="row mb-4 align-items-center product-controls">
+                <!-- Price Filter -->
+                <div class="col-md-6 col-lg-8">
+                    <div class="filter-options">
+                        <span class="fw-bold me-2">Lọc theo giá:</span>
+                        <div class="btn-group btn-group-sm flex-wrap">
+                            <a href="@GetPriceFilterUrl(minPrice: 0, maxPrice: 500000)"
+                               class="btn btn-outline-secondary @(IsPriceFilterActive(0, 500000) ? "active" : "")">
+                                Dưới 500K
+                            </a>
+                            <a href="@GetPriceFilterUrl(minPrice: 500000, maxPrice: 1000000)"
+                               class="btn btn-outline-secondary @(IsPriceFilterActive(500000, 1000000) ? "active" : "")">
+                                500K - 1 Triệu
+                            </a>
+                            <a href="@GetPriceFilterUrl(minPrice: 1000000)"
+                               class="btn btn-outline-secondary @(IsPriceFilterActive(1000000, null) ? "active" : "")">
+                                Trên 1 Triệu
+                            </a>
+                            <!-- NÚT "TẤT CẢ" - LOGIC MỚI -->
+                            <a href="@GetAllProductsUrl()"
+                               class="btn btn-outline-secondary @(IsPriceFilterActive(null, null) ? "active" : "")">
+                                Tất cả
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sort Options -->
+                <div class="col-md-6 col-lg-4 text-md-end mt-3 mt-md-0">
+                    <select class="form-select form-select-sm w-auto d-inline-block" onchange="location = this.value;">
+                        <option value="@GetPriceFilterUrl()">Mặc định</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=price_asc" selected="@(Model.Filter.SortBy == "price_asc")">Giá: Tăng dần</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=price_desc" selected="@(Model.Filter.SortBy == "price_desc")">Giá: Giảm dần</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=name_asc" selected="@(Model.Filter.SortBy == "name_asc")">Tên: A-Z</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=name_desc" selected="@(Model.Filter.SortBy == "name_desc")">Tên: Z-A</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=newest" selected="@(Model.Filter.SortBy == "newest")">Mới nhất</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=best_selling" selected="@(Model.Filter.SortBy == "best_selling")">Bán chạy</option>
+                        <option value="@GetPriceFilterUrl()&sortBy=top_rated" selected="@(Model.Filter.SortBy == "top_rated")">Đánh giá cao</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products Grid -->
+            <div class="products-grid">
+                @if (Model.HasProducts)
+                {
+                    <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                        @foreach (var product in Model.Products)
+                        {
+                            @await Html.PartialAsync("_ProductCard", product)
+                        }
+                    </div>
+                }
+                else
+                {
+                    <div class="alert alert-warning col-12 text-center py-5">
+                        <i class="fas fa-box-open fa-3x mb-3"></i>
+                        <h4>Không tìm thấy sản phẩm nào</h4>
+                        <p class="mb-0">
+                            @if (Model.Filter.HasActiveFilters)
+                            {
+                                <text>Không có sản phẩm nào phù hợp với tiêu chí tìm kiếm của bạn.</text>
+                            }
+                            else
+                            {
+                                <text>Hiện chưa có sản phẩm nào trong danh mục này.</text>
+                            }
+                        </p>
+                        @if (Model.Filter.HasActiveFilters)
+                        {
+                            <a href="/san-pham" class="btn btn-theme-primary mt-3">
+                                <i class="fas fa-undo me-1"></i>Xem tất cả sản phẩm
+                            </a>
+
+                        }
+                    </div>
+                }
+            </div>
+
+            <!-- Pagination -->
+            @if (Model.Pagination?.TotalPages > 1)
+            {
+                <nav class="mt-5">
+                    <ul class="pagination justify-content-center">
+
+                        <!-- Previous -->
+                        <li class="page-item @(Model.Pagination.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link"
+                               href="@(Model.Pagination.HasPreviousPage? GetPagingUrl(Model.Pagination.PageIndex - 1) : "#")">
+                                Trước
+                            </a>
+                        </li>
+
+                        <!-- Page numbers -->
+                        @for (int i = 1; i <= Model.Pagination.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == Model.Pagination.PageIndex ? "active" : "")">
+                                <a class="page-link" href="@GetPagingUrl(i)">
+                                    @i
+                                </a>
+                            </li>
+                        }
+
+                        <!-- Next -->
+                        <li class="page-item @(Model.Pagination.HasNextPage ? "" : "disabled")">
+                            <a class="page-link"
+                               href="@(Model.Pagination.HasNextPage? GetPagingUrl(Model.Pagination.PageIndex + 1) : "#")">
+                                Sau
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <!-- Page info -->
+                    @if (Model.Pagination.TotalCount > 0)
+                    {
+                        <div class="text-center text-muted small mt-2">
+                            Hiển thị @Model.Pagination.StartItem – @Model.Pagination.EndItem
+                            trong tổng số @Model.Pagination.TotalCount sản phẩm
+                        </div>
+                    }
+                </nav>
+            }
+
+        </div>
+    </div>
+</main>

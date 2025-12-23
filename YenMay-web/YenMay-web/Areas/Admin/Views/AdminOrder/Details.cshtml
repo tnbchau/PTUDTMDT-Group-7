@@ -1,0 +1,248 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.AdminOrder
+@using YenMay_web.Enums
+@using YenMay_web.Utilities
+@model AdminOrderFormViewModel
+
+@{
+    ViewData["Title"] = "Chi tiết đơn hàng #" + Model.Order.OrderCode;
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <style>
+        .btn-brown {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+        }
+
+            .btn-brown:hover {
+                background-color: #3E2723;
+                color: white;
+            }
+
+        .order-status-badge {
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .product-img-mini {
+            width: 60px;
+            height: 60px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 1px solid #eee;
+        }
+
+        .info-label {
+            color: #888;
+            font-size: 0.9rem;
+            margin-bottom: 2px;
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .divider {
+            border-top: 1px dashed #ddd;
+            margin: 15px 0;
+        }
+
+        .card-header.bg-brown {
+            background-color: #5D4037 !important;
+            color: white !important;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4">
+    @* Breadcrumb *@
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #5D4037;">Đơn hàng</a></li>
+            <li class="breadcrumb-item active">Chi tiết #@Model.Order.OrderCode</li>
+        </ol>
+    </nav>
+
+    <div class="row">
+        @* CỘT TRÁI: THÔNG TIN SẢN PHẨM & THANH TOÁN *@
+        <div class="col-lg-8">
+            @* Card Danh sách sản phẩm *@
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-brown d-flex justify-content-between align-items-center">
+                    <h6 class="m-0 font-weight-bold">
+                        <i class="fas fa-shopping-basket me-2"></i>Sản phẩm trong đơn hàng
+                    </h6>
+                    <span class="badge bg-white text-dark">@Model.Order.Items.Count món</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="ps-4">Sản phẩm</th>
+                                    <th class="text-center">Đơn giá</th>
+                                    <th class="text-center">Số lượng</th>
+                                    <th class="text-end pe-4">Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.Order.Items)
+                                {
+                                    <tr>
+                                        <td class="ps-4">
+                                            <div class="d-flex align-items-center">
+                                                <img src="@item.ProductImage" class="product-img-mini me-3" onerror="this.src='/images/no-image.png'">
+                                                <span class="fw-bold text-dark">@item.ProductName</span>
+                                            </div>
+                                        </td>
+                                        <td class="text-center">@item.Price.ToString("N0")đ</td>
+                                        <td class="text-center">x @item.Quantity</td>
+                                        <td class="text-end pe-4 fw-bold">@item.TotalPrice.ToString("N0")đ</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-footer bg-white py-3">
+                    <div class="row justify-content-end">
+                        <div class="col-md-5">
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Tiền hàng:</span>
+                                <span>@Model.Order.SubTotal.ToString("N0")đ</span>
+                            </div>
+                            <div class="d-flex justify-content-between mb-2">
+                                <span class="text-muted">Phí vận chuyển (@Model.Order.ShippingRuleName):</span>
+                                <span>+ @Model.Order.ShippingFee.ToString("N0")đ</span>
+                            </div>
+                            <div class="divider"></div>
+                            <div class="d-flex justify-content-between">
+                                <span class="h5 fw-bold text-dark">Tổng cộng:</span>
+                                <span class="h5 fw-bold text-danger">@Model.Order.TotalAmount.ToString("N0")đ</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            @* Card Ghi chú khách hàng *@
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-light">
+                    <h6 class="m-0 font-weight-bold" style="color: #5D4037;"><i class="fas fa-sticky-note me-2"></i>Ghi chú khách hàng</h6>
+                </div>
+                <div class="card-body">
+                    <p class="mb-0 italic text-muted">@(string.IsNullOrEmpty(Model.Order.Notes) ? "Không có ghi chú." : Model.Order.Notes)</p>
+                </div>
+            </div>
+        </div>
+
+        @* CỘT PHẢI: TRẠNG THÁI & KHÁCH HÀNG *@
+        <div class="col-lg-4">
+            @* Card Trạng thái & Thao tác *@
+            <div class="card shadow mb-4 border-left-primary">
+                <div class="card-header py-3 bg-brown">
+                    <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-tasks me-2"></i>Xử lý đơn hàng</h6>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateStatus" method="post">
+                        <input type="hidden" asp-for="Id" />
+                        <div class="mb-3">
+                            <label class="form-label fw-bold">Trạng thái hiện tại:</label>
+                            <div>
+                                @{
+                                    var statusClass = OrderHelper.GetStatusBadgeClass(Model.Status);
+                                }
+                                <span class="badge @statusClass order-status-badge">
+                                    @OrderHelper.GetOrderStatusText(Model.Status)
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label asp-for="Status" class="form-label fw-bold">Cập nhật trạng thái mới:</label>
+                            <select asp-for="Status" class="form-select border-brown"
+                                    asp-items="@(new SelectList(Model.AvailableStatuses.Select(s => new { Id = s, Name = OrderHelper.GetOrderStatusText(s) }), "Id", "Name"))">
+                            </select>
+                        </div>
+
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-brown">
+                                <i class="fas fa-save me-2"></i>Lưu cập nhật
+                            </button>
+
+                            @if (Model.Order.CanCancel)
+                            {
+                                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#cancelModal">
+                                    <i class="fas fa-times me-2"></i>Hủy đơn hàng này
+                                </button>
+                            }
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            @* Card Thông tin khách hàng *@
+            <div class="card shadow mb-4">
+                <div class="card-header py-3 bg-light text-brown">
+                    <h6 class="m-0 font-weight-bold" style="color: #5D4037;"><i class="fas fa-user me-2"></i>Thông tin người nhận</h6>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <div class="info-label">Khách hàng</div>
+                        <div class="info-value">@Model.Order.CustomerName</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="info-label">Số điện thoại</div>
+                        <div class="info-value">@Model.Order.CustomerPhone</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="info-label">Địa chỉ email</div>
+                        <div class="info-value">@Model.Order.CustomerEmail</div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="info-label">Địa chỉ giao hàng</div>
+                        <div class="info-value">@Model.Order.ShippingAddress</div>
+                    </div>
+                    <div class="divider"></div>
+                    <div class="mb-0">
+                        <div class="info-label">Phương thức thanh toán</div>
+                        <div class="info-value">
+                            <i class="fas fa-credit-card me-1"></i> @Model.Order.PaymentMethod.ToString()
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* Modal Hủy đơn hàng *@
+<div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <form asp-action="CancelOrder" method="post">
+            <input type="hidden" name="id" value="@Model.Id" />
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Xác nhận hủy đơn hàng</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Bạn có chắc chắn muốn hủy đơn hàng <strong>#@Model.Order.OrderCode</strong>?</p>
+                    <div class="mb-3">
+                        <label class="form-label">Lý do hủy (gửi cho khách hàng):</label>
+                        <textarea name="reason" class="form-control" rows="3" placeholder="Nhập lý do..." required></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-danger">Xác nhận hủy</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

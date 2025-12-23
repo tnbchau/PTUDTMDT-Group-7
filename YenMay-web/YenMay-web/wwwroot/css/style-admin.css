@@ -1,0 +1,237 @@
+/* style-admin.css */
+
+/* --- 1. BIẾN GLOBAL (Dễ dàng tùy chỉnh màu) --- */
+:root {
+    --primary-color: #5D4037;
+    --primary-dark: #3E2723;
+    --accent-color: #d26e4b;
+    --bg-light: #f4f4f4;
+    --white: #ffffff;
+    --text-main: #444;
+    --danger: #c62828;
+    --sidebar-width: 300px;
+    --transition: all 0.3s ease;
+    --shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* --- 2. RESET & BASE STYLES --- */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Noto Sans', 'Segoe UI', sans-serif;
+    background: var(--bg-light);
+    color: var(--primary-color);
+    line-height: 1.6;
+}
+
+h1, h2, h3 {
+    font-family: 'Segoe UI', Tahoma, sans-serif;
+    font-weight: 700;
+    color: var(--primary-dark);
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+/* --- 3. LAYOUT CHÍNH --- */
+#admin-dashboard {
+    display: flex;
+    min-height: 100vh;
+}
+
+.content {
+    flex: 1;
+    padding: 30px;
+    overflow-y: auto;
+}
+
+/* --- 4. SIDEBAR (Đã kéo to 300px) --- */
+.sidebar {
+    width: var(--sidebar-width);
+    background: var(--white);
+    border-right: 1px solid #eee;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    transition: var(--transition);
+}
+
+    .sidebar .logo-section {
+        padding: 20px;
+        text-align: center;
+    }
+
+    .sidebar .logo {
+        max-width: 100%;
+        height: auto;
+        object-fit: contain;
+    }
+
+    .sidebar nav ul {
+        list-style: none;
+    }
+
+    .sidebar nav li a {
+        display: flex;
+        align-items: center;
+        padding: 14px 25px;
+        margin: 4px 15px;
+        color: var(--text-main);
+        font-weight: 500;
+        border-radius: 10px;
+        transition: var(--transition);
+    }
+
+        .sidebar nav li a i {
+            width: 30px; /* Cố định để text thẳng hàng */
+            font-size: 1.2rem;
+            margin-right: 15px;
+            color: #888;
+        }
+
+        /* Hiệu ứng Hover & Active */
+        .sidebar nav li a:hover {
+            background: rgba(93, 64, 55, 0.08);
+            color: var(--primary-color);
+        }
+
+        .sidebar nav li a.active {
+            background: var(--primary-color) !important;
+            color: var(--white) !important;
+            box-shadow: 0 4px 12px rgba(93, 64, 55, 0.2);
+        }
+
+            .sidebar nav li a.active i {
+                color: var(--white) !important;
+            }
+
+/* Nút Đăng xuất */
+.logout-btn {
+    margin: auto 15px 25px 15px;
+    padding: 12px;
+    background: var(--white);
+    color: var(--danger);
+    border: 1px solid var(--danger);
+    border-radius: 10px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+    .logout-btn:hover {
+        background: var(--danger);
+        color: var(--white);
+    }
+
+/* --- 5. COMPONENTS (Bảng, Thẻ, Nút) --- */
+.section {
+    background: var(--white);
+    padding: 25px;
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    margin-bottom: 25px;
+}
+
+/* Table Design */
+.table-responsive {
+    overflow-x: auto;
+}
+
+.table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+    .table th {
+        background: #f8f9fa;
+        color: var(--primary-dark);
+        font-weight: 600;
+        padding: 12px;
+        border-bottom: 2px solid #eee;
+        text-align: left;
+    }
+
+    .table td {
+        padding: 12px;
+        border-bottom: 1px solid #eee;
+        vertical-align: middle;
+    }
+
+/* --- 6. FORM STYLES --- */
+input[type="text"],
+input[type="number"],
+input[type="password"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: border-color 0.3s;
+}
+
+    input:focus, textarea:focus {
+        outline: none;
+        border-color: var(--primary-color);
+        box-shadow: 0 0 0 3px rgba(93, 64, 55, 0.1);
+    }
+
+.btn-primary {
+    background: var(--primary-color);
+    color: var(--white);
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+    .btn-primary:hover {
+        background: var(--primary-dark);
+        transform: translateY(-1px);
+    }
+
+/* --- 7. RESPONSIVE (Mobile) --- */
+@media (max-width: 768px) {
+    #admin-dashboard {
+        flex-direction: column;
+    }
+
+    .sidebar {
+        width: 100%;
+        position: relative;
+        display: none; /* Logic toggle qua JS */
+    }
+
+        .sidebar.open {
+            display: flex;
+        }
+
+    .content {
+        padding: 15px;
+    }
+}
+
+/* Print */
+@media print {
+    .sidebar, .no-print {
+        display: none !important;
+    }
+
+    .content {
+        padding: 0;
+    }
+}

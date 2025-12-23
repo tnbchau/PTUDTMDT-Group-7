@@ -1,0 +1,285 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.AdminArticle
+@using YenMay_web.Models.ViewModels.Common
+@model AdminArticleIndexViewModel
+
+@{
+    ViewData["Title"] = "Quản lý Bài viết";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var mainBrown = "#5D4037";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/style-admin.css" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        .btn-brown {
+            background-color: @mainBrown;
+            border-color: @mainBrown;
+            color: white;
+        }
+
+            .btn-brown:hover {
+                background-color: #4E342E;
+                border-color: #4E342E;
+                color: white;
+            }
+
+        .btn-outline-brown {
+            color: @mainBrown;
+            border-color: @mainBrown;
+            background-color: transparent;
+        }
+
+            .btn-outline-brown:hover {
+                background-color: @mainBrown;
+                color: white;
+            }
+
+        .badge-brown-light {
+            background-color: #8D6E63;
+            color: white;
+        }
+
+        .text-brown-theme {
+            color: @mainBrown !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: @mainBrown !important;
+            border-color: @mainBrown !important;
+            color: white !important;
+        }
+
+        .pagination .page-link {
+            color: @mainBrown;
+        }
+
+        /* Tối ưu header bộ lọc */
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-newspaper me-2" style="color: @mainBrown;"></i>Quản lý Bài viết
+        </h1>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-brown" data-bs-toggle="modal" data-bs-target="#modalCategoryManager">
+                <i class="fas fa-list me-2"></i>Quản lý Danh mục
+            </button>
+            <a asp-action="Create" class="btn btn-brown">
+                <i class="fas fa-plus me-2"></i>Viết bài mới
+            </a>
+        </div>
+    </div>
+
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-header py-3" style="background-color: @mainBrown;">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-white">
+                    <i class="fas fa-filter me-2"></i>Bộ lọc bài viết
+                </h6>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.SelectedCategoryId > 0 || Model.SortOrder != "newest")
+                {
+                    <a asp-action="Index" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-undo me-1"></i>Xóa bộ lọc
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="card-body bg-light">
+            <form method="get" action="@Url.Action("Index", "AdminArticle", new { area = "Admin" })">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="filter-label">TÌM KIẾM BÀI VIẾT</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" name="SearchTerm" value="@Model.SearchTerm" class="form-control" placeholder="Nhập tiêu đề hoặc từ khóa cần tìm (để trống để hiện tất cả)..." />
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="filter-label">DANH MỤC</label>
+                        <select name="SelectedCategoryId" class="form-select shadow-sm">
+                            <option value="0">-- Tất cả danh mục --</option>
+                            @if (Model.Categories != null)
+                            {
+                                @foreach (var cat in Model.Categories)
+                                {
+                                    <!option value="@cat.Id" @(Model.SelectedCategoryId == cat.Id ? "selected" : "")>@cat.Name</!option>
+                                }
+                            }
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="filter-label">SẮP XẾP THEO</label>
+                        <select name="SortOrder" class="form-select shadow-sm">
+                            <!option value="newest" @(Model.SortOrder == "newest" ? "selected" : "")>Mới nhất trước</!option>
+                            <!option value="oldest" @(Model.SortOrder == "oldest" ? "selected" : "")>Cũ nhất trước</!option>
+                            <!option value="name_asc" @(Model.SortOrder == "name_asc" ? "selected" : "")>Tiêu đề (A-Z)</!option>
+                            <!option value="name_desc" @(Model.SortOrder == "name_desc" ? "selected" : "")>Tiêu đề (Z-A)</!option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="filter-label d-block">&nbsp;</label>
+                        <button type="submit" class="btn btn-brown w-100 shadow-sm d-flex align-items-center justify-content-center" style="height: 38px;">
+                            <i class="fas fa-filter me-2"></i> Áp dụng lọc
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header py-3 bg-white border-bottom">
+            <h6 class="m-0 font-weight-bold text-brown-theme">
+                <i class="fas fa-list me-2"></i>Danh sách bài viết
+                <span class="badge bg-secondary ms-2 fw-normal">@Model.Pagination.TotalCount bài viết</span>
+            </h6>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="80px" class="ps-4">Ảnh</th>
+                            <th>Tiêu đề & Mô tả</th>
+                            <th>Danh mục</th>
+                            <th width="150px">Ngày đăng</th>
+                            <th width="120px" class="text-center">Trạng thái</th>
+                            <th width="120px" class="text-center pe-4">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Articles != null && Model.Articles.Any())
+                        {
+                            @foreach (var item in Model.Articles)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <img src="@(string.IsNullOrEmpty(item.ImageUrl) ? "/images/no-image.png" : item.ImageUrl)"
+                                             class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;"
+                                             onerror="this.src='/images/no-image.png';">
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-dark">@item.Title</div>
+                                        <small class="text-muted d-block text-truncate" style="max-width: 350px;">@item.ShortDescription</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge @(string.IsNullOrEmpty(item.CategoryName) ? "bg-light text-dark border" : "badge-brown-light")">
+                                            @(item.CategoryName ?? "Chưa phân loại")
+                                        </span>
+                                    </td>
+                                    <td><span class="text-muted small">@item.DisplayDate</span></td>
+                                    <td class="text-center">
+                                        <span class="badge @(item.IsPublished ? "bg-success" : "bg-secondary")">
+                                            @(item.IsPublished ? "Hiển thị" : "Đang ẩn")
+                                        </span>
+                                    </td>
+                                    <td class="text-center pe-4">
+                                        <div class="btn-group btn-group-sm border rounded">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-link text-brown-theme px-2" title="Sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-link text-danger px-2" onclick="confirmDeleteArticle(@item.Id, '@item.Title')" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="fas fa-file-alt fa-3x text-light mb-3"></i>
+                                    <p class="text-muted">Không tìm thấy bài viết nào phù hợp.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.Pagination.TotalPages > 1)
+            {
+                <nav class="py-4">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item @(Model.Pagination.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link shadow-none" href="@Model.Pagination.GetPageUrl(Model.Pagination.PageIndex - 1, Context.Request)"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        @foreach (var p in Model.Pagination.GetPageNumbers())
+                        {
+                            <li class="page-item @(p == Model.Pagination.PageIndex ? "active" : "")">
+                                <a class="page-link shadow-none" href="@Model.Pagination.GetPageUrl(p, Context.Request)">@p</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.Pagination.HasNextPage ? "" : "disabled")">
+                            <a class="page-link shadow-none" href="@Model.Pagination.GetPageUrl(Model.Pagination.PageIndex + 1, Context.Request)"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+@* (Các phần Modal Quản lý danh mục và Script giữ nguyên như cũ, chỉ cập nhật hàm confirmDelete bên dưới) *@
+
+<form id="form-delete-article" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="delete-article-id" name="id" />
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        // Hàm xóa bài viết dùng SweetAlert2 cho đồng bộ
+        function confirmDeleteArticle(id, title) {
+            Swal.fire({
+                title: 'Xóa bài viết?',
+                text: `Bạn có chắc chắn muốn xóa bài "${title}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-article-id').value = id;
+                    document.getElementById('form-delete-article').submit();
+                }
+            });
+        }
+
+        // Các hàm quản lý danh mục giữ nguyên...
+        function confirmDeleteCategory(id, name) {
+            $.get('/Admin/AdminArticle/CheckCategoryUsage', { id: id }, function(res) {
+                let txt = res.hasArticles ? `Danh mục này có ${res.count} bài viết. Xóa sẽ chuyển về 'Chưa phân loại'.` : "Bạn chắc chắn xóa?";
+                Swal.fire({
+                    title: `Xóa '${name}'?`, text: txt, icon: res.hasArticles ? 'warning' : 'question',
+                    showCancelButton: true, confirmButtonText: 'Xóa luôn', confirmButtonColor: '#d33'
+                }).then((r) => { if(r.isConfirmed) { $('#delete-cat-id').val(id); $('#form-delete-cat').submit(); } });
+            });
+        }
+
+        function editCategory(id, oldName) {
+            Swal.fire({
+                title: 'Đổi tên danh mục', input: 'text', inputValue: oldName, showCancelButton: true, confirmButtonText: 'Lưu'
+            }).then((r) => { if(r.isConfirmed && r.value) { $('#edit-cat-id').val(id); $('#edit-cat-name').val(r.value); $('#form-edit-cat').submit(); } });
+        }
+    </script>
+}

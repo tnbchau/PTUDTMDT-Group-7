@@ -1,0 +1,365 @@
+:root {
+    --primary: #613613;
+    --light: #FFFFFF;
+    --dark: #3E2723;
+  }
+
+  body {
+    font-family: 'Noto Sans', sans-serif;
+    background: var(--light);
+    color: var(--dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+  }
+        .contact-section {
+            padding-top: 40px;
+            padding-bottom: 60px;
+        }
+        .page-title { 
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 2.2em;
+            color: #613613;
+            text-transform: uppercase;
+        }
+        .contact-info .info-item {
+            display: flex;
+            align-items: flex-start; /* Căn icon và text theo top */
+            margin-bottom: 20px;
+            
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .contact-info .info-item.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .contact-info .info-item .icon {
+            font-size: 1.5rem; /* Kích thước icon */
+            color: #8F582A; /* Màu icon */
+            margin-right: 15px;
+            width: 30px; /* Đảm bảo icon có không gian cố định */
+            text-align: center;
+        }
+        .contact-info .info-item .details h5 {
+            font-size: 1.1rem;
+            color: #613613;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        .contact-info .info-item .details p {
+            margin-bottom: 0;
+            color: #4f4f4f;
+            font-size: 0.95rem;
+        }
+        .contact-info .info-item .details a {
+            color: #4f4f4f;
+            text-decoration: none;
+        }
+        .contact-info .info-item .details a:hover {
+            color: #d26e4b;
+        }
+
+        
+       
+        .contact-form .btn-primary { /* Đã có trong style.css, có thể bỏ nếu không cần ghi đè */
+            padding: 0.75rem 1.5rem;
+            font-size: 1.05rem;
+        }
+        .map-container {
+            margin-top: 40px;
+            border-radius: 8px;
+            overflow: hidden; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            transition: opacity 0.5s ease-out 0.2s, transform 0.5s ease-out 0.2s; 
+        }
+        .map-container.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .map-container iframe {
+            border: 0;
+            width: 100%;
+            height: 400px;
+        }
+        .contact-form {
+            max-width: 600px;
+            margin: 0 auto;
+          }
+        .contact-form .form-floating label {
+            color: #6c757d; 
+        }
+         .contact-form .form-control:focus {
+            border-color: #a1744f;
+            box-shadow: 0 0 0 0.25rem rgba(143, 88, 42, 0.25);
+        }
+        .contact-form .form-floating, .contact-form .btn-primary {
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .contact-form .form-floating.animate, .contact-form .btn-primary.animate {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .contact-form .form-floating:nth-child(1).animate { transition-delay: 0.1s; }
+        .contact-form .form-floating:nth-child(2).animate { transition-delay: 0.2s; }
+        .contact-form .form-floating:nth-child(3).animate { transition-delay: 0.3s; }
+        .contact-form .form-floating:nth-child(4).animate { transition-delay: 0.4s; }
+        .contact-form .btn-primary.animate { transition-delay: 0.5s; }
+        .btn-primary {
+            background: var(--primary);
+            color: var(--light);
+            padding: 15px 30px;
+            border: none;
+            font-size: 18px;
+          }
+          .btn-primary:hover {
+            background: var(--dark);
+          }
+  /* Site header & footer placeholders */
+  #site-header,
+  #site-footer {
+    width: 100%;
+    background: transparent;
+    /* Placeholder area for custom header/footer */
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: var(--primary);
+  }
+
+  .hero-header {
+    background: #622B2C;
+    background-size: cover;
+    padding: 100px 0;
+    text-align: center;
+  }
+
+  .hero-header h1 {
+    font-size: 3rem;
+    color: var(--light);
+    margin: 0;
+  }
+
+  .section-title {
+    display: flex;
+    flex-direction: column;  /* logo + h2 thành 2 hàng */
+    align-items:flex-start;     /* căn giữa theo chiều ngang */
+    justify-content: center; /* căn giữa theo chiều dọc (nếu cần) */
+    gap: 20px;               /* khoảng cách giữa logo và h2 */
+    margin-bottom: 50px;
+  }
+  
+  
+  /* Đảm bảo xóa hoặc comment bỏ quy tắc text-align cũ */
+  .section-title h2 {
+    /* giữ nguyên để trước/sau vẫn vẽ được line */
+    position: relative;
+    display: inline-block;
+    margin: 0;
+  }
+  
+  .section-title img {
+    margin: 0;
+  }
+  
+  
+  .section-title h2::before,
+  .section-title h2::after {
+    content: '';
+    position: absolute;
+    width: 45px;
+    height: 2px;
+    background: var(--primary);
+    top: 50%;
+  }
+  
+  .section-title h2::before {
+    left: -60px;
+  }
+  
+  .section-title h2::after {
+    right: -60px;
+  }
+
+  .contact-info {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    margin-bottom: 50px;
+  }
+ .contact-info .info-item {
+    display: flex; /* Sử dụng Flexbox để căn chỉnh icon và text */
+    align-items: flex-start; /* Căn các item con theo đầu của chúng (theo chiều dọc) */
+    margin-bottom: 25px; /* Tăng khoảng cách giữa các mục thông tin */
+    opacity: 0; /* Cho animation (nếu bạn đang dùng) */
+    transform: translateY(20px); /* Cho animation */
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+}
+
+.contact-info .info-item.animate { /* Class để kích hoạt animation */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.contact-info .info-item .icon {
+    font-size: 1.6rem;   /* Kích thước icon lớn hơn một chút */
+    color: #8F582A;       /* Màu icon (màu theme của bạn) */
+    margin-right: 20px;   /* Khoảng cách lớn hơn giữa icon và text */
+    flex-shrink: 0;       /* Ngăn icon bị co lại nếu text quá dài */
+    width: 35px;          /* Độ rộng cố định cho khu vực icon */
+    text-align: center;   /* Căn giữa icon trong khu vực của nó */
+    margin-top: 2px;      /* Điều chỉnh nhẹ vị trí icon xuống một chút nếu cần */
+}
+
+.contact-info .info-item .details {
+    flex-grow: 1; /* Cho phép phần details chiếm hết không gian còn lại */
+}
+
+.contact-info .info-item .details h5 {
+    font-size: 1.15rem; /* Kích thước tiêu đề nhỏ */
+    color: #613613;     /* Màu tiêu đề (màu theme) */
+    margin-bottom: 6px; /* Khoảng cách dưới tiêu đề nhỏ */
+    font-weight: 600;
+    line-height: 1.3; /* Đảm bảo chiều cao dòng tốt */
+}
+
+.contact-info .info-item .details p {
+    margin-bottom: 3px; /* Khoảng cách nhỏ hơn giữa các dòng p */
+    color: #4f4f4f;
+    font-size: 0.95rem;
+    line-height: 1.6; /* Chiều cao dòng cho text dễ đọc */
+}
+.contact-info .info-item .details p:last-child {
+    margin-bottom: 0; /* Bỏ margin cho dòng p cuối cùng trong một item */
+}
+
+
+.contact-info .info-item .details a {
+    color: #4f4f4f; /* Màu link giống text thường */
+    text-decoration: none;
+    display: inline-block; /* Giúp link không bị vỡ nếu dài */
+}
+
+.contact-info .info-item .details a:hover {
+    color: #d26e4b; /* Màu hover cho link */
+    text-decoration: underline;
+}
+
+/* Đặc biệt cho mục mạng xã hội nếu cần */
+.contact-info .info-item.social-media-item .details p {
+    display: flex; /* Để các icon MXH nằm ngang */
+    gap: 15px;    /* Khoảng cách giữa các icon MXH */
+    align-items: center;
+}
+.contact-info .info-item.social-media-item .details a i {
+    font-size: 1.5rem; /* Kích thước icon MXH */
+    color: #613613; /* Màu icon MXH */
+    transition: color 0.2s ease;
+}
+.contact-info .info-item.social-media-item .details a:hover i {
+    color: #d26e4b; /* Màu hover icon MXH */
+}
+
+  
+  .form-floating > input,
+  .form-floating > textarea {
+    border: none;
+    border-bottom: 2px solid var(--primary);
+    background: transparent;
+    color: var(--dark);
+    font-size: 16px;
+    padding: 12px 0;
+  }
+  .form-floating > label {
+    color: #555;
+  }
+  .form-floating > input:focus,
+  .form-floating > textarea:focus {
+    outline: none;
+    border-bottom-color: var(--dark);
+  }
+
+ 
+
+  .map-container {
+    height: 100%;
+    min-height: 350px;
+    overflow: hidden;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+@keyframes fadeInUp {
+    0% {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .contact-info .info-item,
+  .map-container,
+  .contact-form .form-floating {
+    opacity: 0; 
+    transition: opacity 0.3s ease; 
+  }
+  
+  .animate {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  .contact-info .info-item:nth-child(1).animate {
+    animation-delay: 0.1s;
+  }
+  .contact-info .info-item:nth-child(2).animate {
+    animation-delay: 0.2s;
+  }
+  .contact-info .info-item:nth-child(3).animate {
+    animation-delay: 0.3s;
+  }
+  
+  .contact-form .form-floating:nth-child(1).animate {
+    animation-delay: 0.1s;
+  }
+  .contact-form .form-floating:nth-child(2).animate {
+    animation-delay: 0.2s;
+  }
+  .contact-form .form-floating:nth-child(3).animate {
+    animation-delay: 0.3s;
+  }
+  .contact-form .form-floating:nth-child(4).animate {
+    animation-delay: 0.4s;
+  }
+  
+  .contact-form .btn-primary.animate {
+    animation: fadeInUp 0.6s ease-out forwards;
+    animation-delay: 0.5s; 
+  }
+   .contact-form .btn-primary {
+    opacity: 0;
+    transition: opacity 0.3s ease; 
+  }
+  
+  /* Map container animation */
+  .map-container.animate {
+    animation-delay: 0.2s;
+  }
+ /* end animation */
+  @media (max-width: 768px) {
+    .contact-info {
+      flex-direction: column;
+    }
+    .hero-header h1 {
+      font-size: 2.5rem;
+    }
+  }
+
+  /* Ensure footer sticks to bottom */
+  main {
+    flex: 1;
+  }

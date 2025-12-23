@@ -1,0 +1,259 @@
+﻿@using YenMay_web.Models.ViewModels.Home
+@model HomeIndexViewModel
+
+@{
+    ViewData["Title"] = "Yến Mây Bird's Nest - Yến Sào Cung Đình Hảo Hạng";
+}
+
+@* --- 1. VIDEO INTRO SECTION --- *@
+<section class="intro-video-section">
+    <div class="container-fluid p-0">
+        <div class="ratio ratio-16x9 video-wrapper">
+            <iframe id="embeddedYoutubeVideo"
+                    src="https://www.youtube.com/embed/d6lvfsdmLpU?autoplay=1&mute=1&enablejsapi=1&loop=1&playlist=d6lvfsdmLpU&controls=0&showinfo=0&rel=0&modestbranding=1"
+                    title="Video giới thiệu Yến Mây"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+</section>
+
+@* --- 2. COMMITMENTS STRIP --- *@
+<section class="commitments-strip section-padding py-4" style="background-color: #fff; border-bottom: 1px solid #eee;">
+    <div class="container">
+        <div class="row text-center gy-3">
+            <div class="col-md-3 col-6">
+                <i class="fas fa-award fa-2x mb-2 text-primary"></i>
+                <h6 class="fw-semibold mb-0">CAM KẾT CHẤT LƯỢNG</h6>
+                <p class="small text-muted">Yến sào 100% tự nhiên.</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-shield-alt fa-2x mb-2 text-primary"></i>
+                <h6 class="fw-semibold mb-0">ĐẢM BẢO VSATTP</h6>
+                <p class="small text-muted">Quy trình khép kín.</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-exchange-alt fa-2x mb-2 text-primary"></i>
+                <h6 class="fw-semibold mb-0">ĐỔI TRẢ SẢN PHẨM</h6>
+                <p class="small text-muted">Linh hoạt trong 24h.</p>
+            </div>
+            <div class="col-md-3 col-6">
+                <i class="fas fa-shipping-fast fa-2x mb-2 text-primary"></i>
+                <h6 class="fw-semibold mb-0">GIAO HÀNG</h6>
+                <p class="small text-muted">Toàn quốc, thanh toán COD.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<main class="site-main">
+    @* --- 3. HERO BANNER --- *@
+    <section class="hero-banner" style="background-image: url('@(string.IsNullOrEmpty(Model.HeroImageUrl) ? "/img-sp/banner.png" : Model.HeroImageUrl)'); background-size: cover; background-position: center; padding: 100px 0;">
+        <div class="banner-content container text-center text-md-start">
+            <h1 class="display-4 fw-bold text-white shadow-sm">@(Model.HeroTitle ?? "Yến Sào Chất Lượng Cao")</h1>
+            <p class="lead text-white shadow-sm">@(Model.HeroSubtitle ?? "Mang đến sức khỏe và sự an tâm cho mọi gia đình.")</p>
+            <a asp-controller="Product" asp-action="Index" class="btn btn-primary btn-lg px-5 shadow">Mua Ngay</a>
+        </div>
+    </section>
+
+    @* --- 4. NEWEST PRODUCTS --- *@
+    <section class="newest-products section-padding py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-end mb-4">
+                <div>
+                    <h2 class="section-title mb-0">Sản Phẩm Mới Nhất</h2>
+                    <p class="text-muted mb-0">Cập nhật những dòng yến sào thượng hạng mới nhất</p>
+                </div>
+                <a asp-controller="Product" asp-action="Index" class="text-primary fw-bold text-decoration-none">Xem tất cả <i class="fas fa-chevron-right small"></i></a>
+            </div>
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                @foreach (var product in Model.NewProducts)
+                {
+                    <div class="col">
+                        @await Html.PartialAsync("~/Views/Shared/_ProductCard.cshtml", product)
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    @* --- 5. NATURAL INGREDIENTS BANNER --- *@
+    <section class="natural-ingredients-banner py-5 bg-light">
+        <div class="container text-center">
+            <h2 class="section-title mb-4">Thành Phần Tự Nhiên</h2>
+            <div class="custom-image-banner shadow-sm rounded overflow-hidden">
+                <img src="/img-sp/nguyenlieungangdai.png" alt="Nguyên liệu" class="img-fluid w-100">
+            </div>
+        </div>
+    </section>
+
+    @* --- 6. TABBED CATEGORIES --- *@
+    <section class="category-tabs-section py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Danh Mục Sản Phẩm</h2>
+
+            <ul class="nav nav-pills justify-content-center mb-5" id="pills-tab" role="tablist">
+                @for (int i = 0; i < Model.CategoriesWithProducts.Count; i++)
+                {
+                    var cat = Model.CategoriesWithProducts[i];
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link @(i == 0 ? "active" : "") mx-2 px-4 py-2 rounded-pill border fw-bold"
+                                id="tab-@cat.Slug"
+                                data-bs-toggle="pill"
+                                data-bs-target="#content-@cat.Slug"
+                                type="button" role="tab">
+                            @cat.Name
+                        </button>
+                    </li>
+                }
+            </ul>
+
+            <div class="tab-content pt-2" id="pills-tabContent">
+                @for (int i = 0; i < Model.CategoriesWithProducts.Count; i++)
+                {
+                    var cat = Model.CategoriesWithProducts[i];
+                    <div class="tab-pane fade @(i == 0 ? "show active" : "")" id="content-@cat.Slug" role="tabpanel">
+                        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                            @if (cat.Products.Any())
+                            {
+                                foreach (var product in cat.Products)
+                                {
+                                    <div class="col">
+                                        @await Html.PartialAsync("~/Views/Shared/_ProductCard.cshtml", product)
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <div class="col-12 text-center py-5">
+                                    <p class="text-muted">Danh mục @cat.Name tạm thời chưa có sản phẩm</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    @* --- 7. ABOUT SECTION (Đã chỉnh màu nút) --- *@
+    <section class="about-section section-padding py-5 background-alt bg-light">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6 mb-4 mb-md-0 text-center">
+                    <img src="/img-sp/3thanhphan.png" alt="Về Yến Mây" class="img-fluid rounded shadow-sm">
+                </div>
+                <div class="col-md-6 px-md-5">
+                    <h2 class="mb-4">Về Yến Mây Bird's Nest</h2>
+                    <p class="lead">Tinh hoa cung đình hảo hạng</p>
+                    <p>Yến Mây Bird’s Nest chuyên cung cấp các loại sản phẩm Tổ yến, yến chưng cao cấp mang đậm nét văn hóa và chất lượng thượng tầng.</p>
+                    @* Nút đã được đổi sang class btn-custom-brown *@
+                    <a asp-controller="About" asp-action="Index" class="btn btn-custom-brown mt-3 px-4 py-2 fw-bold shadow-sm">
+                        Tìm hiểu câu chuyện của chúng tôi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    @* --- 8. TESTIMONIALS --- *@
+    <section class="testimonials section-padding py-5">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Cảm Nhận Khách Hàng</h2>
+            <div id="testimonialCarousel" class="carousel slide testimonial-carousel shadow-sm bg-white rounded p-4" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="text-center px-4">
+                            <img src="https://yanyen.vn/wp-content/uploads/2022/05/271169866_440479347741752_1719618570084114061_n.jpeg" alt="Hoàng hà trang" class="rounded-circle mb-3 shadow" width="100">
+                            <blockquote class="blockquote">
+                                <p>"Yến vừa ngon, chất lượng xuất sắc mà giá thành lại hợp lý."</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer mt-2">Hoàng Hà Trang</figcaption>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="text-center px-4">
+                            <img src="https://yanyen.vn/wp-content/uploads/2022/05/z3387384314455_a8812fd11d45c52ce80b59175e1a6e47.jpeg" alt="Phan Quỳnh Như" class="rounded-circle mb-3 shadow" width="100">
+                            <blockquote class="blockquote">
+                                <p>"Bao bì đẹp, nhân viên tư vấn nhiệt tình, sản phẩm rất thích hợp làm quà biếu."</p>
+                            </blockquote>
+                            <figcaption class="blockquote-footer mt-2">Phan Quỳnh Như</figcaption>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon bg-secondary rounded-circle" aria-hidden="true"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon bg-secondary rounded-circle" aria-hidden="true"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    @* --- 9. LATEST BLOGS --- *@
+    <section class="blog-preview section-padding py-5 bg-light">
+        <div class="container">
+            <h2 class="section-title text-center mb-5">Tin Tức & Kinh Nghiệm</h2>
+            <div class="row g-4">
+                @foreach (var article in Model.LatestArticles)
+                {
+                    <div class="col-md-4">
+                        @await Html.PartialAsync("~/Views/Shared/_ArticleCard.cshtml", article)
+                    </div>
+                }
+            </div>
+            <div class="text-center mt-5">
+                <a asp-controller="Article" asp-action="Index" class="btn btn-outline-dark btn-lg px-5">Xem tất cả bài viết</a>
+            </div>
+        </div>
+    </section>
+</main>
+
+<style>
+    /* Style cho Nút Về Chúng Tôi - Màu Nâu Chủ Đề */
+    .btn-custom-brown {
+        background-color: #8B4513;
+        color: #ffffff !important; /* Chữ trắng rõ nét */
+        border: 2px solid #8B4513;
+        transition: all 0.3s ease;
+    }
+
+        .btn-custom-brown:hover {
+            background-color: #A0522D; /* Màu nâu sáng hơn khi hover */
+            border-color: #A0522D;
+            color: #ffffff !important;
+            transform: translateY(-2px);
+        }
+
+    /* Style cho Tab Danh Mục */
+    #pills-tab .nav-link {
+        color: #6c757d;
+        background: white;
+        transition: all 0.3s ease;
+    }
+
+        #pills-tab .nav-link:hover {
+            border-color: #8B4513;
+            color: #8B4513;
+        }
+
+        #pills-tab .nav-link.active {
+            background-color: #8B4513 !important;
+            color: white !important;
+            border-color: #8B4513 !important;
+            box-shadow: 0 4px 10px rgba(139, 69, 19, 0.2);
+        }
+
+    .section-title {
+        font-weight: 700;
+        position: relative;
+        padding-bottom: 15px;
+    }
+
+    .background-alt {
+        background-color: #fdfaf5;
+    }
+</style>

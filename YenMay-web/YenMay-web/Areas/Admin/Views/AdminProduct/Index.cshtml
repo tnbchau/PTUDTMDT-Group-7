@@ -1,0 +1,278 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.AdminProduct
+@using YenMay_web.Models.ViewModels.Common
+@model AdminProductIndexViewModel
+
+@{
+    ViewData["Title"] = "Quản lý Sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+    var mainBrown = "#5D4037";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/style-admin.css" />
+    <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
+
+    <style>
+        /* Đồng bộ màu sắc và button */
+        .btn-brown {
+            background-color: @mainBrown;
+            border-color: @mainBrown;
+            color: white;
+        }
+
+            .btn-brown:hover {
+                background-color: #4E342E;
+                border-color: #4E342E;
+                color: white;
+            }
+
+        .btn-outline-brown {
+            color: @mainBrown;
+            border-color: @mainBrown;
+            background-color: transparent;
+        }
+
+            .btn-outline-brown:hover {
+                background-color: @mainBrown;
+                color: white;
+            }
+
+        /* Nhãn bộ lọc nhỏ gọn */
+        .filter-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #6c757d;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .text-brown-theme {
+            color: @mainBrown !important;
+        }
+
+        .text-price {
+            color: #d32f2f;
+            font-weight: 700;
+        }
+
+        .badge-brown-light {
+            background-color: #8D6E63;
+            color: white;
+        }
+
+        /* Phân trang đồng bộ */
+        .pagination .page-item.active .page-link {
+            background-color: @mainBrown !important;
+            border-color: @mainBrown !important;
+            color: white !important;
+        }
+
+        .pagination .page-link {
+            color: @mainBrown;
+        }
+
+        /* Stock status */
+        .badge-low-stock {
+            background-color: #ffebee;
+            color: #c62828;
+            border: 1px solid #ffcdd2;
+            font-size: .7rem;
+        }
+    </style>
+}
+
+<div class="container-fluid px-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 mt-4">
+        <h1 class="h3 mb-0 text-gray-800">
+            <i class="fas fa-boxes me-2" style="color: @mainBrown;"></i>Quản lý Sản phẩm
+        </h1>
+        <div class="d-flex gap-2">
+            <button type="button" class="btn btn-outline-brown" data-bs-toggle="modal" data-bs-target="#modalCategoryManager">
+                <i class="fas fa-list me-2"></i>Quản lý Danh mục
+            </button>
+            <a asp-action="Create" class="btn btn-brown">
+                <i class="fas fa-plus me-2"></i>Thêm sản phẩm mới
+            </a>
+        </div>
+    </div>
+
+    <div class="card mb-4 border-0 shadow-sm">
+        <div class="card-header py-3" style="background-color: @mainBrown;">
+            <div class="d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-white">
+                    <i class="fas fa-filter me-2"></i>Bộ lọc tìm kiếm
+                </h6>
+                @if (!string.IsNullOrEmpty(Model.SearchTerm) || Model.SelectedCategoryId > 0)
+                {
+                    <a asp-action="Index" class="btn btn-sm btn-outline-light">
+                        <i class="fas fa-undo me-1"></i>Xóa bộ lọc
+                    </a>
+                }
+            </div>
+        </div>
+
+        <div class="card-body bg-light">
+            <form method="get" asp-action="Index">
+                <div class="row g-3">
+                    <div class="col-12">
+                        <label class="filter-label">TÌM KIẾM SẢN PHẨM</label>
+                        <div class="input-group shadow-sm">
+                            <span class="input-group-text bg-white"><i class="fas fa-search text-muted"></i></span>
+                            <input type="text" asp-for="SearchTerm" class="form-control" placeholder="Nhập tên sản phẩm hoặc mã SKU..." />
+                        </div>
+                    </div>
+
+                    <div class="col-md-5">
+                        <label class="filter-label">DANH MỤC</label>
+                        <select asp-for="SelectedCategoryId" asp-items="Model.CategoryOptions" class="form-select shadow-sm">
+                            <option value="0">-- Tất cả danh mục --</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-4">
+                        <label class="filter-label">SẮP XẾP THEO</label>
+                        <select asp-for="SortBy" class="form-select shadow-sm">
+                            <option value="name">Tên sản phẩm (A-Z)</option>
+                            <option value="price_asc">Giá tăng dần</option>
+                            <option value="price_desc">Giá giảm dần</option>
+                            <option value="stock">Tồn kho thấp đến cao</option>
+                            <option value="newest">Mới nhất</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3">
+                        <label class="filter-label d-block">&nbsp;</label>
+                        <button type="submit" class="btn btn-brown w-100 shadow-sm d-flex align-items-center justify-content-center" style="height: 38px;">
+                            <i class="fas fa-filter me-2"></i> Áp dụng lọc
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="card shadow-sm mb-4 border-0">
+        <div class="card-header py-3 bg-white border-bottom">
+            <h6 class="m-0 font-weight-bold text-brown-theme">
+                <i class="fas fa-list me-2"></i>Danh sách sản phẩm
+                <span class="badge bg-secondary ms-2 fw-normal">@Model.Pagination.TotalCount sản phẩm</span>
+            </h6>
+        </div>
+
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th width="80px" class="ps-4">Ảnh</th>
+                            <th>Thông tin sản phẩm</th>
+                            <th>Danh mục</th>
+                            <th>Giá bán</th>
+                            <th width="150px" class="text-center">Kho / Đã bán</th>
+                            <th width="120px" class="text-center pe-4">Thao tác</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.Products != null && Model.Products.Any())
+                        {
+                            @foreach (var item in Model.Products)
+                            {
+                                <tr>
+                                    <td class="ps-4">
+                                        <img src="/@item.ImageUrl" class="img-thumbnail" style="width: 60px; height: 60px; object-fit: cover;" onerror="this.src='/images/no-image.png';">
+                                    </td>
+                                    <td>
+                                        <div class="fw-bold text-dark">@item.Name</div>
+                                        <small class="text-muted">SKU: @item.SKU</small>
+                                    </td>
+                                    <td>
+                                        <span class="badge badge-brown-light">@item.CategoryName</span>
+                                    </td>
+                                    <td><span class="text-price">@item.Price.ToString("N0")đ</span></td>
+                                    <td class="text-center">
+                                        @if (item.IsLowStock)
+                                        {
+                                            <div class="text-danger fw-bold small">Kho: @item.StockQuantity</div>
+                                            <span class="badge badge-low-stock">Sắp hết hàng</span>
+                                        }
+                                        else
+                                        {
+                                            <div class="small">Kho: @item.StockQuantity</div>
+                                        }
+                                        <div class="text-muted" style="font-size: 0.75rem;">Đã bán: @item.SoldCount</div>
+                                    </td>
+                                    <td class="text-center pe-4">
+                                        <div class="btn-group btn-group-sm border rounded">
+                                            <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-link text-brown-theme px-2" title="Sửa">
+                                                <i class="fas fa-edit"></i>
+                                            </a>
+                                            <button type="button" class="btn btn-link text-danger px-2" onclick="confirmDeleteProduct(@item.Id, '@item.Name')" title="Xóa">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="fas fa-box-open fa-3x text-light mb-3"></i>
+                                    <p class="text-muted">Không tìm thấy sản phẩm nào phù hợp.</p>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+            @if (Model.Pagination.TotalPages > 1)
+            {
+                <nav class="py-4 border-top">
+                    <ul class="pagination justify-content-center mb-0">
+                        <li class="page-item @(Model.Pagination.HasPreviousPage ? "" : "disabled")">
+                            <a class="page-link shadow-none" href="@Model.Pagination.GetPageUrl(Model.Pagination.PageIndex - 1, Context.Request)"><i class="fas fa-chevron-left"></i></a>
+                        </li>
+                        @foreach (var p in Model.Pagination.GetPageNumbers())
+                        {
+                            <li class="page-item @(p == Model.Pagination.PageIndex ? "active" : "")">
+                                <a class="page-link shadow-none" href="@Model.Pagination.GetPageUrl(p, Context.Request)">@p</a>
+                            </li>
+                        }
+                        <li class="page-item @(Model.Pagination.HasNextPage ? "" : "disabled")">
+                            <a class="page-link shadow-none" href="@Model.Pagination.GetPageUrl(Model.Pagination.PageIndex + 1, Context.Request)"><i class="fas fa-chevron-right"></i></a>
+                        </li>
+                    </ul>
+                </nav>
+            }
+        </div>
+    </div>
+</div>
+
+<form id="form-delete-product" asp-action="Delete" method="post" style="display:none;">
+    @Html.AntiForgeryToken()
+    <input type="hidden" id="delete-product-id" name="id" />
+</form>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmDeleteProduct(id, name) {
+            Swal.fire({
+                title: 'Xóa sản phẩm?',
+                text: `Bạn có chắc chắn muốn xóa "${name}"?`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Đồng ý xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    document.getElementById('delete-product-id').value = id;
+                    document.getElementById('form-delete-product').submit();
+                }
+            });
+        }
+    </script>
+}

@@ -1,0 +1,185 @@
+﻿@model YenMay_web.Models.ViewModels.Orders.OrderTrackViewModel
+
+@{
+    ViewData["Title"] = "Tra cứu đơn hàng";
+}
+
+<style>
+    /* Định nghĩa màu nâu chủ đạo của Yên May */
+    :root {
+        --yenmay-brown: #5D4037;
+    }
+
+    .text-brown {
+        color: var(--yenmay-brown) !important;
+    }
+
+    .btn-yenmay {
+        background-color: var(--yenmay-brown);
+        color: white;
+        border: none;
+        transition: opacity 0.3s;
+    }
+
+        .btn-yenmay:hover {
+            background-color: #4e342e; /* Nâu đậm hơn khi hover */
+            color: white;
+        }
+</style>
+
+<div class="container py-5" style="max-width: 1100px">
+
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Tra cứu đơn hàng</h2>
+        <p class="text-muted">
+            Nhập <strong class="text-brown">Mã đơn hàng</strong> và <strong class="text-brown">Số điện thoại</strong> để xem chi tiết
+        </p>
+    </div>
+
+    <form asp-action="TrackResult"
+          method="post"
+          class="card shadow-sm p-4 mb-5">
+
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="ModelOnly"
+             class="text-danger mb-3"></div>
+
+        <div class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Mã đơn hàng <span class="text-danger">*</span>
+                </label>
+                <input asp-for="OrderCode"
+                       class="form-control"
+                       placeholder="VD: YM20240601" />
+                <span asp-validation-for="OrderCode"
+                      class="text-danger small"></span>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-semibold">
+                    Số điện thoại <span class="text-danger">*</span>
+                </label>
+                <input asp-for="Phone"
+                       class="form-control"
+                       placeholder="VD: 090xxxxxxx" />
+                <span asp-validation-for="Phone"
+                      class="text-danger small"></span>
+            </div>
+        </div>
+
+        <button type="submit"
+                class="btn btn-yenmay w-100 mt-4 py-2 fw-bold">
+            Tra cứu đơn hàng
+        </button>
+    </form>
+
+    @if (Model.OrderDetail != null)
+    {
+        <div class="card shadow-sm p-4 mb-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <h5 class="fw-bold mb-0">
+                    Đơn hàng:
+                    <span class="text-brown">
+                        #@Model.OrderDetail.OrderCode
+                    </span>
+                </h5>
+
+                <span class="badge bg-secondary fs-6">
+                    @Model.OrderDetail.OrderStatus
+                </span>
+            </div>
+
+            <small class="text-muted">
+                Ngày đặt:
+                @Model.OrderDetail.CreatedAt.ToString("dd/MM/yyyy HH:mm")
+            </small>
+        </div>
+
+        <div class="row g-4">
+
+            <div class="col-md-8">
+                <div class="card shadow-sm p-4">
+                    <h6 class="fw-bold mb-4 text-brown">Danh sách sản phẩm</h6>
+
+                    @foreach (var item in Model.OrderDetail.Items)
+                    {
+                        <div class="d-flex align-items-center mb-3 border-bottom pb-3">
+                            <img src="@item.ProductImage"
+                                 alt="@item.ProductName"
+                                 class="me-3 rounded"
+                                 style="width: 80px; height: 80px; object-fit: cover;" />
+
+                            <div class="flex-grow-1">
+                                <div class="fw-semibold">
+                                    @item.ProductName
+                                </div>
+                                <small class="text-muted">
+                                    @item.Price.ToString("N0") ₫ × @item.Quantity
+                                </small>
+                            </div>
+
+                            <div class="fw-bold text-brown">
+                                @item.TotalPrice.ToString("N0") ₫
+                            </div>
+                        </div>
+                    }
+
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Tạm tính</span>
+                            <span>
+                                @Model.OrderDetail.SubTotal.ToString("N0") ₫
+                            </span>
+                        </div>
+
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Phí vận chuyển</span>
+                            <span>
+                                @Model.OrderDetail.ShippingFee.ToString("N0") ₫
+                            </span>
+                        </div>
+
+                        <hr />
+
+                        <div class="d-flex justify-content-between fw-bold fs-5">
+                            <span>Tổng cộng</span>
+                            <span class="text-brown">
+                                @Model.OrderDetail.TotalAmount.ToString("N0") ₫
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-4">
+                <div class="card shadow-sm p-4">
+                    <h6 class="fw-bold mb-4 text-brown">Thông tin người nhận</h6>
+
+                    <p class="mb-2">
+                        <strong class="text-brown">Họ tên</strong><br />
+                        @Model.OrderDetail.CustomerName
+                    </p>
+
+                    <p class="mb-2">
+                        <strong class="text-brown">Số điện thoại</strong><br />
+                        @Model.OrderDetail.CustomerPhone
+                    </p>
+
+                    <p class="mb-2">
+                        <strong class="text-brown">Địa chỉ</strong><br />
+                        @Model.OrderDetail.ShippingAddress
+                    </p>
+
+                    <hr />
+
+                    <p class="mb-0">
+                        <strong class="text-brown">Hình thức thanh toán</strong><br />
+                        @Model.OrderDetail.PaymentMethod
+                    </p>
+                </div>
+            </div>
+        </div>
+    }
+</div>

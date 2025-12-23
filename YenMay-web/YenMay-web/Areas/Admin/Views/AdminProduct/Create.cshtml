@@ -1,0 +1,185 @@
+﻿@using YenMay_web.Areas.Admin.ViewModels.AdminProduct
+@model AdminProductFormViewModel
+
+@{
+    ViewData["Title"] = "Thêm sản phẩm mới";
+    Layout = "~/Areas/Admin/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/style-admin.css" />
+    <style>
+        .tox-tinymce {
+            border-radius: 4px;
+            border: 1px solid #5D4037 !important;
+        }
+
+        .image-preview-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .preview-image {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 4px;
+            border: 2px solid #e0e0e0;
+        }
+
+        .required::after {
+            content: " *";
+            color: #dc3545;
+        }
+
+        .card-header.bg-light {
+            background-color: #f5f5f5 !important;
+            color: #5D4037 !important;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        /* Nút màu nâu tùy chỉnh */
+        .btn-brown {
+            background-color: #5D4037;
+            color: white;
+            border: none;
+        }
+
+            .btn-brown:hover {
+                background-color: #3E2723;
+                color: white;
+            }
+    </style>
+}
+
+<div class="container-fluid px-4">
+    <nav aria-label="breadcrumb" class="mb-4">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a asp-action="Index" class="text-decoration-none" style="color: #5D4037;">Sản phẩm</a></li>
+            <li class="breadcrumb-item active">Thêm mới</li>
+        </ol>
+    </nav>
+
+    <div class="card shadow">
+        <div class="card-header py-3" style="background-color: #5D4037;">
+            <h6 class="m-0 font-weight-bold text-white"><i class="fas fa-plus-circle me-2"></i>Thêm sản phẩm mới</h6>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Create" method="post" enctype="multipart/form-data" id="productForm">
+                <div class="row">
+                    <div class="col-md-8">
+                        @* --- Thông tin cơ bản --- *@
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Thông tin cơ bản</h6></div>
+                            <div class="card-body">
+                                <div class="mb-3">
+                                    <label asp-for="Name" class="form-label required"></label>
+                                    <input asp-for="Name" class="form-control" placeholder="Nhập tên sản phẩm" />
+                                    <span asp-validation-for="Name" class="text-danger small"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="SKU" class="form-label required"></label>
+                                        <input asp-for="SKU" class="form-control" placeholder="Mã SKU" />
+                                        <span asp-validation-for="SKU" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="Price" class="form-label required"></label>
+                                        <div class="input-group">
+                                            <input asp-for="Price" class="form-control" type="number" />
+                                            <span class="input-group-text">đ</span>
+                                        </div>
+                                        <span asp-validation-for="Price" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="CategoryId" class="form-label required"></label>
+                                        <select asp-for="CategoryId" asp-items="Model.CategoryList" class="form-select">
+                                            <option value="">-- Chọn danh mục --</option>
+                                        </select>
+                                        <span asp-validation-for="CategoryId" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label asp-for="StockQuantity" class="form-label required"></label>
+                                        <input asp-for="StockQuantity" class="form-control" type="number" />
+                                        <span asp-validation-for="StockQuantity" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                                <div class="mb-3">
+                                    <label asp-for="ShortDescriptionHTML" class="form-label">Mô tả ngắn</label>
+                                    <textarea asp-for="ShortDescriptionHTML" id="shortDescription" class="form-control"></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* --- Nội dung chi tiết --- *@
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Mô tả chi tiết</h6></div>
+                            <div class="card-body">
+                                <textarea asp-for="FullDescriptionHTML" id="fullDescription"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        @* --- Hình ảnh --- *@
+                        <div class="card mb-4">
+                            <div class="card-header bg-light"><h6 class="mb-0">Hình ảnh sản phẩm</h6></div>
+                            <div class="card-body">
+                                <input asp-for="ImageFiles" class="form-control" type="file" multiple accept="image/*" id="productImages" />
+                                <div class="image-preview-container" id="imagePreview">
+                                    <p class="text-muted small">Chưa có ảnh được chọn</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        @* --- Nút hành động --- *@
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-brown"><i class="fas fa-save me-2"></i>Lưu sản phẩm</button>
+                                    <a asp-action="Index" class="btn btn-outline-secondary"><i class="fas fa-times me-2"></i>Hủy bỏ</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    @{
+        ViewDataDictionary ConfigTiny(string s, int h, bool img) => new ViewDataDictionary(ViewData) { ["Selector"] = s, ["EditorHeight"] = h, ["AllowImages"] = img };
+    }
+    <partial name="_TinyMCEPartial" view-data='ConfigTiny("#shortDescription", 180, false)' />
+    <partial name="_TinyMCEPartial" view-data='ConfigTiny("#fullDescription", 400, true)' />
+
+    <script>
+                $('#productImages').on('change', function() {
+            const preview = $('#imagePreview').empty();
+            if (this.files.length === 0) {
+                preview.append('<p class="text-muted small">Chưa có ảnh được chọn</p>');
+                return;
+            }
+
+            Array.from(this.files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = e => {
+                    // Thêm style để ảnh preview trông chuyên nghiệp hơn
+                    const imgHtml = `
+                        <div class="position-relative">
+                            <img src="${e.target.result}" class="preview-image" />
+                        </div>`;
+                    preview.append(imgHtml);
+                };
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+}

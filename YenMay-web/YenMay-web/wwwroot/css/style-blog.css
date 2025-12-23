@@ -1,0 +1,180 @@
+/* css/style-blog.css hoặc style.css */
+
+body.blog-page {
+    background-color: #fdfbf9; /* Nền hơi khác cho trang blog */
+}
+
+.blog-post-card {
+    background-color: #fff;
+    border-radius: 10px; /* Bo góc nhiều hơn */
+    overflow: hidden; /* Quan trọng để bo góc ảnh */
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.07); /* Shadow mềm mại hơn */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    height: 100%; /* Giúp các card đều chiều cao trong grid */
+    border: 1px solid #eee; /* Thêm viền nhẹ */
+}
+
+.blog-post-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 10px 25px rgba(97, 54, 19, 0.1); /* Shadow rõ hơn khi hover, dùng màu theme */
+}
+
+.blog-post-card .card-img-link {
+     display: block;
+     overflow: hidden; /* Để hiệu ứng zoom không tràn */
+}
+
+.blog-post-card .card-img-top {
+    width: 100%;
+    height: 220px; /* Tăng chiều cao ảnh thumbnail */
+    object-fit: cover; /* Đảm bảo ảnh lấp đầy, cắt nếu cần */
+    transition: transform 0.4s ease;
+}
+
+.blog-post-card:hover .card-img-top {
+    transform: scale(1.05); /* Hiệu ứng zoom nhẹ khi hover card */
+}
+
+.blog-post-card .card-body {
+    padding: 1.25rem; /* Tăng padding */
+    flex-grow: 1; /* Cho phép card body co giãn */
+    display: flex;
+    flex-direction: column; /* Xếp nội dung theo chiều dọc */
+}
+
+.blog-post-card .post-meta {
+    font-size: 0.75rem; /* Chữ meta nhỏ hơn */
+    color: #888;
+    margin-bottom: 0.75rem; /* Giảm khoảng cách dưới meta */
+    text-transform: uppercase; /* Viết hoa cho chuyên nghiệp */
+    letter-spacing: 0.5px;
+}
+.blog-post-card .post-meta i {
+    color: #A67B5B; /* Màu icon meta */
+}
+
+.blog-post-card .card-title {
+    font-size: 1.1rem; /* Kích thước tiêu đề */
+    font-weight: 600;
+    color: #613613; /* Màu tiêu đề theme */
+    margin-bottom: 0.75rem;
+    line-height: 1.4;
+    /* Giới hạn 2 dòng */
+    height: calc(1.4em * 2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.blog-post-card .card-title a { color: inherit; text-decoration: none; transition: color 0.2s ease;}
+.blog-post-card .card-title a:hover { color: #d26e4b; } /* Màu hover link tiêu đề */
+
+.blog-post-card .card-text {
+    font-size: 0.9rem;
+    color: #555;
+    margin-bottom: 1.25rem; /* Tăng khoảng cách dưới excerpt */
+    flex-grow: 1; /* Đẩy nút đọc thêm xuống */
+    /* Giới hạn 3 dòng */
+     line-height: 1.5;
+     height: calc(1.5em * 3);
+     overflow: hidden;
+     text-overflow: ellipsis;
+     display: -webkit-box;
+     -webkit-line-clamp: 3;
+     -webkit-box-orient: vertical;
+}
+
+.blog-post-card .btn-read-more {
+    margin-top: auto; /* Đẩy nút xuống cuối card */
+    align-self: flex-start; /* Căn trái */
+    font-size: 0.8rem; /* Font nút nhỏ */
+    padding: 0.35rem 0.9rem; /* Padding nút */
+    border-color: #A67B5B; /* Màu viền nút */
+    color: #A67B5B;
+    font-weight: 500;
+}
+.blog-post-card .btn-read-more:hover {
+    background-color: #A67B5B;
+    color: white;
+}
+.blog-post-card .btn-read-more i {
+    transition: transform 0.2s ease-in-out;
+    display: inline-block; /* Cho phép transform */
+}
+.blog-post-card .btn-read-more:hover i {
+    transform: translateX(4px); /* Hiệu ứng mũi tên */
+}
+
+/* Style cho phân trang blog (tương tự phân trang sản phẩm) */
+.blog-pagination .page-item.active .page-link {
+    background-color: #613613;
+    border-color: #613613;
+    color: white;
+    z-index: 3;
+}
+.blog-pagination .page-link {
+    color: #613613;
+}
+.blog-pagination .page-link:hover {
+    color: #d26e4b;
+    background-color: #f8f5f2;
+    border-color: #dee2e6;
+     z-index: 2;
+}
+.blog-pagination .page-item.disabled .page-link {
+    color: #6c757d;
+    background-color: #e9ecef;
+    border-color: #dee2e6;
+}
+
+/* (Tùy chọn) Style cho bộ lọc danh mục */
+.blog-filters .btn {
+    margin: 0 5px 10px; /* Khoảng cách giữa các nút lọc */
+    border-radius: 50px; /* Bo tròn nút lọc */
+}
+.blog-filters .btn.active {
+     background-color: #613613;
+     color: white;
+     border-color: #613613;
+}
+/* Article Prev/Next Navigation */
+.article-navigation {
+    /* border-top: 1px solid #eee; /* Đã có trong HTML */
+    /* margin-top: 2rem; /* Đã có trong HTML */
+    /* padding-top: 1.5rem; /* Đã có trong HTML */
+}
+
+.article-navigation .article-nav-link {
+    display: inline-block; /* Giúp link không chiếm hết cột */
+    padding: 0.5rem 0; /* Thêm padding dọc nhỏ */
+}
+
+.article-navigation .article-nav-link small {
+    font-size: 0.8em;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #888; /* Màu nhạt hơn */
+}
+
+.article-navigation .article-nav-link span {
+    color: #613613; /* Màu tiêu đề bài viết */
+    font-weight: 500; /* Độ đậm vừa phải */
+    transition: color 0.2s ease;
+    display: block; /* Cho tiêu đề xuống dòng nếu dài */
+    line-height: 1.3;
+    margin-top: 2px;
+}
+
+.article-navigation .article-nav-link:hover span {
+    color: #d26e4b; /* Màu hover */
+}
+
+/* Căn chỉnh nếu chỉ có 1 nút (ví dụ: bài đầu tiên/cuối cùng) */
+.article-navigation #prev-article-link-container:empty + #next-article-link-container,
+.article-navigation #next-article-link-container:empty + #prev-article-link-container {
+   /* Có thể không cần style gì đặc biệt nếu dùng col text-start/end */
+}

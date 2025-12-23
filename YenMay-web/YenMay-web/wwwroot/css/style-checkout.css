@@ -1,0 +1,422 @@
+/* ==========================================================================
+   STYLES FOR CHECKOUT.HTML & INVOICE
+   ========================================================================== */
+
+body.checkout-page { /* Class riêng cho body trang checkout nếu cần style nền khác */
+    /* background-color: #f8f9fa;  Đã có ở base.css */
+}
+
+.checkout-section { /* Section chính của trang checkout */
+    /* background-color: #f8f9fa; */ /* Đã có ở base.css */
+    padding-bottom: 3rem; /* Khoảng cách dưới cùng */
+}
+
+/* --- BILLING DETAILS & ORDER SUMMARY TITLES (Mục 10 từ style.css gốc) --- */
+.billing-details h2,
+.order-summary h2.card-title, /* Tiêu đề trong card tóm tắt đơn hàng */
+.payment-methods h3 { /* Tiêu đề khu vực phương thức thanh toán */
+    color: #613613;
+    font-weight: 600;
+    font-size: 1.4rem;
+    border-bottom: 1px solid #e0e0e0;
+    padding-bottom: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+
+/* --- FORM STYLES (Billing Details - Mục 10 từ style.css gốc) --- */
+.billing-details .form-label {
+    font-weight: 500;
+    color: #495057;
+}
+.billing-details .form-control { /* Input field */
+    border-radius: 0.375rem; /* Bo góc input Bootstrap */
+    border-color: #ced4da; /* Màu border Bootstrap */
+}
+.billing-details .form-control:focus {
+    border-color: #a1744f; /* Màu theme nhạt khi focus */
+    box-shadow: 0 0 0 .25rem rgba(143, 88, 42, .25); /* Shadow theme khi focus */
+}
+
+
+/* --- ORDER SUMMARY CARD (Tóm tắt đơn hàng ở Checkout - Mục 10) --- */
+.order-summary .card {
+    border: 1px solid #e9d8c7; /* Viền màu theme nhạt */
+    border-radius: 0.5rem;
+    box-shadow: 0 0.125rem 0.375rem rgba(0, 0, 0, .07);
+}
+.order-summary .card-body {
+    padding: 1.5rem;
+}
+.order-summary .summary-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.85rem;
+    font-size: 0.95rem;
+    color: #555;
+}
+.order-summary .summary-item strong { /* Giá trị (số tiền) */
+    color: #343a40;
+    font-weight: 500;
+}
+.order-summary hr.my-3 { /* Đường kẻ ngang */
+    margin-top: 1.25rem !important;
+    margin-bottom: 1.25rem !important;
+    border-top-color: #e0e0e0;
+}
+.order-summary .grand-total { /* Khu vực Tổng cộng */
+    margin-top: 0.5rem;
+    padding-top: 0.25rem;
+}
+.order-summary .grand-total strong:first-child { /* Chữ "Tổng cộng" */
+    font-size: 1.15rem;
+    font-weight: 600;
+    color: #333;
+}
+.order-summary #checkout-grand-total,
+.order-summary #checkout-total-amount { /* ID cũ hơn, nếu còn dùng */
+    color: #d26e4b; /* Màu theme cho tổng tiền */
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+
+/* --- PAYMENT METHODS (Mục 10 từ style.css gốc) --- */
+.payment-methods .form-check {
+    background-color: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 0.375rem;
+    padding: 1rem 1.25rem;
+    margin-bottom: 1rem; /* Khoảng cách giữa các lựa chọn */
+    transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+.payment-methods .form-check:hover {
+    background-color: #f8f9fa;
+    border-color: #b0a193; /* Viền theme nhạt hơn khi hover */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+}
+.payment-methods .form-check-input { /* Radio button */
+    margin-top: 0.25em; /* Căn với text label */
+    width: 1.15em;
+    height: 1.15em;
+    margin-right: 0.75rem; /* Khoảng cách với label */
+    accent-color: #8F582A; /* Màu radio khi được chọn (modern browsers) */
+    float: left; /* Để label và description bao quanh */
+    position: relative; /* Đảm bảo z-index hoạt động nếu cần */
+    z-index: 1;
+}
+/* Style khi focus đã có ở .form-check-input trong base.css nếu bạn đặt chung */
+/* .payment-methods .form-check-input:focus { ... } */
+.payment-methods .form-check-input:checked + .form-check-label {
+    color: #8F582A; /* Màu chữ label thay đổi khi radio được chọn */
+}
+.payment-methods .form-check-label {
+    font-weight: 500;
+    color: #495057;
+    display: inline-flex; /* Icon và text thẳng hàng */
+    align-items: center;
+    cursor: pointer;
+    margin-left: 0; /* Reset margin nếu Bootstrap có */
+    margin-bottom: 0.3rem; /* Khoảng cách với description */
+}
+.payment-methods .form-check-label i { /* Icon trong label (COD, Bank, E-wallet) */
+    margin-right: 0.75rem;
+    color: #8F582A; /* Màu icon theme */
+    width: 22px;
+    text-align: center;
+    font-size: 1.2rem;
+    line-height: 1;
+}
+.payment-methods .payment-description { /* Mô tả chi tiết của phương thức thanh toán */
+    font-size: 0.875em;
+    color: #6c757d; /* Màu xám Bootstrap */
+    margin-top: 0.1rem;
+    line-height: 1.5;
+    clear: left; /* Đảm bảo xuống dòng đúng nếu input có float */
+    margin-left: calc(1.15em + 0.75rem); /* Căn thẳng hàng với text của label */
+    padding-top: 0.2rem; /* Thêm chút padding trên cho description */
+}
+/* Thông tin chi tiết cho Chuyển khoản và Ví điện tử */
+#bank-transfer-info,
+#ewallet-info {
+    background-color: #fdf6ef; /* Nền vàng rất nhạt */
+    padding: 0.85rem 1rem;
+    margin-top: 0.75rem;
+    border-radius: 0.375rem;
+    font-size: 0.875em;
+    border: 1px solid #eeddc9; /* Viền vàng nhạt */
+    color: #523e29; /* Màu chữ */
+}
+#bank-transfer-info p,
+#ewallet-info p {
+    margin-bottom: 0.4rem;
+}
+#bank-transfer-info strong,
+#ewallet-info strong {
+    font-weight: 500;
+    color: #42311f; /* Màu chữ đậm hơn */
+}
+/* QR Code cho E-wallet */
+.qr-code-image {
+    max-width: 160px;
+    height: auto;
+    display: block;
+    margin: 0.5rem auto; /* Căn giữa QR */
+    border: 1px solid #eee;
+    padding: 5px;
+    background-color: #fff;
+}
+
+/* --- SUBMIT BUTTON (Đặt hàng - Mục 10) --- */
+/* Nút này có thể dùng chung class .btn-theme-primary từ base.css */
+/* Hoặc bạn có thể style riêng nếu muốn nút Đặt hàng to hơn/khác biệt */
+.order-summary .btn-theme-primary, /* Nút trong tóm tắt đơn hàng */
+#checkout-form ~ .btn-theme-primary { /* Nút sau form nếu có (ít dùng) */
+    font-size: 1.1rem;
+    padding: .85rem 1.5rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    border-radius: 0.375rem; /* Hoặc bo tròn hơn nếu muốn */
+}
+.btn-theme-primary i { /* Icon trong nút Đặt hàng */
+    margin-right: 0.6rem;
+}
+
+
+/* --- CHECKOUT SUCCESS MESSAGE (Mục 10 từ style.css gốc) --- */
+#checkout-success-message { /* Thông báo đặt hàng thành công */
+    border-color: #7a9c59; /* Viền xanh lá (màu theme success) */
+    background-color: #e9f5e3; /* Nền xanh lá nhạt */
+    padding: 1.5rem;
+    border-radius: 0.5rem; /* Bo góc */
+}
+#checkout-success-message .alert-heading {
+    color: #3c763d; /* Màu chữ xanh lá đậm */
+    font-size: 1.5rem;
+}
+#checkout-success-message p {
+    font-size: 1.05rem;
+}
+#checkout-success-message .btn-outline-success { /* Nút trong thông báo */
+    color: #3c763d;
+    border-color: #3c763d;
+    font-weight: 500;
+}
+#checkout-success-message .btn-outline-success:hover {
+    background-color: #3c763d;
+    color: #fff;
+}
+
+
+/* ==========================================================================
+   11. INVOICE STYLES (Cho hóa đơn hiển thị sau khi checkout - Mục 11)
+   ========================================================================== */
+.invoice-container {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, .1);
+    margin-top: 30px;
+    border: 1px solid #dee2e6;
+}
+.invoice-header {
+    border-bottom: 2px solid #eee;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.invoice-header img { /* Logo công ty */
+    max-height: 60px; /* Giữ nguyên hoặc điều chỉnh */
+    margin-bottom: 15px;
+}
+.invoice-header h2 { /* Tên hóa đơn */
+    color: #613613;
+    margin-bottom: 5px;
+    font-size: 1.6rem;
+    font-weight: 700;
+}
+.customer-details, .invoice-details {
+    margin-bottom: 20px;
+}
+.customer-details h5, .invoice-details h5 {
+    font-size: 1.1rem;
+    color: #495057;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+.customer-details p, .invoice-details p {
+    margin-bottom: 5px;
+    font-size: .9rem;
+    line-height: 1.6;
+}
+.customer-details strong, .invoice-details strong { /* Kế thừa từ base hoặc định nghĩa lại */
+    color: #495057;
+}
+
+.order-items-table { /* Bảng chi tiết sản phẩm trong hóa đơn */
+    margin-top: 20px;
+    margin-bottom: 25px;
+    width: 100%;
+    border-collapse: collapse;
+}
+.order-items-table th {
+    background-color: #f8f9fa; /* Nền header bảng Bootstrap */
+    color: #613613;
+    font-weight: 600;
+    border: 1px solid #dee2e6; /* Border cho tất cả cell */
+    padding: 10px;
+    text-align: left;
+    font-size: .85rem;
+}
+.order-items-table td {
+    vertical-align: middle;
+    font-size: .9rem;
+    border: 1px solid #e9ecef; /* Border cho cell */
+    padding: 10px;
+}
+.order-items-table .text-end { text-align: right !important; }
+.order-items-table .text-center { text-align: center !important; }
+
+
+.invoice-summary { /* Phần tóm tắt cuối hóa đơn */
+    margin-top: 20px;
+}
+.invoice-summary .summary-item {
+    display: flex;
+    justify-content: space-between;
+    font-size: .95rem;
+    margin-bottom: .5rem;
+    padding: 5px 0;
+}
+.invoice-summary .summary-item span:first-child { color: #4f4f4f; }
+.invoice-summary .summary-item span:last-child { font-weight: 500; color: #343a40; }
+
+.invoice-summary .grand-total { /* Dòng tổng cộng */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid #eee;
+}
+.invoice-summary .grand-total strong { /* Chữ "Tổng thanh toán" */
+    font-size: 1.15rem;
+    color: #333;
+}
+.invoice-summary #invoice-grand-total-value { /* Số tiền tổng */
+    font-size: 1.3rem;
+    color: #d26e4b;
+    font-weight: 700;
+}
+
+.invoice-footer {
+    margin-top: 30px;
+    border-top: 1px solid #eee;
+    padding-top: 20px;
+    text-align: center;
+}
+.invoice-footer p {
+    font-size: .85rem;
+    color: #777;
+}
+
+.btn-print-invoice { /* Nút In hóa đơn */
+    font-weight: 500;
+    margin-top: 20px;
+    /* Style nút này có thể kế thừa từ .btn-theme-secondary trong base.css */
+}
+
+
+/* ==========================================================================
+   15. PRINT STYLES (Cho hóa đơn - Mục 15 từ style.css gốc)
+   ========================================================================== */
+@media print {
+    body * { visibility: hidden; }
+    .invoice-container, .invoice-container * { visibility: visible; }
+    .invoice-container {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        margin: 0;
+        padding: 10mm; /* Hoặc 0.5in */
+        box-shadow: none;
+        border: 0;
+        font-size: 9pt;
+        background-color: #fff !important;
+        color: #000 !important;
+    }
+    .invoice-container h2 { font-size: 13pt; }
+    .invoice-container h5 { font-size: 9.5pt; }
+    .invoice-container p,
+    .invoice-container td,
+    .invoice-container th,
+    .invoice-summary .summary-item { font-size: 8.5pt; }
+
+    .order-items-table th,
+    .order-items-table td {
+        border: 1px solid #ccc !important;
+        padding: 5px;
+    }
+    .order-items-table th {
+        background-color: #f0f0f0 !important;
+    }
+
+    .invoice-summary .grand-total strong { font-size: 10pt; }
+    .invoice-summary #invoice-grand-total-value { font-size: 11pt; }
+
+    .no-print,
+    .site-header,
+    .site-footer,
+    .page-title.text-center.mb-5, /* Tiêu đề trang checkout */
+    #checkout-success-message.alert, /* Thông báo thành công */
+    .btn-print-invoice,
+    .btn-print-invoice + a, /* Link bên cạnh nút in */
+    .menu-toggle,
+    .header-icons { /* Các thành phần không cần thiết khi in */
+        display: none !important;
+    }
+
+    .table { /* Đảm bảo màu chữ bảng khi in */
+        --bs-table-color: #000;
+        --bs-table-bg: #fff;
+    }
+    .invoice-header img { max-height: 40px; } /* Logo nhỏ hơn khi in */
+
+    a { text-decoration: none !important; color: #000 !important; }
+    a[href^="http"]::after, a[href^="https"]::after {
+        content: " (" attr(href) ")"; /* Hiển thị URL cho link ngoài */
+        font-size: 0.8em;
+        color: #555;
+    }
+
+    /* Đảm bảo layout không bị phá vỡ bởi float hoặc flex không cần thiết */
+    .row > *, .col, .col-md-12, .col-lg-7, .col-lg-5, .col-md-6, .col-md-7, .col-sm-6 {
+        width: 100% !important;
+        flex: 0 0 100% !important;
+        max-width: 100% !important;
+        float: none !important; /* Quan trọng */
+        padding-left: 0 !important; /* Reset padding nếu có */
+        padding-right: 0 !important;
+    }
+     /* Có thể cần thêm !important cho một số thuộc tính nếu Bootstrap ghi đè mạnh */
+}
+
+
+/* --- MEDIA QUERIES (Cho checkout.html - Mục 14 từ style.css gốc) --- */
+@media (max-width: 575.98px) {
+    .billing-details h2,
+    .order-summary h2.card-title,
+    .payment-methods h3 {
+        font-size: 1.25rem; /* Giảm tiêu đề trên mobile nhỏ */
+    }
+    .payment-methods .form-check-label {
+        font-size: 0.9rem;
+    }
+    .payment-methods .form-check-label i {
+        font-size: 1.1rem;
+    }
+    .order-summary #checkout-grand-total {
+        font-size: 1.5rem; /* Giảm font tổng tiền */
+    }
+}   
