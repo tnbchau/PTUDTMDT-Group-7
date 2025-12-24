@@ -36,7 +36,8 @@ namespace YenMay_web.Areas.Identity.Pages.Account
             {
                 // This needs to be a redirect so that the browser performs a new
                 // request and the identity for the user gets updated.
-                return RedirectToPage("/Index");
+                return Redirect("~/"); 
+
             }
         }
     }

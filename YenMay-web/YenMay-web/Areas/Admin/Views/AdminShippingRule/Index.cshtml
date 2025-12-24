@@ -53,6 +53,15 @@
             background-color: @mainBrown;
             color: white;
         }
+
+        .badge {
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+            .badge:hover {
+                opacity: 0.8;
+            }
     </style>
 }
 
@@ -61,8 +70,7 @@
         <h1 class="h3 mb-0 text-gray-800">
             <i class="fas fa-truck-moving me-2" style="color: @mainBrown;"></i>Phí vận chuyển
         </h1>
-        @* Nút trigger Create Modal *@
-        <button type="button" class="btn btn-brown" onclick="openShippingModal(null)">
+        <button type="button" class="btn btn-brown shadow-sm" onclick="openShippingModal(null)">
             <i class="fas fa-plus me-2"></i>Thêm quy tắc mới
         </button>
     </div>
@@ -87,9 +95,9 @@
                     <div class="col-md-3">
                         <label class="filter-label">TRẠNG THÁI</label>
                         <select name="isActive" class="form-select shadow-sm">
-                            <!option value="">Tất cả</!option>
-                            <!option value="true" @(Model.IsActive == true ? "selected" : "")>Đang hoạt động</!option>
-                            <!option value="false" @(Model.IsActive == false ? "selected" : "")>Đang ẩn</!option>
+                            <option value="">Tất cả</option>
+                            <option value="true" selected="@(Model.IsActive == true)">Đang hoạt động</option>
+                            <option value="false" selected="@(Model.IsActive == false)">Đang ẩn</option>
                         </select>
                     </div>
                     <div class="col-md-3">
@@ -129,18 +137,13 @@
                                     <td>@item.MaxOrderValueText</td>
                                     <td class="text-danger fw-bold">@item.ShippingFeeText</td>
                                     <td class="text-center">
-                                        <form asp-action="ToggleStatus" asp-route-id="@item.Id" method="post" class="d-inline">
-                                            @Html.AntiForgeryToken()
-                                            <button type="submit" class="border-0 bg-transparent shadow-none">
-                                                <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")" style="cursor:pointer">
-                                                    @item.StatusText
-                                                </span>
-                                            </button>
-                                        </form>
+                                        <span class="badge @(item.IsActive ? "bg-success" : "bg-secondary")"
+                                              onclick="toggleStatus(@item.Id)">
+                                            @item.StatusText
+                                        </span>
                                     </td>
                                     <td class="text-center pe-4">
                                         <div class="btn-group btn-group-sm border rounded">
-                                            @* Nút trigger Edit Modal kèm data attributes *@
                                             <button type="button" class="btn btn-link text-brown-theme px-2" title="Sửa"
                                                     onclick="openShippingModal(this)"
                                                     data-id="@item.Id"
@@ -192,7 +195,7 @@
                 <h5 class="modal-title" id="modalTitle">Quy tắc vận chuyển</h5>
                 <button type="button" class="btn-close btn-close-white shadow-none" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="formShippingRule" method="post">
+            <form id="formShippingRule">
                 @Html.AntiForgeryToken()
                 <input type="hidden" id="ruleId" name="Id" value="0" />
 
@@ -224,95 +227,143 @@
                     </div>
 
                     <div class="form-check form-switch mt-2">
-                        <input class="form-check-input" type="checkbox" id="ruleActive" name="IsActive" value="true" checked>
+                        <input class="form-check-input" type="checkbox" id="ruleActive" name="IsActive" value="true">
                         <label class="form-check-label" for="ruleActive">Kích hoạt quy tắc</label>
                     </div>
                 </div>
                 <div class="modal-footer bg-light border-0">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Hủy</button>
-                    <button type="submit" class="btn btn-brown px-4">Lưu thông tin</button>
+                    <button type="submit" class="btn btn-brown px-4" id="btnSave">Lưu thông tin</button>
                 </div>
             </form>
         </div>
     </div>
 </div>
 
-<form id="form-delete" asp-action="Delete" method="post" style="display:none;">
-    @Html.AntiForgeryToken()
-    <input type="hidden" id="delete-id" name="id" />
-</form>
-
 @section Scripts {
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script>
         const shippingModal = new bootstrap.Modal(document.getElementById('modalShippingRule'));
         const shippingForm = document.getElementById('formShippingRule');
+        let currentSubmitUrl = '';
 
+        // 1. Mở Modal
         function openShippingModal(btn) {
             shippingForm.reset();
 
             if (btn === null) {
-                // TRƯỜNG HỢP CREATE
                 document.getElementById('modalTitle').innerHTML = '<i class="fas fa-plus me-2"></i>Thêm quy tắc mới';
                 document.getElementById('ruleId').value = 0;
                 document.getElementById('ruleActive').checked = true;
-                shippingForm.action = '@Url.Action("Create", "AdminShippingRule")';
+                currentSubmitUrl = '@Url.Action("Create", "AdminShippingRule")';
             } else {
-                // TRƯỜNG HỢP EDIT
                 document.getElementById('modalTitle').innerHTML = '<i class="fas fa-edit me-2"></i>Chỉnh sửa quy tắc';
 
-                // Lấy data từ attributes
-                const id = btn.getAttribute('data-id');
-                const name = btn.getAttribute('data-name');
-                const min = btn.getAttribute('data-min');
-                const max = btn.getAttribute('data-max');
-                const fee = btn.getAttribute('data-fee');
-                const desc = btn.getAttribute('data-desc');
-                const active = btn.getAttribute('data-active') === 'true';
+                document.getElementById('ruleId').value = btn.getAttribute('data-id');
+                document.getElementById('ruleName').value = btn.getAttribute('data-name');
+                document.getElementById('ruleMin').value = btn.getAttribute('data-min');
+                document.getElementById('ruleMax').value = btn.getAttribute('data-max');
+                document.getElementById('ruleFee').value = btn.getAttribute('data-fee');
+                document.getElementById('ruleDesc').value = btn.getAttribute('data-desc');
+                document.getElementById('ruleActive').checked = btn.getAttribute('data-active') === 'true';
 
-                document.getElementById('ruleId').value = id;
-                document.getElementById('ruleName').value = name;
-                document.getElementById('ruleMin').value = min;
-                document.getElementById('ruleMax').value = max;
-                document.getElementById('ruleFee').value = fee;
-                document.getElementById('ruleDesc').value = desc;
-                document.getElementById('ruleActive').checked = active;
-
-                shippingForm.action = '@Url.Action("Edit", "AdminShippingRule")';
+                currentSubmitUrl = '@Url.Action("Edit", "AdminShippingRule")';
             }
-
             shippingModal.show();
         }
 
-        function confirmDelete(id, name) {
-            Swal.fire({
-                title: 'Xóa quy tắc?',
-                text: `Bạn có chắc muốn xóa "${name}"? Thao tác này không thể hoàn tác.`,
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'Đồng ý xóa',
-                cancelButtonText: 'Hủy'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    document.getElementById('delete-id').value = id;
-                    document.getElementById('form-delete').submit();
+        // 2. Submit Form qua AJAX
+        shippingForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            // Xử lý giá trị checkbox IsActive (vì checkbox không check sẽ không gửi dữ liệu)
+            if (!formData.has('IsActive')) {
+                formData.append('IsActive', 'false');
+            }
+
+            const btnSave = document.getElementById('btnSave');
+            btnSave.disabled = true;
+            btnSave.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Đang lưu...';
+
+            fetch(currentSubmitUrl, {
+                method: 'POST',
+                body: formData,
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    shippingModal.hide();
+                    Swal.fire({ icon: 'success', title: 'Thành công', text: data.message, timer: 1500, showConfirmButton: false })
+                        .then(() => location.reload());
+                } else {
+                    Swal.fire('Lỗi', data.message, 'error');
+                }
+            })
+            .catch(() => Swal.fire('Lỗi', 'Không thể kết nối máy chủ', 'error'))
+            .finally(() => {
+                btnSave.disabled = false;
+                btnSave.innerText = 'Lưu thông tin';
+            });
+        });
+
+        // 3. Toggle Status nhanh
+        function toggleStatus(id) {
+            const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+            fetch('@Url.Action("ToggleStatus", "AdminShippingRule")', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                    'RequestVerificationToken': token,
+                    'X-Requested-With': 'XMLHttpRequest'
+                },
+                body: `id=${id}`
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    location.reload();
+                } else {
+                    Swal.fire('Lỗi', data.message, 'error');
                 }
             });
         }
 
-        // Tự động đóng alert thành công của hệ thống nếu có
-        @if (TempData["Success"] != null)
-        {
-                <text>
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Thành công',
-                    text: '@TempData["Success"]',
-                    timer: 2000,
-                    showConfirmButton: false
-                });
-                </text>
+        // 4. Xác nhận xóa
+        function confirmDelete(id, name) {
+            Swal.fire({
+                title: 'Xác nhận xóa?',
+                text: `Quy tắc "${name}" sẽ bị xóa vĩnh viễn!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#6c757d',
+                confirmButtonText: 'Đồng ý xóa',
+                cancelButtonText: 'Hủy'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+                    fetch('@Url.Action("Delete", "AdminShippingRule")', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                            'RequestVerificationToken': token,
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: `id=${id}`
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire('Đã xóa', data.message, 'success').then(() => location.reload());
+                        } else {
+                            Swal.fire('Lỗi', data.message, 'error');
+                        }
+                    });
+                }
+            });
         }
     </script>
 }

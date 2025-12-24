@@ -2,6 +2,7 @@
 using YenMay_web.Areas.Admin.ViewModels.Shipping;
 using YenMay_web.Models.ViewModels.Common;
 using YenMay_web.Services.Interfaces;
+using YenMay_web.Models.ViewModels.Shipping; 
 
 namespace YenMay_web.Areas.Admin.Controllers
 {
@@ -22,7 +23,6 @@ namespace YenMay_web.Areas.Admin.Controllers
         public async Task<IActionResult> Index(string? searchTerm, bool? isActive, int page = 1)
         {
             var allRules = await _shippingService.GetAllRulesAsync();
-
             var query = allRules.AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTerm))
@@ -32,7 +32,6 @@ namespace YenMay_web.Areas.Admin.Controllers
                 query = query.Where(r => r.IsActive == isActive.Value);
 
             var totalCount = query.Count();
-
             var rulesPaged = query
                 .OrderBy(r => r.MinOrderValue)
                 .Skip((page - 1) * PageSize)
@@ -68,74 +67,54 @@ namespace YenMay_web.Areas.Admin.Controllers
         }
 
         // =========================
-        // 2. CREATE / THÊM MỚI
+        // 2. CREATE / THÊM MỚI (AJAX)
         // =========================
-        public IActionResult Create()
-        {
-            var model = new ShippingRuleFormViewModel();
-            return View(model);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(ShippingRuleFormViewModel model)
         {
             if (!ModelState.IsValid)
-                return View(model);
+                return Json(new { success = false, message = "Dữ liệu nhập vào không hợp lệ." });
 
             try
             {
-                var ruleViewModel = new YenMay_web.Models.ViewModels.Shipping.ShippingRuleViewModel
-                {
-                    Id = 0,
-                    Name = model.Name,
-                    Description = model.Description,
-                    MinOrderValue = model.MinOrderValue,
-                    MaxOrderValue = model.MaxOrderValue,
-                    ShippingFee = model.ShippingFee,
-                    IsActive = model.IsActive
-                };
-
+                var ruleViewModel = MapToViewModel(model);
+                ruleViewModel.Id = 0;
                 await _shippingService.CreateRuleAsync(ruleViewModel);
-                TempData["Success"] = "Tạo quy tắc vận chuyển thành công.";
-                return RedirectToAction(nameof(Index));
+
+                return Json(new { success = true, message = "Tạo quy tắc vận chuyển thành công." });
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", "Lỗi: " + ex.Message);
-                return View(model);
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
         }
 
         // =========================
-        // 3. EDIT / CHỈNH SỬA
+        // 3. EDIT / CHỈNH SỬA (AJAX)
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(ShippingRuleFormViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                TempData["Error"] = "Dữ liệu không hợp lệ.";
-                return RedirectToAction(nameof(Index));
-            }
+                return Json(new { success = false, message = "Dữ liệu chỉnh sửa không hợp lệ." });
 
             try
             {
                 var ruleViewModel = MapToViewModel(model);
                 await _shippingService.UpdateRuleAsync(ruleViewModel);
-                TempData["Success"] = "Cập nhật thành công.";
+
+                return Json(new { success = true, message = "Cập nhật thành công." });
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Lỗi: " + ex.Message;
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
-
-            return RedirectToAction(nameof(Index));
         }
-                
+
         // =========================
-        // 4. DELETE / XÓA
+        // 4. DELETE / XÓA (AJAX)
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -144,18 +123,16 @@ namespace YenMay_web.Areas.Admin.Controllers
             try
             {
                 await _shippingService.DeleteRuleAsync(id);
-                TempData["Success"] = "Xóa quy tắc vận chuyển thành công.";
+                return Json(new { success = true, message = "Xóa quy tắc vận chuyển thành công." });
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Lỗi: " + ex.Message;
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
-
-            return RedirectToAction(nameof(Index));
         }
 
         // =========================
-        // 5. TOGGLE STATUS / BẬT/TẮT
+        // 5. TOGGLE STATUS / BẬT-TẮT (AJAX)
         // =========================
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -164,18 +141,20 @@ namespace YenMay_web.Areas.Admin.Controllers
             try
             {
                 await _shippingService.ToggleRuleStatusAsync(id);
-                TempData["Success"] = "Cập nhật trạng thái quy tắc thành công.";
+                return Json(new { success = true, message = "Cập nhật trạng thái thành công." });
             }
             catch (Exception ex)
             {
-                TempData["Error"] = "Lỗi: " + ex.Message;
+                return Json(new { success = false, message = "Lỗi: " + ex.Message });
             }
-
-            return RedirectToAction(nameof(Index));
         }
-        private YenMay_web.Models.ViewModels.Shipping.ShippingRuleViewModel MapToViewModel(ShippingRuleFormViewModel model)
+
+        // =========================
+        // MAPPING HELPER
+        // =========================
+        private ShippingRuleViewModel MapToViewModel(ShippingRuleFormViewModel model)
         {
-            return new YenMay_web.Models.ViewModels.Shipping.ShippingRuleViewModel
+            return new ShippingRuleViewModel
             {
                 Id = model.Id,
                 Name = model.Name,

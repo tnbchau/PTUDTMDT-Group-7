@@ -90,6 +90,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 app.UseSession();
+
 app.Use(async (context, next) =>
 {
     await context.Session.LoadAsync();
@@ -100,6 +101,7 @@ app.Use(async (context, next) =>
 
 app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapRazorPages();
 app.UseEndpoints(endpoints =>
